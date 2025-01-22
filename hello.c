@@ -53,7 +53,7 @@ int main(int argc, char *argv[]){
     int C = atoi (argv[2]);
     int ** mysheet = (int **)malloc(R * sizeof(int *));
     for (int i = 0; i < R; i++){
-        mysheet[i] = (int *)calloc(C * sizeof(int), 0);
+        mysheet[i] = (int *)calloc(C , sizeof(int));
     }
     int x, y;
     x=0;
@@ -65,6 +65,12 @@ int main(int argc, char *argv[]){
     while (s[0] != 'q'){
         printf("Hello, World!\n");
         scanf("%s", &s);
+        if (s[0] == 'q'){
+            for (int i = 0; i < R; i++){
+                free(mysheet[i]);
+            }
+            free(mysheet);
+        }
     }
     return 0;
 }
