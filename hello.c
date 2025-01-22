@@ -5,6 +5,9 @@
 int min(int a, int b) {
     return (a < b) ? a : b;
 }
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
 char * return_string(int n){
     if (n<26){
         char * s = (char *)malloc(2 * sizeof(char));
@@ -33,13 +36,13 @@ char * return_string(int n){
 void display (int ** mysheet, int R, int C, int x, int y){
     printf("%15s", return_string(y));
     for (int j = y+1; j < min(C, y+10); j++){
-        printf("%12s", return_string(j)); 
+        printf("%12s", return_string(j));
     }
     printf("\n");
     for (int i = x; i < min(R, x+10); i++){
-        printf("%3d", i);
+        printf("%3d", i+1);
         for (int j = y; j < min(C, y+10); j++){
-            printf("%12d", mysheet[i][j]); 
+            printf("%12d", mysheet[i][j]);
         }
         printf("\n");
 
@@ -63,7 +66,22 @@ int main(int argc, char *argv[]){
     char s[100];
     scanf("%s", &s);
     while (s[0] != 'q'){
-        printf("Hello, World!\n");
+        if (s[0] == 'a'){
+            y = max(0, y-10);
+            display(mysheet, R, C, x, y);
+        }
+        if (s[0] == 'd'){
+            y = min(C-10, y+10);
+            display(mysheet, R, C, x, y);
+        }
+        if (s[0] == 'w'){
+            x = max(0, x-10);
+            display(mysheet, R, C, x, y);
+        }
+        if (s[0] == 's'){
+            x = min(R-10, x+10);
+            display(mysheet, R, C, x, y);
+        }
         scanf("%s", &s);
         if (s[0] == 'q'){
             for (int i = 0; i < R; i++){
