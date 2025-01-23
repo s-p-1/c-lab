@@ -63,27 +63,36 @@ int main(int argc, char *argv[]){
     y=0;
     display(mysheet, R, C, x, y);
 
-    char s[100];
-    scanf("%s", &s);
-    while (s[0] != 'q'){
-        if (s[0] == 'a'){
+    int flag=1;
+    int gl = get_line();
+    while (gl != 5){
+        if (gl == 6){
+            flag=0;
+        }
+        if (gl == 7){
+            flag=1;
+        }
+        if (gl == 8){
+            printf("to be handled") ;
+        }
+        if (gl == 2){
             y = max(0, y-10);
-            display(mysheet, R, C, x, y);
+            if (flag==1){display(mysheet, R, C, x, y);}
         }
-        if (s[0] == 'd'){
+        if (gl == 4){
             y = min(C-10, y+10);
-            display(mysheet, R, C, x, y);
+            if (flag==1){display(mysheet, R, C, x, y);}
         }
-        if (s[0] == 'w'){
+        if (gl == 1){
             x = max(0, x-10);
-            display(mysheet, R, C, x, y);
+            if (flag==1){display(mysheet, R, C, x, y);}
         }
-        if (s[0] == 's'){
+        if (gl == 3){
             x = min(R-10, x+10);
-            display(mysheet, R, C, x, y);
+            if (flag==1){display(mysheet, R, C, x, y);}
         }
-        scanf("%s", &s);
-        if (s[0] == 'q'){
+        gl = get_line();
+        if (gl == 5){
             for (int i = 0; i < R; i++){
                 free(mysheet[i]);
             }
