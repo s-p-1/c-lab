@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "helper.h"
 
 int stringcomp(const char s1[20], const char s2[20], char myc){
         int flag =1;
