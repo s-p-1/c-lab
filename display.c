@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "helper.h"
 
 //a file that runs until q and initializes display
 int min(int a, int b) {
