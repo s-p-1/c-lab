@@ -2,17 +2,21 @@
 #include <stdio.h>
 #include "helper.h"
 
-int stringcomp(const char s1[20], const char s2[20], char myc){
+int stringcomp(const char* s1, const char* s2, char myc){
         int flag =1;
-        for (int i =0; i<20; ++i){
-                if (s1[i]==myc){
-                        if (s2[i]!=myc) flag=0;
+        int i=0;
+        while (i<20){
+                if (*s1==myc){
+                        if (*s2!=myc) flag=0;
                         break;
                 }
-                if (s1[i]!=s2[i]){
+                if (*s1!=*s2){
                         flag=0;
                         break;
                 }
+                ++s1;
+                ++s2;
+                ++i;
         }
         return flag;
 }
