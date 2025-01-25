@@ -82,7 +82,7 @@ int main(int argc, char *argv[]){
                 display(mysheet, R, C, x, y);
             }
             if (gl == 4){
-                y = min(C-10, y+10);
+                if ((y+10)<=(C-1))  y+=10;
                 display(mysheet, R, C, x, y);
             }
             if (gl == 1){
@@ -90,7 +90,7 @@ int main(int argc, char *argv[]){
                 display(mysheet, R, C, x, y);
             }
             if (gl == 3){
-                x = min(R-10, x+10);
+                if ((x+10)<=(R-1)) x+=10;
                 display(mysheet, R, C, x, y);
             }
         }
