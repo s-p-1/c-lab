@@ -39,3 +39,40 @@ int mycomp(char s[20]){
         printf("give correct input\n");
         return -1;
 }
+
+int get_line(){
+        char string[20];
+        char c = getchar();
+        int q = c-'a';
+        if (q>=26){
+                printf("this is wrong input\n");
+                return -1;
+        }else if (q>=0){
+                int i =0;
+                while (c!='\n'){
+                        string[i]=c;
+                        c=getchar();
+                        ++i;
+                        if (i==19) {
+                                while (getchar()!='\n')
+                                break;
+                        }
+                }
+                string[i]='\0';
+                return mycomp(string);
+        }else{
+                //handleassignment(c);
+                printf("do the functional assignment now");
+                return -2;
+        }
+}
+
+
+int main(){
+        int g =get_line();
+        while(g!=5){
+                printf("%d\n", g);
+                g=get_line();
+        }
+        return 0;
+}
