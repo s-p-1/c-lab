@@ -68,11 +68,11 @@ int get_line(){
 }
 
 
-int main(){
-        int g =get_line();
-        while(g!=5){
-                printf("%d\n", g);
-                g=get_line();
-        }
-        return 0;
-}
+// int main(){
+//         int g =get_line();
+//         while(g!=5){
+//                 printf("%d\n", g);
+//                 g=get_line();
+//         }
+//         return 0;
+// }
