@@ -76,21 +76,23 @@ int main(int argc, char *argv[]){
         if (gl == 8){
             printf("to be handled") ;
         }
-        if (gl == 2){
-            y = max(0, y-10);
-            if (flag==1){display(mysheet, R, C, x, y);}
-        }
-        if (gl == 4){
-            y = min(C-10, y+10);
-            if (flag==1){display(mysheet, R, C, x, y);}
-        }
-        if (gl == 1){
-            x = max(0, x-10);
-            if (flag==1){display(mysheet, R, C, x, y);}
-        }
-        if (gl == 3){
-            x = min(R-10, x+10);
-            if (flag==1){display(mysheet, R, C, x, y);}
+        if (flag==1){
+            if (gl == 2){
+                y = max(0, y-10);
+                display(mysheet, R, C, x, y);
+            }
+            if (gl == 4){
+                y = min(C-10, y+10);
+                display(mysheet, R, C, x, y);
+            }
+            if (gl == 1){
+                x = max(0, x-10);
+                display(mysheet, R, C, x, y);
+            }
+            if (gl == 3){
+                x = min(R-10, x+10);
+                display(mysheet, R, C, x, y);
+            }
         }
         gl = get_line();
         if (gl == 5){
