@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "helper.h"
+#include <time.h>
 
 //a file that runs until q and initializes display
 int min(int a, int b) {
@@ -53,18 +54,18 @@ void display (int ** mysheet, int R, int C, int x, int y){
 
 
 int main(int argc, char *argv[]){
+    //timing
+    clock_t st = clock();
+    //initializatoin
     int R = atoi (argv[1]);
     int C = atoi (argv[2]);
     int ** mysheet = (int **)malloc(R * sizeof(int *));
-    for (int i = 0; i < R; i++){
-        mysheet[i] = (int *)calloc(C , sizeof(int));
-    }
-    int x, y;
-    x=0;
-    y=0;
+    for (int i = 0; i < R; i++) mysheet[i] = (int *)calloc(C , sizeof(int));
+    int x=0, y=0, flag=1;
     display(mysheet, R, C, x, y);
+    printf("[%.4f] (ok) > ", (((double)(clock()- st))/CLOCKS_PER_SEC));
+    st = clock();
 
-    int flag=1;
     int gl = get_line();
     while (gl != 5){
         if (gl == 6){
