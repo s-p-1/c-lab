@@ -5,11 +5,22 @@
  into the required expressions*/
 
 
-int cell_handler(char *cell){
+typedef struct Rowcol
+{
+    int row;
+    int col;
+} rowcol;
+
+
+
+
+rowcol cell_handler(char *cell){
     extern R, C;
+    rowcol rc;
     int col=0;
     int row=0;
     int flag =0;
+    int invalid =0;
     while (*cell){
         if (flag==0){
             if (*cell>='A' && *cell<='Z'){
@@ -19,6 +30,8 @@ int cell_handler(char *cell){
                 row=*cell-'0';
                 cell++;
                 flag=1;
+            }else{
+                invalid = 1;break;
             }
         }
         else{
@@ -27,97 +40,114 @@ int cell_handler(char *cell){
                 cell++;
             }
             else{
-                return 0;
+                invalid = 1;break;
             }
         }
     }
-
-    if (row>=0 && row<=R && col>=0 && col<=C){
-        return 1;
+    if (invalid==0){
+        rc.row=row-1;
+        rc.col=col-1;
     }
-    return 0;
+    if (row>=1 && row<=R && col>=1 && col<=C){
+        return rc;
+    }
+    rc.row=-1;
+    rc.col=-1;
+    return rc;
     // return 0;
 }
 
-char* parser(char input[]){
+char parser(char input[]){
     char *cell;
     cell=strtok(input, "=");
-    // if (cell_handler(cell)==0){
-    //     printf("Cell out of range\n");
-    // }
-    
-        char *exp;
-        char *cell1;
-        char *cell2;
-        char *range;
-        exp=strtok(NULL, "=");
-        // printf("%s\n", exp);
-        char *arr[200];
-        if (strpbrk(exp, "+-*/")!=NULL){
-            if (strpbrk(exp, "+")!=NULL){
-                cell1=strtok(exp, "+");
-                cell2=strtok(NULL, "+");
-                printf("%s %s\n", cell1, cell2);
-                return "a1";
-            }
-            else if (strpbrk(exp, "-")!=NULL){
-                cell1=strtok(exp, "-");
-                cell2=strtok(NULL, "-");
-                return "a2";
-            }
-            else if (strpbrk(exp, "*")!=NULL){
-                cell1=strtok(exp, "*");
-                cell2=strtok(NULL, "*");
-                return "a3";
-            }
-            else if (strpbrk(exp, "/")!=NULL){
-                cell1=strtok(exp, "/");
-                cell2=strtok(NULL, "/");
-                return "a4";
-            }
-            printf("%s %s\n", cell1, cell2);
-        }
-        else if (strpbrk(exp, "MINMAXAVGSUMSTDEVSLEEP")!=NULL){
-            // printf("Function\n");
-            char *func;
-            char *intmed1;
-            char *part1;
-            char *part2;
-            char *intmed2;
-            func=strtok(exp, "(");
-            intmed1=strtok(NULL, "(");
-            part1=strtok(intmed1, ":");
-            intmed2=strtok(NULL, ":");
-            part2=strtok(intmed2, ")");
-            printf("%s %s\n", part1, part2);
-            // char* arr1[3];
-            if (strstr(exp, "MIN")!=NULL){
-                // printf("MIN\n");
-                // arr1[0]='f';
-                // arr1[1]='1';
-                // arr1[2]='\0';
-                return "f1";
-            }
-            else if (strstr(exp, "MAX")!=NULL){
-                return "f2";
-            }
-            else if (strstr(exp, "AVG")!=NULL){
-                return "f3";
-            }
-            else if (strstr(exp, "SUM")!=NULL){
-                return "f4";
-            }
-            else if (strstr(exp, "STDEV")!=NULL){
-                return "f5";
-            }
-            else if (strstr(exp, "SLEEP")!=NULL){
-                return "f6";
-            }
-        }
+    if (cell_handler(cell).row==-1){
+        printf("Invalid First cell\n");
+        return '1';
+    }
 
-        else{
-            return "a";
+    char *exp;
+    char *cell1;
+    char *cell2;
+    if (cell_handler(cell1).row==-1){
+        printf("Invalid Second cell\n");
+        return '2';
+    }
+    if (cell_handler(cell2).row==-1){
+        printf("Invalid Third cell\n");
+        return '3';
+    }
+    char *range;
+    exp=strtok(NULL, "=");
+    // printf("%s\n", exp);
+    char *arr[200];
+    if (strpbrk(exp, "+-*/")!=NULL){
+        if (strpbrk(exp, "+")!=NULL){
+            cell1=strtok(exp, "+");
+            cell2=strtok(NULL, "+");
+            printf("%s %s\n", cell1, cell2);
+            return '+';
         }
+        else if (strpbrk(exp, "-")!=NULL){
+            cell1=strtok(exp, "-");
+            cell2=strtok(NULL, "-");
+            return '-';
+        }
+        else if (strpbrk(exp, "*")!=NULL){
+            cell1=strtok(exp, "*");
+            cell2=strtok(NULL, "*");
+            return '*';
+        }
+        else if (strpbrk(exp, "/")!=NULL){
+            cell1=strtok(exp, "/");
+            cell2=strtok(NULL, "/");
+            return '/';
+        }
+        else{
+            return 'q';
+        }
+        printf("%s %s\n", cell1, cell2);
+    }
+    else if (strpbrk(exp, "MINMAXAVGSUMSTDEVSLEEP")!=NULL){
+        // printf("Function\n");
+        char *func;
+        char *intmed1;
+        char *part1;
+        char *part2;
+        char *intmed2;
+        func=strtok(exp, "(");
+        intmed1=strtok(NULL, "(");
+        part1=strtok(intmed1, ":");
+        intmed2=strtok(NULL, ":");
+        part2=strtok(intmed2, ")");
+        printf("%s %s\n", part1, part2);
+        // char* arr1[3];
+        if (strstr(exp, "MIN")!=NULL){
+            // printf("MIN\n");
+            // arr1[0]='f';
+            // arr1[1]='1';
+            // arr1[2]='\0';
+            return 'm';
+        }
+        else if (strstr(exp, "MAX")!=NULL){
+            return 'M';
+        }
+        else if (strstr(exp, "AVG")!=NULL){
+            return 'a';
+        }
+        else if (strstr(exp, "SUM")!=NULL){
+            return 's';
+        }
+        else if (strstr(exp, "STDEV")!=NULL){
+            return 'S';
+        }
+        else if (strstr(exp, "SLEEP")!=NULL){
+            return '-';
+        }
+    }
+
+    else{
+        return "a";
+    }
     return "a";
 }
 // int main() {
