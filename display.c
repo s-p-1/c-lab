@@ -35,7 +35,7 @@ char * return_string(int n){
 
 }
 
-void display (int ** mysheet, int R, int C, int x, int y){
+void display (cell ** mysheet, int R, int C, int x, int y){
     printf("%15s", return_string(y));
     for (int j = y+1; j < min(C, y+10); j++){
         printf("%12s", return_string(j));
@@ -44,7 +44,7 @@ void display (int ** mysheet, int R, int C, int x, int y){
     for (int i = x; i < min(R, x+10); i++){
         printf("%3d", i+1);
         for (int j = y; j < min(C, y+10); j++){
-            printf("%12d", mysheet[i][j]);
+            printf("%12d", mysheet[i][j].value);
         }
         printf("\n");
 
