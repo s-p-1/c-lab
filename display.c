@@ -59,8 +59,8 @@ int main(int argc, char *argv[]){
     //initializatoin
     int R = atoi (argv[1]);
     int C = atoi (argv[2]);
-    int ** mysheet = (int **)malloc(R * sizeof(int *));
-    for (int i = 0; i < R; i++) mysheet[i] = (int *)calloc(C , sizeof(int));
+    cell ** mysheet = (cell **)malloc(R * sizeof(cell *));
+    for (int i = 0; i < R; i++) mysheet[i] = (cell *)calloc(C , sizeof(cell));
     int x=0, y=0, flag=1;
     display(mysheet, R, C, x, y);
     printf("[%.1f] (ok) > ", (((double)(clock()- st))/CLOCKS_PER_SEC));
