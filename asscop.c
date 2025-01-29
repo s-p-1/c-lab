@@ -91,12 +91,12 @@ char* parser(){
         }
     return "a";
 }
-int main() {
-    char* result = parser();
-    if (strcmp(result, "a")!=0) {
-        printf("Result: %s\n", result);
-    } else {
-        printf("No match found.\n");
-    }
-    return 0;
-}
+// int main() {
+//     char* result = parser();
+//     if (strcmp(result, "a")!=0) {
+//         printf("Result: %s\n", result);
+//     } else {
+//         printf("No match found.\n");
+//     }
+//     return 0;
+// }
