@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "helper.h"
 
+
 int stringcomp(const char* s1, const char* s2, char myc){
         int flag =1;
         int i=0;

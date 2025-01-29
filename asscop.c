@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<string.h>
+
 /* code to classify the input strings i.e the formulas
  into the required expressions*/
 
