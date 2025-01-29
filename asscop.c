@@ -3,14 +3,42 @@
 /* code to classify the input strings i.e the formulas
  into the required expressions*/
 
-// int cell_handler(char *cell){
-//     /*function to determine whether the cell is 
-//     in the range or not*/
-//     return 1;
-//     // return 0;
-// }
-char* parser(){
-    char input[]="a1=a2+a3";
+
+int cell_handler(char *cell){
+    extern R, C;
+    int col=0;
+    int row=0;
+    int flag =0;
+    while (*cell){
+        if (flag==0){
+            if (*cell>='A' && *cell<='Z'){
+                col=col*26+(*cell-'A'+1);
+                cell++;
+            }else if (*cell>='1' && *cell<='9'){
+                row=*cell-'0';
+                cell++;
+                flag=1;
+            }
+        }
+        else{
+            if (*cell>='0' && *cell<='9'){
+                row=10*row+(*cell-'0');
+                cell++;
+            }
+            else{
+                return 0;
+            }
+        }
+    }
+
+    if (row>=0 && row<=R && col>=0 && col<=C){
+        return 1;
+    }
+    return 0;
+    // return 0;
+}
+
+char* parser(char input[]){
     char *cell;
     cell=strtok(input, "=");
     // if (cell_handler(cell)==0){

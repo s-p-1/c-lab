@@ -61,7 +61,17 @@ int get_line(){
                 string[i]='\0';
                 return mycomp(string);
         }else{
-                //handleassignment(c);
+                char arr[30];
+                arr[0]=c;
+                int i =1;
+                for (i; i<30; ++i){
+                        c=getchar();
+                        if (c=='\n') break;
+                        arr[i]=c;
+                }
+                arr[i]='\0';
+                
+
                 printf("do the functional assignment now");
                 return -2;
         }
