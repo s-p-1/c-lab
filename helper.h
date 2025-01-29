@@ -2,6 +2,8 @@
 #define HELPER_H
 
 int get_line();
+int R;
+int C;
 typedef struct {
     int value; //initially 0
     char operation; //0 initially and for value/sleep, 
