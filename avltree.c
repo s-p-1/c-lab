@@ -138,11 +138,9 @@ AVLNode* deleteNode(AVLNode* root, int value) {
             root->count--;
             return root;
         }
-
         // node with only one child or no child
         if ((root->left == NULL) || (root->right == NULL)) {
             AVLNode *temp = root->left ? root->left : root->right;
-
             // No child case
             if (temp == NULL) {
                 temp = root;
@@ -150,7 +148,6 @@ AVLNode* deleteNode(AVLNode* root, int value) {
             }
             else // One child case
                 *root = *temp; // Copy the contents of the non-empty child
-
             free(temp);
         }
         else {
@@ -179,27 +176,22 @@ AVLNode* deleteNode(AVLNode* root, int value) {
     int balance = getBalance(root);
 
     // If this node becomes unbalanced, then there are 4 cases
-
     // Left Left Case
     if (balance > 1 && getBalance(root->left) >= 0)
         return rightRotate(root);
-
     // Left Right Case
     if (balance > 1 && getBalance(root->left) < 0) {
         root->left = leftRotate(root->left);
         return rightRotate(root);
     }
-
     // Right Right Case
     if (balance < -1 && getBalance(root->right) <= 0)
         return leftRotate(root);
-
     // Right Left Case
     if (balance < -1 && getBalance(root->right) > 0) {
         root->right = rightRotate(root->right);
         return leftRotate(root);
     }
-
     return root;
 }
 
@@ -224,11 +216,16 @@ AVLNode* buildAVLTree(int values[], int size) {
 // Utility function to find the node with minimum value
 AVLNode* minValueNode(AVLNode* node) {
     AVLNode* current = node;
-
     // loop down to find the leftmost leaf
     while (current->left != NULL)
         current = current->left;
-
+    return current;
+}
+AVLNode* maxValueNode(AVLNode* node) {
+    AVLNode* current = node;
+    // loop down to find the rightmost leaf
+    while (current->right != NULL)
+        current = current->right;
     return current;
 }
 

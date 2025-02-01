@@ -40,6 +40,8 @@ AVLNode* deleteNode(AVLNode* root, int value);
 void inorderTraversal(AVLNode* root);
 AVLNode* buildAVLTree(int values[], int size);
 AVLNode* minValueNode(AVLNode* node);
+AVLNode* maxValueNode(AVLNode* node);
+
 
 #define max(a, b) ((a) > (b) ? (a) : (b))
 #define min(a, b) ((a) < (b) ? (a) : (b))
