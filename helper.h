@@ -10,7 +10,7 @@
 #include <time.h>
 
 
-char parser(char* input[]);
+char parser(char* input);
 
 int get_line();
 int R;

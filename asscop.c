@@ -46,9 +46,9 @@ rowcol cell_handler(char *cell){
     // return 0;
 }
 
-char parser(char* input[]){
+char parser(char* input){
     char *cell;
-    char op = '-1';
+    char op = '\0';
     cell=strtok(input, "=");
     if (cell_handler(cell).row==-1){
         op = '1';
@@ -151,9 +151,9 @@ char parser(char* input[]){
     }
 
     else{
-        return "a";
+        return 'q';
     }
-    return "a";
+    return 'q';
 }
 // int main() {
 //     char* result = parser();
