@@ -8,6 +8,7 @@
 #define min(a, b) ((a) < (b) ? (a) : (b))
 #include <math.h>
 #include <time.h>
+#include <limits.h>
 
 
 char parser(char* input);
@@ -32,6 +33,7 @@ typedef struct {
     short col1;
     short row2;
     short col2;
+    int count;
     AVLNode *cell_avl;
     AVLNode *range_min_max;
 } cell; 

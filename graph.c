@@ -2,7 +2,7 @@
 
 void dfs (int address){
     AVLNode* root = mysheet[address%1000-1][address/1000-1].cell_avl;
-    int myl []= inorderTraversal(root);
+    int* myl= inorderTraversal(root);
     while (*myl!=-1){
         int addr1= *myl;
         mysheet[addr1%1000-1][addr1/1000-1].count += 1;
@@ -26,12 +26,14 @@ void prograph(int address){
     int size = 5;
     while (rear != front) {
         int address = queue[front];
+        cell* ptr = mysheet[address%1000-1]+(address/1000-1);
         AVLNode* root = mysheet[address%1000-1][address/1000-1].cell_avl;
         int* myl= inorderTraversal(root);
         //this array contains adddress of the cells
 
         while (*myl!=-1){
             int addr1= *myl;
+            update_value(ptr, address%1000-1, address/1000-1);
             //update the value here
             mysheet[addr1%1000-1][addr1/1000-1].count -= 1;
             if (mysheet[addr1%1000-1][addr1/1000-1].count == 0){
