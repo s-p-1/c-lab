@@ -25,8 +25,6 @@ typedef struct AVLNode {
 } AVLNode;
 typedef struct {
     int value; //initially 0
-    short my_row;
-    short my_col;
     int sum;
     int sq_sum;
     char operation; 
@@ -35,6 +33,7 @@ typedef struct {
     short row2;
     short col2;
     AVLNode *cell_avl;
+    AVLNode *range_min_max;
 } cell; 
 
 cell ** mysheet;
@@ -56,5 +55,6 @@ int* inorderTraversal(AVLNode* root);
 AVLNode* buildAVLTree(int values[], int size);
 AVLNode* minValueNode(AVLNode* node);
 AVLNode* maxValueNode(AVLNode* node);
-
+void update_value(cell *cell1, int row, int col);
+void final_update(cell *cell1);
 #endif
