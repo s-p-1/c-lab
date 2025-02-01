@@ -193,7 +193,7 @@ AVLNode* deleteNode(AVLNode* root, int value) {
 }
 
 // function to print inorder traversal of the tree when given the int converted values of the cells
-void inorderTraversal(AVLNode *root) {
+int* inorderTraversal(AVLNode *root) {
     int size=5;
     int* list = (int*)malloc(size*sizeof(int));
     int i = 0;

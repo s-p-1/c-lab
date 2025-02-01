@@ -52,7 +52,7 @@ int cell_handler(char *cell);
 
 AVLNode* insert(AVLNode* node, int value);
 AVLNode* deleteNode(AVLNode* root, int value);
-void inorderTraversal(AVLNode* root);
+int* inorderTraversal(AVLNode* root);
 AVLNode* buildAVLTree(int values[], int size);
 AVLNode* minValueNode(AVLNode* node);
 AVLNode* maxValueNode(AVLNode* node);
