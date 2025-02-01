@@ -13,33 +13,33 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     count = (cell1->row2 - cell1->row1 + 1) * (cell1->col2 - cell1->col1 + 1);
 
     if(cell1->operation == '+'){
-        val = mysheet[cell1->row1][cell1->col1]+mysheet[cell1->row2][cell1->col2];
+        val = mysheet[cell1->row1][cell1->col1].value+mysheet[cell1->row2][cell1->col2].value;
         cell1->sum = val;  //i will update sum and keep the init_value same while updating so that i can have both final_value and init_value and i don't have to make new variable for this
     }
 
     else if(cell1->operation == '-'){
-        val = mysheet[cell1->row1][cell1->col1]-mysheet[cell1->row2][cell1->col2];
+        val = mysheet[cell1->row1][cell1->col1].value-mysheet[cell1->row2][cell1->col2].value;
         cell1->sum = val;
     }
 
     else if(cell1->operation == '*'){
-        val = mysheet[cell1->row1][cell1->col1]*mysheet[cell1->row2][cell1->col2];
+        val = mysheet[cell1->row1][cell1->col1].value*mysheet[cell1->row2][cell1->col2].value;
         cell1->sum = val;
     }
 
     else if(cell1->operation == '/'){
-        val = mysheet[cell1->row1][cell1->col1]/mysheet[cell1->row2][cell1->col2];
+        val = mysheet[cell1->row1][cell1->col1].value/mysheet[cell1->row2][cell1->col2].value;
         cell1->sum = val;
     }
     
     // Min operation
     else if(cell1->operation == 'm') {
         val = INT_MAX;  // Initialize with maximum possible value
-        cell1.range_min_max = freeTree(cell1.range_min_max);
+        cell1->range_min_max = freeTree(cell1->range_min_max);
         for(int i = cell1->row1; i <= cell1->row2; i++) {
             for(int j = cell1->col1; j <= cell1->col2; j++) {
                 val = min(mysheet[i][j].value, val);
-                cell1.range_min_max = insert(cell1.range_min_max, mysheet[i][j].value);
+                cell1->range_min_max = insert(cell1->range_min_max, mysheet[i][j].value);
             }
         }
         cell1->sum = val;
@@ -48,11 +48,11 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     // Max operation
     else if(cell1->operation == 'M') {
         val = INT_MIN;  // Initialize with minimum possible value
-        cell1.range_min_max = freeTree(cell1.range_min_max);
+        cell1->range_min_max = freeTree(cell1->range_min_max);
         for(int i = cell1->row1; i <= cell1->row2; i++) {
             for(int j = cell1->col1; j <= cell1->col2; j++) {
                 val = max(mysheet[i][j].value, val);
-                cell1.range_min_max = insert(cell1.range_min_max, mysheet[i][j].value);
+                cell1->range_min_max = insert(cell1->range_min_max, mysheet[i][j].value);
             }
         }
         cell1->sum = val;
@@ -146,13 +146,13 @@ void update_value(cell *cell1, short row, short col){
             }
         }
     } else if (cell1->operation == 'm') {
-        cell1.range_min_max = delete(cell1.range_min_max, old_val);
-        cell1.range_min_max = insert(cell1.range_min_max, new_val);
-        cell1.sum = (minValueNode(cell1.range_min_max))->value;
+        cell1->range_min_max = delete(cell1->range_min_max, old_val);
+        cell1->range_min_max = insert(cell1->range_min_max, new_val);
+        cell1->sum = (minValueNode(cell1->range_min_max))->value;
     } else if (cell1->operation == 'M') {
-        cell1.range_min_max = delete(cell1.range_min_max, old_val);
-        cell1.range_min_max = insert(cell1.range_min_max, new_val);
-        cell1.sum = (maxValueNode(cell1.range_min_max))->value;
+        cell1->range_min_max = delete(cell1->range_min_max, old_val);
+        cell1->range_min_max = insert(cell1->range_min_max, new_val);
+        cell1->sum = (maxValueNode(cell1->range_min_max))->value;
     } else if (cell1->operation == 's') {
         cell1->sum += (new_val - old_val);
     } else if (cell1->operation == 'a') {
