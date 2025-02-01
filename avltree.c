@@ -201,7 +201,7 @@ int* inorderTraversal(AVLNode *root) {
         inorderTraversal(root->left );
         list[i] = root->value;
         i++;
-        if (i == size) {
+        if (i == size-1) {
             int new_size = (size) * 2;  // Doubling the size
             int *new_list = (int *)realloc(list, new_size * sizeof(int));
             size = new_size;
