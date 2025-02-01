@@ -103,7 +103,7 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     cell1->value = val;
 }
 
-void update_value(cell *cell1, short row, short col){
+void update_value(cell *cell1, int row, int col){
     int new_val = 0;
     int old_val = mysheet[row][col].value;
 
