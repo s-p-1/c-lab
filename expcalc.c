@@ -181,11 +181,9 @@ void final_update(cell *cell1){
         cell1->value = cell1->sum / count;
     }
     else{
-        cell->value= cell->sum;
+        cell1->value= cell1->sum;
     }
 }
-
-mysheet
 
 // int main(){
 //     for(int i=0; i<5; i++){
