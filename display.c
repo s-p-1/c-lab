@@ -69,8 +69,8 @@ int main(int argc, char *argv[]){
             flag=1;
         }
         if (gl >=1000){
-            x=gl/1000-1 ;
-            y=gl%1000-1;
+            x=gl%1000;
+            y=gl/1000;
             display(mysheet, R, C, x, y);
         }
         if (flag==1){
