@@ -4,12 +4,7 @@
 #include <time.h>
 
 //a file that runs until q and initializes display
-int min(int a, int b) {
-    return (a < b) ? a : b;
-}
-int max(int a, int b) {
-    return (a > b) ? a : b;
-}
+
 char * return_string(int n){
     if (n<26){
         char * s = (char *)malloc(2 * sizeof(char));

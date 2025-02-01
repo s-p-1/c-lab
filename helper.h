@@ -42,6 +42,8 @@ AVLNode* buildAVLTree(int values[], int size);
 AVLNode* minValueNode(AVLNode* node);
 
 #define max(a, b) ((a) > (b) ? (a) : (b))
-
+#define min(a, b) ((a) < (b) ? (a) : (b))
+#include <math.h>
+#include <time.h>
 
 #endif
