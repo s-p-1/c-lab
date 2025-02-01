@@ -1,7 +1,7 @@
 #ifndef HELPER_H
 #define HELPER_H
 
-int cell_handler(char *cell);
+rowcol cell_handler(char *cell);
 char* parser(char input[]);
 
 int get_line();
@@ -18,5 +18,30 @@ typedef struct {
     short col2;
     //above four will be initialized to -1;
 } cell; 
+
+
+
+typedef struct Rowcol
+{
+    int row;
+    int col;
+} rowcol;
+rowcol cell_handler(char *cell);
+
+
+typedef struct AVLNode {
+    int value;
+    struct AVLNode *left;
+    struct AVLNode *right;
+    int height;
+    int count;
+} AVLNode;
+
+AVLNode* insert(AVLNode* root, int value);
+AVLNode* delete(AVLNode* root, int value);
+void inorder_traversal(AVLNode* root);
+AVLNode* bulid_AVL(int list[], int size);
+
+
 
 #endif

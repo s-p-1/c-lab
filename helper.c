@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include "helper.h"
 
-
 int stringcomp(const char* s1, const char* s2, char myc){
         int flag =1;
         int i=0;
@@ -21,9 +20,6 @@ int stringcomp(const char* s1, const char* s2, char myc){
         }
         return flag;
 }
-
-
-
 
 int mycomp(char s[20]){
         if (stringcomp("w", s, '\0')==1) return 1;
@@ -77,7 +73,6 @@ int get_line(){
                 return -2;
         }
 }
-
 
 // int main(){
 //         int g =get_line();

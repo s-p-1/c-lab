@@ -1,18 +1,9 @@
 #include<stdio.h>
 #include<string.h>
+#include "helper.h"
 
 /* code to classify the input strings i.e the formulas
  into the required expressions*/
-
-
-typedef struct Rowcol
-{
-    int row;
-    int col;
-} rowcol;
-
-
-
 
 rowcol cell_handler(char *cell){
     extern R, C;
