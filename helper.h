@@ -1,8 +1,7 @@
 #ifndef HELPER_H
 #define HELPER_H
 
-rowcol cell_handler(char *cell);
-char* parser(char input[]);
+char parser(char* input[]);
 
 int get_line();
 int R;
