@@ -27,6 +27,7 @@ typedef struct {
     //above four will be initialized to -1;
 } cell; 
 
+cell ** mysheet;
 
 typedef struct Rowcol
 {

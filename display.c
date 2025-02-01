@@ -48,11 +48,11 @@ void display (cell ** mysheet, int R, int C, int x, int y){
 int main(int argc, char *argv[]){
     //timing
     clock_t st = clock();
-    extern R, C;
+    extern R, C, mysheet;
     //initializatoin
     R = atoi (argv[1]);
     C = atoi (argv[2]);
-    cell ** mysheet = (cell **)malloc(R * sizeof(cell *));
+    mysheet = (cell **)malloc(R * sizeof(cell *));
     for (int i = 0; i < R; i++) mysheet[i] = (cell *)calloc(C , sizeof(cell));
     int x=0, y=0, flag=1;
     display(mysheet, R, C, x, y);
