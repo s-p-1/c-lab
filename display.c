@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "helper.h"
-#include <time.h>
 
 //a file that runs until q and initializes display
 

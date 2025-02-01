@@ -1,5 +1,3 @@
-#include<stdio.h>
-#include<string.h>
 #include "helper.h"
 
 /* code to classify the input strings i.e the formulas
