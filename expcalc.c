@@ -131,16 +131,16 @@ void update_value(cell *cell1, int row, int col){
         }
     } else if (cell1->operation == '*') {
         if (cell1->row1 == row && cell1->col1 == col) {
-            cell1->sum = new_val * (mysheet[cell1.row2][cell1.col2].sum);
+            cell1->sum = new_val * (mysheet[cell1->row2][cell1->col2].sum);
         } else {
-            cell1->sum = (mysheet[cell1.row1][cell1.col1].sum) * new_val;
+            cell1->sum = (mysheet[cell1->row1][cell1->col1].sum) * new_val;
         }
     } else if (cell1->operation == '/') {
         if (cell1->row1 == row && cell1->col1 == col) {
-            cell1->sum = new_val / (mysheet[cell1.row2][cell1.col2].sum);
+            cell1->sum = new_val / (mysheet[cell1->row2][cell1->col2].sum);
         } else {
             if (new_val != 0) {
-                cell1->sum = (mysheet[cell1.row1][cell1.col1].sum) / new_val;
+                cell1->sum = (mysheet[cell1->row1][cell1->col1].sum) / new_val;
             } else {
                 cell1->sum = 0; // Avoid division by zero
             }
@@ -170,13 +170,13 @@ void update_value(cell *cell1, int row, int col){
 }
 
 void final_update(cell *cell1){
-    if(cell1.operation == 'S'){
+    if(cell1->operation == 'S'){
         int count = (cell1->row2 - cell1->row1 + 1) * (cell1->col2 - cell1->col1 + 1);
         double mean = (double)cell1->sum / count;
         double variance = ((double)cell1->sq_sum / count) - (mean * mean);
         cell1->value = (int)sqrt(variance);
     }
-    else if(cell1.operation == 'a'){
+    else if(cell1->operation == 'a'){
         int count = (cell1->row2 - cell1->row1 + 1) * (cell1->col2 - cell1->col1 + 1);
         cell1->value = cell1->sum / count;
     }
@@ -184,6 +184,8 @@ void final_update(cell *cell1){
         cell->value= cell->sum;
     }
 }
+
+mysheet
 
 // int main(){
 //     for(int i=0; i<5; i++){
