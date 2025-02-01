@@ -19,7 +19,6 @@ typedef struct {
 } cell; 
 
 
-
 typedef struct Rowcol
 {
     int row;
@@ -36,11 +35,13 @@ typedef struct AVLNode {
     int count;
 } AVLNode;
 
-AVLNode* insert(AVLNode* root, int value);
-AVLNode* delete(AVLNode* root, int value);
-void inorder_traversal(AVLNode* root);
-AVLNode* bulid_AVL(int list[], int size);
+AVLNode* insert(AVLNode* node, int value);
+AVLNode* deleteNode(AVLNode* root, int value);
+void inorderTraversal(AVLNode* root);
+AVLNode* buildAVLTree(int values[], int size);
+AVLNode* minValueNode(AVLNode* node);
 
+#define max(a, b) ((a) > (b) ? (a) : (b))
 
 
 #endif

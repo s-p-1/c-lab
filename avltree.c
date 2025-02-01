@@ -3,94 +3,6 @@
 #include<stdlib.h>
 #include "helper.h"
 
-// int height(AVLNode* node){
-//     if (node==NULL){
-//         return 0;
-//     }
-//     return node->height;
-// }
-
-// int getBalance(AVLNode* node){
-//     if (node==NULL){
-//         return 0;
-//     }
-//     return height(node->left)-height(node->right);
-// }
-
-// AVLNode* newNode (int value){
-//     AVLNode* node= (AVLNode*)malloc(sizeof(AVLNode));
-//     node->value=value;
-//     node->left=NULL;
-//     node->right=NULL;
-//     node->height=1;
-//     node->count=1;
-//     return node;
-// }
-
-// AVLNode* insert(AVLNode* root, int value){
-//     if (root == NULL){
-//         return newNode (value) ;
-//     }
-
-//     if (value < root->value){
-//         root->left=insert(root->left, value);
-//     }
-//     else if (value > root->value){
-//         root->right=insert(root->right, value);
-//     }
-//     else{
-//         root->count++;
-//         return root;
-//     }
-
-//     root->height = 1 + max(height(root->left), height(root->right));
-//     int balance = getBalance(root);
-    
-// }
-
-// AVLNode *leftRotate(AVLNode *x) {
-//     AVLNode *y = x->right;
-//     AVLNode *T2 = y->left;
-
-//     // Perform rotation
-//     y->left = x;
-//     x->right = T2;
-
-//     // Update heights
-//     x->height = max(height(x->left), height(x->right)) + 1;
-//     y->height = max(height(y->left), height(y->right)) + 1;
-
-//     // Return new root
-//     return y;
-// }
-
-// AVLNode *rightRotate(AVLNode *y) {
-//     AVLNode *x = y->left;
-//     AVLNode *T2 = x->right;
-
-//     // Perform rotation
-//     x->right = y;
-//     y->left = T2;
-
-//     // Update heights
-//     y->height = max(height(y->left), height(y->right)) + 1;
-//     x->height = max(height(x->left), height(x->right)) + 1;
-
-//     // Return new root
-//     return x;
-// }
-
-// AVLNode* delete(AVLNode* root, int value){
-
-// }
-
-// void inorder_traversal(AVLNode* root){
-
-// }
-
-// AVLNode* bulid_AVL(int list[], int size){
-
-// }
 
 // Function to get the height of the tree
 int height(AVLNode *N) {
@@ -319,3 +231,46 @@ AVLNode* minValueNode(AVLNode* node) {
 
     return current;
 }
+
+// Driver program to test above functions
+
+// int main() {
+//     // List of values to insert into the AVL tree
+//     int values[] = {10, 20, 30, 40, 50, 25};
+//     int size = sizeof(values) / sizeof(values[0]);
+
+//     // Build the AVL tree from the list of values
+//     AVLNode *root = buildAVLTree(values, size);
+
+//     // Print inorder traversal of the AVL tree
+//     printf("Inorder traversal of the constructed AVL tree is:\n");
+//     inorderTraversal(root);
+//     printf("\n");
+
+//     // Insert duplicate values to test count increment
+//     root = insert(root, 20);
+//     root = insert(root, 30);
+
+//     // Print inorder traversal after inserting duplicates
+//     printf("Inorder traversal after inserting duplicates:\n");
+//     inorderTraversal(root);
+//     printf("\n");
+
+//     // Delete a value and print the tree
+//     root = deleteNode(root, 20);
+//     printf("Inorder traversal after deleting 20:\n");
+//     inorderTraversal(root);
+//     printf("\n");
+
+//     // Delete a value with count > 1 and print the tree
+//     root = deleteNode(root, 30);
+//     printf("Inorder traversal after deleting 30 (count > 1):\n");
+//     inorderTraversal(root);
+//     printf("\n");
+
+//     root = deleteNode(root, 30);
+//     printf("Inorder traversal after deleting 30 (count > 1):\n");
+//     inorderTraversal(root);
+//     printf("\n");
+//     return 0;
+// }
