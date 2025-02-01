@@ -32,12 +32,12 @@ typedef struct {
 cell ** mysheet;
 void calc_value(cell *cell1);
 
-typedef struct Rowcol
-{
-    int row;
-    int col;
-} rowcol;
-rowcol cell_handler(char *cell);
+// typedef struct Rowcol
+// {
+//     int row;
+//     int col;
+// } rowcol;
+int cell_handler(char *cell);
 
 
 typedef struct AVLNode {
@@ -54,8 +54,5 @@ void inorderTraversal(AVLNode* root);
 AVLNode* buildAVLTree(int values[], int size);
 AVLNode* minValueNode(AVLNode* node);
 AVLNode* maxValueNode(AVLNode* node);
-
-
-
 
 #endif

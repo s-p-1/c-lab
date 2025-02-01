@@ -3,9 +3,8 @@
 /* code to classify the input strings i.e the formulas
  into the required expressions*/
 
-rowcol cell_handler(char *cell){
+int cell_handler(char *cell){
     extern int R, C;
-    rowcol rc;
     int col=0;
     int row=0;
     int flag =0;
@@ -29,28 +28,29 @@ rowcol cell_handler(char *cell){
                 cell++;
             }
             else{
-                invalid = 1;break;
+                invalid = 1;
+                return -1;
             }
         }
     }
     if (invalid==0){
-        rc.row=row-1;
-        rc.col=col-1;
+        row=row-1;
+        col=col-1;
     }
     if (row>=1 && row<=R && col>=1 && col<=C){
-        return rc;
+        return col*1000+row;
     }
-    rc.row=-1;
-    rc.col=-1;
-    return rc;
-    // return 0;
+    row=-1;
+    col=-1;
+    return row;
+   
 }
 
 char parser(char* input){
     char *cell;
     char op = '\0';
     cell=strtok(input, "=");
-    if (cell_handler(cell).row==-1){
+    if (cell_handler(cell) == -1){
         op = '1';
         return '1';
     }
@@ -63,11 +63,11 @@ char parser(char* input){
     exp=strtok(NULL, "=");
     // printf("%s\n", exp);
     char *arr[200];
-    if (cell_handler(exp).row!=-1){
+    if (cell_handler(exp) != -1){
         op = 'c';
-        
         return 'c';
     }
+
     else if (strpbrk(exp, "+-*/")!=NULL){
         if (strpbrk(exp, "+")!=NULL){
             cell1=strtok(exp, "+");
@@ -94,11 +94,11 @@ char parser(char* input){
             op = 'q';
             return 'q';
         }
-        if (cell_handler(cell1).row==-1){
+        if (cell_handler(cell1) == -1){
             op = '2';
             return '2';
         }
-        if (cell_handler(cell2).row==-1){
+        if (cell_handler(cell2) == -1){
             op = '3';
             return '3';
         }
