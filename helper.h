@@ -17,6 +17,8 @@ int R;
 int C;
 typedef struct {
     int value; //initially 0
+    short my_row;
+    short my_col;
     int sum;
     int sq_sum;
     char operation; //0 initially and for value/sleep, 
