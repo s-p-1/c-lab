@@ -1,5 +1,4 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include "helper.h"
 
 void resize_adj_list(int **adj_list, int *size) {
     int new_size = (*size) * 2;  // Doubling the size

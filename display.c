@@ -68,8 +68,10 @@ int main(int argc, char *argv[]){
         if (gl == 7){
             flag=1;
         }
-        if (gl == 8){
-            printf("to be handled") ;
+        if (gl >=1000){
+            x=gl/1000-1 ;
+            y=gl%1000-1;
+            display(mysheet, R, C, x, y);
         }
         if (flag==1){
             if (gl == 2){
