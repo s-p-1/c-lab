@@ -4,7 +4,7 @@
  into the required expressions*/
 
 rowcol cell_handler(char *cell){
-    extern R, C;
+    extern int R, C;
     rowcol rc;
     int col=0;
     int row=0;
