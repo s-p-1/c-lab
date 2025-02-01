@@ -1,6 +1,15 @@
 #ifndef HELPER_H
 #define HELPER_H
 
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#define max(a, b) ((a) > (b) ? (a) : (b))
+#define min(a, b) ((a) < (b) ? (a) : (b))
+#include <math.h>
+#include <time.h>
+
+
 char parser(char* input[]);
 
 int get_line();
@@ -43,9 +52,6 @@ AVLNode* minValueNode(AVLNode* node);
 AVLNode* maxValueNode(AVLNode* node);
 
 
-#define max(a, b) ((a) > (b) ? (a) : (b))
-#define min(a, b) ((a) < (b) ? (a) : (b))
-#include <math.h>
-#include <time.h>
+
 
 #endif

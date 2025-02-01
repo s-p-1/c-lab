@@ -1,0 +1,2 @@
+git stash; git fetch origin; git reset --hard origin; git stash pop
+git add . ; git commit -m "nothing"; git push
