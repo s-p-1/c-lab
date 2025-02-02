@@ -1,48 +1,48 @@
 #include "helper.h"
 
+bool is_int (char *s){
+    int i =0;
+    if (s[i]=='+' || s[i]=='-') i++; //to allow the optional sign in the beginning
+    if (s[i]=='\0') return false; //if the string has no neumerals
+    while (s[i]!='\0'){
+        if (s[i]<'0' || s[i]>'9') return false;
+        i++; //if the string has any non-numerals
+    }
+    return true;
+}
+
 /* code to classify the input strings i.e the formulas
  into the required expressions*/
 
 int cell_handler(char *cell){
-    extern int R, C;
-    int col=0;
-    int row=0;
-    int flag =0;
-    int invalid =0;
+
+    int col=0, row=0, flag=0, invalid=0;
+
     while (*cell){
+
         if (flag==0){
+
             if (*cell>='A' && *cell<='Z'){
                 col=col*26+(*cell-'A'+1);
-                cell++;
             }else if (*cell>='1' && *cell<='9'){
                 row=*cell-'0';
-                cell++;
                 flag=1;
-            }else{
-                invalid = 1;break;
-            }
-        }
-        else{
+            }else return -1;
+
+        }else{
+
             if (*cell>='0' && *cell<='9'){
                 row=10*row+(*cell-'0');
-                cell++;
             }
-            else{
-                invalid = 1;
-                return -1;
-            }
-        }
-    }
-    if (invalid==0){
-        row=row-1;
-        col=col-1;
+            else return -1;
+
+        }cell++;
     }
     if (row>=1 && row<=R && col>=1 && col<=C){
-        return col*1000+row;
+        return (col-1)*1000+(row-1);
     }
-    row=-1;
-    col=-1;
-    return row;
+    
+    return -1;
    
 }
 
@@ -63,6 +63,9 @@ char parser(char* input){
     exp=strtok(NULL, "=");
     // printf("%s\n", exp);
     char *arr[200];
+    if (is_int(exp)) {
+        return 'c';
+    }
     if (cell_handler(exp) != -1){
         op = 'c';
         return 'c';

@@ -1,7 +1,3 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<math.h>
-#include<limits.h>
 #include "helper.h"
 void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     int val = 0;

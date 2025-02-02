@@ -14,7 +14,8 @@ void dfs (int address){
 
 
 
-void prograph(int address){
+void pro_graph(int address){
+    dfs(address);
     int size = 5;
     int *queue = (int *)malloc(size * sizeof(int));
     
@@ -39,14 +40,16 @@ void prograph(int address){
             if (mysheet[addr1%1000-1][addr1/1000-1].count == 0){
                 queue[rear] = addr1;
                 rear++;
+                if (rear == size){
+                    size = size*2;
+                    queue = (int *)realloc(queue, size * sizeof(int));
+                }
             }
             myl++;
         }
-
-        if (rear == size) {
-            printf("Queue is full\n");
-            break;
-        }
+        front++;
+        final_update(ptr);
+        
     }
 }
 
