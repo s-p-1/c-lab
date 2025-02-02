@@ -1,5 +1,6 @@
 #include "helper.h"
-
+#include <stdio.h>
+#include <stdlib.h>
 
 // Function to get the height of the tree
 int height(AVLNode *N) {
@@ -67,10 +68,14 @@ AVLNode* insert(AVLNode* root, int value) {
     if (root == NULL)
         return newNode(value);
 
-    if (value < root->value)
+    if (value < root->value){
+        printf("Going left from node with value %d\n", root->value);
         root->left = insert(root->left, value);
-    else if (value > root->value)
+    }
+    else if (value > root->value){
+        printf("Going right from node with value %d\n", root->value);
         root->right = insert(root->right, value);
+    }
     else { // Equal values are found
         root->count++;
         return root;
@@ -192,23 +197,42 @@ AVLNode* deleteNode(AVLNode* root, int value) {
     return root;
 }
 
-// function to print inorder traversal of the tree when given the int converted values of the cells
-int* inorderTraversal(AVLNode *root) {
-    int size=5;
-    int* list = (int*)malloc(size*sizeof(int));
-    int i = 0;
+void inorderHelper(AVLNode *root, int *list, int *index) {
     if (root != NULL) {
-        inorderTraversal(root->left );
-        list[i] = root->value;
-        i++;
-        if (i == size-1) {
-            int new_size = (size) * 2;  // Doubling the size
-            int *new_list = (int *)realloc(list, new_size * sizeof(int));
-            size = new_size;
-            list = new_list;
+        inorderHelper(root->left, list, index);
+        for (int i = 0; i < root->count; i++) {
+            list[*index] = root->value;
+            (*index)++;
         }
-        inorderTraversal(root->right );
+        inorderHelper(root->right, list, index);
     }
+}
+
+// Function to count the total number of nodes
+void countNodes(AVLNode* node, int* size) {
+    if (node != NULL) {
+        countNodes(node->left, size);
+        *size += node->count;
+        countNodes(node->right, size);
+    }
+}
+
+// function to print inorder traversal of the tree when given the int converted values of the cells
+int* inorderTraversal(AVLNode* root) {
+    int x=0;
+    int *size;
+    size=&x;
+    countNodes(root, size);
+
+    // Allocate memory for the list
+    int* list = (int*)malloc(*size * sizeof(int));
+    int index = 0;
+
+    // Populate the list with inorder traversal
+    inorderHelper(root, list, &index);
+    // for (int i = 0; i < *size; i++) {
+    //     printf("%d ", list[i]);
+    // }
     return list;
 }
 
@@ -237,44 +261,41 @@ AVLNode* maxValueNode(AVLNode* node) {
     return current;
 }
 
-// Driver program to test above functions
+//Driver program to test above functions
 
 // int main() {
 //     // List of values to insert into the AVL tree
-//     int values[] = {10, 20, 30, 40, 50, 25};
-//     int size = sizeof(values) / sizeof(values[0]);
+//     // int values[] = {10, 20, 30, 40, 50, 25};
+//     // int size = sizeof(values) / sizeof(values[0]);
 
 //     // Build the AVL tree from the list of values
-//     AVLNode *root = buildAVLTree(values, size);
-
-//     // Print inorder traversal of the AVL tree
-//     printf("Inorder traversal of the constructed AVL tree is:\n");
-//     inorderTraversal(root);
-//     printf("\n");
+//     // AVLNode *root = buildAVLTree(values, size);
+//     // inorderTraversal(root);
+    
 
 //     // Insert duplicate values to test count increment
-//     root = insert(root, 20);
+//     AVLNode *root = NULL;
+//     root = insert(root, 45);
 //     root = insert(root, 30);
+//     root = insert(root, 20);
+//     root = insert(root, 40);
+//     root = insert(root, 50);
+//     root = insert(root, 10);
 
-//     // Print inorder traversal after inserting duplicates
-//     printf("Inorder traversal after inserting duplicates:\n");
 //     inorderTraversal(root);
 //     printf("\n");
 
 //     // Delete a value and print the tree
 //     root = deleteNode(root, 20);
-//     printf("Inorder traversal after deleting 20:\n");
 //     inorderTraversal(root);
 //     printf("\n");
 
 //     // Delete a value with count > 1 and print the tree
 //     root = deleteNode(root, 30);
-//     printf("Inorder traversal after deleting 30 (count > 1):\n");
 //     inorderTraversal(root);
 //     printf("\n");
 
 //     root = deleteNode(root, 30);
-//     printf("Inorder traversal after deleting 30 (count > 1):\n");
 //     inorderTraversal(root);
 //     printf("\n");
 //     return 0;
