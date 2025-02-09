@@ -1,15 +1,15 @@
 #include "helper.h"
 
-int stringcomp(const char* s1, const char* s2, char myc){
-        int flag =1;
+bool stringcomp(const char* s1, const char* s2, char myc){
+        bool flag =true;
         int i=0;
         while (i<20){
                 if (*s1==myc){
-                        if (*s2!=myc) flag=0;
+                        if (*s2!=myc) flag=false;
                         break;
                 }
                 if (*s1!=*s2){
-                        flag=0;
+                        flag=false;
                         break;
                 }
                 ++s1;
@@ -20,14 +20,14 @@ int stringcomp(const char* s1, const char* s2, char myc){
 }
 
 int mycomp(char s[20]){
-        if (stringcomp("w", s, '\0')==1) return 1;
-        if (stringcomp("a", s, '\0')==1) return 2;
-        if (stringcomp("s", s, '\0')==1) return 3;
-        if (stringcomp("d", s, '\0')==1) return 4;
-        if (stringcomp("q", s, '\0')==1) return 5;
-        if (stringcomp("disable_output", s, '\0')==1) return 6;
-        if (stringcomp("enable_output", s, '\0')==1) return 7;
-        if (stringcomp("scroll_to ", s, ' ')==1){
+        if (stringcomp("w", s, '\0')) return 1;
+        if (stringcomp("a", s, '\0')) return 2;
+        if (stringcomp("s", s, '\0')) return 3;
+        if (stringcomp("d", s, '\0')) return 4;
+        if (stringcomp("q", s, '\0')) return 5;
+        if (stringcomp("disable_output", s, '\0')) return 6;
+        if (stringcomp("enable_output", s, '\0')) return 7;
+        if (stringcomp("scroll_to ", s, ' ')){
                 return cell_handler(s+10);
         }
         printf("give correct input\n");

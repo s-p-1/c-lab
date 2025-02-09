@@ -24,7 +24,7 @@ void pro_graph(int address){
     int rear = 1;
     queue[0] = address;
     AVLNode* root = mysheet[address%1000-1][address/1000-1].cell_avl;
-    int size = 5;
+    
     while (rear != front) {
         int address = queue[front];
         cell* ptr = mysheet[address%1000-1]+(address/1000-1);

@@ -47,12 +47,9 @@ int cell_handler(char *cell){
 
 char parser(char* input){
     char *celll=strtok(input , "=");
-    char op = '\0';
+    char op = 'q';
     int lhs = cell_handler(celll);
-    if (lhs == -1){
-        op = '1';
-        return '1';
-    }
+    if (lhs == -1) return 'q';
     cell* lhscell=mysheet[lhs/1000]+(lhs%1000);
     char* exp=strtok(NULL, "=");
     char *cell1;
@@ -60,17 +57,15 @@ char parser(char* input){
     char *range;
     if (is_int(exp)) {
         lhscell->value = atoi(exp);
-        return 'c';
+        op='c';
     }
     if (cell_handler(exp) != -1){
-        op = 'c';
-        return 'c';
+        op = 'C';
     }
     else if (strpbrk(exp, "+-*/")!=NULL){
         if (strpbrk(exp, "+")!=NULL){
             cell1=strtok(exp, "+");
             cell2=strtok(NULL, "+");
-            printf("%s %s\n", cell1, cell2);
             op = '+';
         }
         else if (strpbrk(exp, "-")!=NULL){
@@ -88,20 +83,11 @@ char parser(char* input){
             cell2=strtok(NULL, "/");
             op = '/';
         }
-        else{
-            op = 'q';
-            return 'q';
-        }
-        if (cell_handler(cell1) == -1){
-            op = '2';
-            return 'q';
-        }
-        if (cell_handler(cell2) == -1){
-            op = '3';
-            return 'q';
-        }
+        else return 'q';
+        if (cell_handler(cell1) == -1) return 'q';        
+        if (cell_handler(cell2) == -1) return 'q';
+        
         // handle the operations here
-        return 's';
     }
     else if (strpbrk(exp, "MINMAXAVGSUMSTDEVSLEEP")!=NULL){
         char* func=strtok(exp, "(");
@@ -110,15 +96,22 @@ char parser(char* input){
         char* intmed2 =strtok(NULL, ":");
         char* part2=strtok(intmed2, ")");
         if (strtok(NULL, ")") != NULL) return 'q';
-        if (stringcomp("MIN", exp, '\0')==1) return 'm';
-        else if (stringcomp("MAX", exp, '\0')==1) return 'M';
-        else if (stringcomp("AVG", exp, '\0')==1) return 'a';
-        else if (stringcomp("SUM", exp, '\0')==1) return 's';
-        else if (stringcomp("STDEV", exp, '\0')==1) return 'S';
-        else if (stringcomp("SLEEP", exp, '\0')==1) return '-';
+        if (stringcomp("MIN", exp, '\0')==1) op='m';
+        else if (stringcomp("MAX", exp, '\0')==1) op='M';
+        else if (stringcomp("AVG", exp, '\0')==1) op='a';
+        else if (stringcomp("SUM", exp, '\0')==1) op='s';
+        else if (stringcomp("STDEV", exp, '\0')==1) op='S';
+        else if (stringcomp("SLEEP", exp, '\0')==1) op='-';
         else return 'q';
     }
-    return 'q';
+    lhscell->operation = op;
+    lhscell->row1 = cell_handler(cell1)/1000;
+    lhscell->col1 = cell_handler(cell1)%1000;
+    lhscell->row2 = cell_handler(cell2)/1000;
+    lhscell->col2 = cell_handler(cell2)%1000;
+    calc_value(lhscell);
+    pro_graph(lhs);
+    return op;
 }
 // int main() {
 //     char result = parser();

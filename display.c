@@ -48,8 +48,6 @@ void display (cell ** mysheet, int R, int C, int x, int y){
 int main(int argc, char *argv[]){
     //timing
     clock_t st = clock();
-    extern int R, C;
-    extern cell ** mysheet;
     //initializatoin
     R = atoi (argv[1]);
     C = atoi (argv[2]);

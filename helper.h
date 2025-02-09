@@ -42,7 +42,7 @@ typedef struct {
 
 cell ** mysheet;
 void calc_value(cell *cell1);
-int stringcomp(const char* s1, const char* s2, char myc);
+bool stringcomp(const char* s1, const char* s2, char myc);
 // typedef struct Rowcol
 // {
 //     int row;
@@ -61,4 +61,5 @@ AVLNode* minValueNode(AVLNode* node);
 AVLNode* maxValueNode(AVLNode* node);
 void update_value(cell *cell1, int row, int col);
 void final_update(cell *cell1);
+
 #endif
