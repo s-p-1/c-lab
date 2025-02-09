@@ -31,7 +31,8 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     // Min operation
     else if(cell1->operation == 'm') {
         val = INT_MAX;  // Initialize with maximum possible value
-        cell1->range_min_max = freeTree(cell1->range_min_max);
+        freeTree(cell1->range_min_max);
+        cell1->range_min_max = NULL;
         for(int i = cell1->row1; i <= cell1->row2; i++) {
             for(int j = cell1->col1; j <= cell1->col2; j++) {
                 val = min(mysheet[i][j].value, val);
@@ -44,7 +45,8 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     // Max operation
     else if(cell1->operation == 'M') {
         val = INT_MIN;  // Initialize with minimum possible value
-        cell1->range_min_max = freeTree(cell1->range_min_max);
+        freeTree(cell1->range_min_max);
+        cell1->range_min_max = NULL;
         for(int i = cell1->row1; i <= cell1->row2; i++) {
             for(int j = cell1->col1; j <= cell1->col2; j++) {
                 val = max(mysheet[i][j].value, val);
@@ -196,3 +198,4 @@ void final_update(cell *cell1){
 //     printf("%d", mysheet[5][2].value);
 //     return 0;
 // }
+freeTree
