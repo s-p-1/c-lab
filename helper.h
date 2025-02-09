@@ -52,7 +52,7 @@ int cell_handler(char *cell);
 
 
 
-
+void freeTree(AVLNode *root);
 AVLNode* insert(AVLNode* node, int value);
 AVLNode* deleteNode(AVLNode* root, int value);
 int* inorderTraversal(AVLNode* root);

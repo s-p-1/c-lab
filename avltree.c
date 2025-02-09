@@ -19,6 +19,14 @@ AVLNode* newNode(int value) {
     node->count = 1; // initialize count to 1
     return node;
 }
+void freeTree(AVLNode *root) {
+    if (root == NULL) {
+        return;
+    }
+    freeTree(root->left);
+    freeTree(root->right);
+    free(root);
+}
 
 // Right rotate subtree rooted with y
 AVLNode *rightRotate(AVLNode *y) {
