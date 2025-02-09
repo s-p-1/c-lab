@@ -142,11 +142,11 @@ void update_value(cell *cell1, int row, int col){
             }
         }
     } else if (cell1->operation == 'm') {
-        cell1->range_min_max = delete(cell1->range_min_max, old_val);
+        cell1->range_min_max = deleteNode(cell1->range_min_max, old_val);
         cell1->range_min_max = insert(cell1->range_min_max, new_val);
         cell1->sum = (minValueNode(cell1->range_min_max))->value;
     } else if (cell1->operation == 'M') {
-        cell1->range_min_max = delete(cell1->range_min_max, old_val);
+        cell1->range_min_max = deleteNode(cell1->range_min_max, old_val);
         cell1->range_min_max = insert(cell1->range_min_max, new_val);
         cell1->sum = (maxValueNode(cell1->range_min_max))->value;
     } else if (cell1->operation == 's') {
