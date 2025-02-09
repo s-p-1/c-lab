@@ -50,14 +50,33 @@ char parser(char* input){
     char op = 'q';
     int lhs = cell_handler(celll);
     if (lhs == -1) return 'q';
-    cell* lhscell=mysheet[lhs/1000]+(lhs%1000);
+    cell* lhscell=mysheet[lhs%1000]+(lhs/1000);
     char* exp=strtok(NULL, "=");
     char *cell1;
     char *cell2;    
     char *range;
     if (is_int(exp)) {
-        lhscell->value = atoi(exp);
-        op='c';
+        printf("done_parser\n");
+        op=lhscell->operation;
+        if (op != '\0'){
+            if (op=='+'|| op =='*'|| op=='-'|| op=='/'){
+                mysheet[lhscell->row1][lhscell->col1].cell_avl = deleteNode(lhscell->cell_avl, lhs);
+                mysheet[lhscell->row2][lhscell->col2].cell_avl = deleteNode(lhscell->cell_avl, lhs);
+            }
+            else{
+                for (int i =lhscell->row1; i<=lhscell->row2; i++){
+                    for (int j = lhscell->col1; j<=lhscell->col2; j++){
+                        mysheet[i][j].cell_avl = deleteNode(mysheet[i][j].cell_avl, lhs);
+                    }
+                }
+            }
+        } 
+        lhscell->sum = atoi(exp);
+        lhscell->operation = '\0';
+
+        pro_graph(lhs);
+
+        return 'c';
     }
     if (cell_handler(exp) != -1){
         op = 'C';
@@ -92,9 +111,9 @@ char parser(char* input){
     else if (strpbrk(exp, "MINMAXAVGSUMSTDEVSLEEP")!=NULL){
         char* func=strtok(exp, "(");
         char* intmed1 =strtok(NULL, "(");
-        char* part1=strtok(intmed1, ":");
+        cell1=strtok(intmed1, ":");
         char* intmed2 =strtok(NULL, ":");
-        char* part2=strtok(intmed2, ")");
+        cell2=strtok(intmed2, ")");
         if (strtok(NULL, ")") != NULL) return 'q';
         if (stringcomp("MIN", exp, '\0')==1) op='m';
         else if (stringcomp("MAX", exp, '\0')==1) op='M';
@@ -104,13 +123,43 @@ char parser(char* input){
         else if (stringcomp("SLEEP", exp, '\0')==1) op='-';
         else return 'q';
     }
+    if (lhscell->operation != '\0'){
+        if (lhscell->operation=='+'|| lhscell->operation =='*'|| lhscell->operation=='-'|| lhscell->operation=='/'){
+            mysheet[lhscell->row1][lhscell->col1].cell_avl = deleteNode(lhscell->cell_avl, lhs);
+            mysheet[lhscell->row2][lhscell->col2].cell_avl = deleteNode(lhscell->cell_avl, lhs);
+        }
+        else{
+            for (int i =lhscell->row1; i<=lhscell->row2; i++){
+                for (int j = lhscell->col1; j<=lhscell->col2; j++){
+                    mysheet[i][j].cell_avl = deleteNode(mysheet[i][j].cell_avl, lhs);
+                }
+            }
+        }
+    } 
+    printf("done_parserop\n");
     lhscell->operation = op;
-    lhscell->row1 = cell_handler(cell1)/1000;
-    lhscell->col1 = cell_handler(cell1)%1000;
-    lhscell->row2 = cell_handler(cell2)/1000;
-    lhscell->col2 = cell_handler(cell2)%1000;
+    printf("%d\n", 1);
+    printf("%s %s\n", cell1, cell2);
+    lhscell->row1 = cell_handler(cell1)%1000;
+    lhscell->col1 = cell_handler(cell1)/1000;
+    lhscell->row2 = cell_handler(cell2)%1000;
+    lhscell->col2 = cell_handler(cell2)/1000;
+    if (op=='+'|| op =='*'|| op=='-'|| op=='/'){
+        mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(lhscell->cell_avl, lhs);
+        mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(lhscell->cell_avl, lhs);
+    }
+    else{
+        for (int i =lhscell->row1; i<=lhscell->row2; i++){
+            for (int j = lhscell->col1; j<=lhscell->col2; j++){
+                mysheet[i][j].cell_avl = insert(mysheet[i][j].cell_avl, lhs);
+            }
+        }
+    }
+    printf("done_calc1\n");
     calc_value(lhscell);
+    printf("done_calc\n");
     pro_graph(lhs);
+    printf("done_parser\n");
     return op;
 }
 // int main() {

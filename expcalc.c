@@ -104,7 +104,7 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
 void update_value(cell *cell1, int row, int col){
     int new_val = 0;
     int old_val = mysheet[row][col].value;
-
+    printf("old_val %d\n", old_val);
     if (mysheet[row][col].operation == 'S') {
         int count = (mysheet[row][col].row2 - mysheet[row][col].row1 + 1) * (mysheet[row][col].col2 - mysheet[row][col].col1 + 1);
         double mean = (double)mysheet[row][col].sum / count;
@@ -117,7 +117,7 @@ void update_value(cell *cell1, int row, int col){
     } else {
         new_val = mysheet[row][col].sum;
     }
-
+    printf("new_val %d\n", new_val);
 
     if (cell1->operation == '+') {
         cell1->sum += (new_val - old_val);
@@ -165,6 +165,8 @@ void update_value(cell *cell1, int row, int col){
         double variance = ((double)cell1->sq_sum / count) - (mean * mean);
         cell1->value = (int)sqrt(variance);
     }
+    printf("cell1->sum %d\n", cell1->sum);
+    printf("cell1->value %d\n", cell1->value);
 }
 
 void final_update(cell *cell1){

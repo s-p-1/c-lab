@@ -77,11 +77,9 @@ AVLNode* insert(AVLNode* root, int value) {
         return newNode(value);
 
     if (value < root->value){
-        printf("Going left from node with value %d\n", root->value);
         root->left = insert(root->left, value);
     }
     else if (value > root->value){
-        printf("Going right from node with value %d\n", root->value);
         root->right = insert(root->right, value);
     }
     else { // Equal values are found
@@ -233,7 +231,7 @@ int* inorderTraversal(AVLNode* root) {
     countNodes(root, size);
 
     // Allocate memory for the list
-    int* list = (int*)malloc(*size * sizeof(int));
+    int* list = (int*)malloc((*size+1) * sizeof(int));
     int index = 0;
 
     // Populate the list with inorder traversal
@@ -241,6 +239,7 @@ int* inorderTraversal(AVLNode* root) {
     // for (int i = 0; i < *size; i++) {
     //     printf("%d ", list[i]);
     // }
+    list[*size] = -1;
     return list;
 }
 
