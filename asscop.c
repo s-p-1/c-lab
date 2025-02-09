@@ -17,7 +17,6 @@ bool is_int (char *s){
 int cell_handler(char *cell){
 
     int col=0, row=0, flag=0, invalid=0;
-
     while (*cell){
 
         if (flag==0){
@@ -38,6 +37,7 @@ int cell_handler(char *cell){
 
         }cell++;
     }
+    printf("%d %d\n", R, C);
     if (row>=1 && row<=R && col>=1 && col<=C){
         return (col-1)*1000+(row-1);
     }
@@ -47,30 +47,32 @@ int cell_handler(char *cell){
 }
 
 char parser(char* input){
-    char *cell;
+    char *celll=strtok(input , "=");
     char op = '\0';
-    cell=strtok(input, "=");
-    if (cell_handler(cell) == -1){
+    int lhs = cell_handler(celll);
+    printf("%d\n", lhs);
+    printf("%s\n", celll);
+    if (lhs == -1){
         op = '1';
         return '1';
     }
+    cell* lhscell=mysheet[lhs/1000]+(lhs%1000);
 
-    char *exp;
+    char* exp=strtok(NULL, "=");
+    printf("%s\n", exp);
     char *cell1;
     char *cell2;
     
     char *range;
-    exp=strtok(NULL, "=");
     // printf("%s\n", exp);
-    char *arr[200];
     if (is_int(exp)) {
+        lhscell->value = atoi(exp);
         return 'c';
     }
     if (cell_handler(exp) != -1){
         op = 'c';
         return 'c';
     }
-
     else if (strpbrk(exp, "+-*/")!=NULL){
         if (strpbrk(exp, "+")!=NULL){
             cell1=strtok(exp, "+");
@@ -99,11 +101,11 @@ char parser(char* input){
         }
         if (cell_handler(cell1) == -1){
             op = '2';
-            return '2';
+            return 'q';
         }
         if (cell_handler(cell2) == -1){
             op = '3';
-            return '3';
+            return 'q';
         }
         // handle the operations here
         return 's';
@@ -111,19 +113,20 @@ char parser(char* input){
     }
     else if (strpbrk(exp, "MINMAXAVGSUMSTDEVSLEEP")!=NULL){
         // printf("Function\n");
-        char *func;
-        char *intmed1;
-        char *part1;
-        char *part2;
-        char *intmed2;
-        char *extra;
-        func=strtok(exp, "(");
-        intmed1=strtok(NULL, "(");
-        part1=strtok(intmed1, ":");
-        intmed2=strtok(NULL, ":");
-        part2=strtok(intmed2, ")");
-        extra=strtok(NULL, ")");
-        if (*extra == '\0'){
+        printf("%d\n", 7777);
+        char* func=strtok(exp, "(");
+        printf("%d\n", 8888);
+        char* intmed1 =strtok(NULL, "(");
+        printf("%d\n", 7788);
+        printf("%s\n", intmed1);
+        char* part1=strtok(intmed1, ":");
+        printf("%s\n", part1);
+        char* intmed2 =strtok(NULL, ":");
+        printf("%s\n", intmed2);
+        char* part2=strtok(intmed2, ")");
+        printf("%s\n", part2);
+        if (strtok(NULL, ")") != NULL){
+            printf("Invalid\n");
             op = 'q';
             return 'q';
         }
@@ -152,18 +155,10 @@ char parser(char* input){
             return '-';
         }
     }
-
-    else{
-        return 'q';
-    }
     return 'q';
 }
 // int main() {
-//     char* result = parser();
-//     if (strcmp(result, "a")!=0) {
-//         printf("Result: %s\n", result);
-//     } else {
-//         printf("No match found.\n");
-//     }
+//     char result = parser();
+//     printf("%c\n", result);
 //     return 0;
 // }

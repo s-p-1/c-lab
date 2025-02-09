@@ -91,7 +91,7 @@ int main(int argc, char *argv[]){
                 display(mysheet, R, C, x, y);
             }
         }
-        printf("[%.4f] (ok) > ", ((double)(clock()- st)/CLOCKS_PER_SEC));
+        printf("[%.1f] (ok) > ", ((double)(clock()- st)/CLOCKS_PER_SEC));
         st=clock();
         gl = get_line();
         if (gl == 5){

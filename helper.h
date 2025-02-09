@@ -13,7 +13,7 @@
 #define min(a, b) ((a) < (b) ? (a) : (b))
 
 
-char parser(char* input);
+char parser();
 
 int get_line();
 int R;
