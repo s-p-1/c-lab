@@ -37,7 +37,6 @@ int cell_handler(char *cell){
 
         }cell++;
     }
-    printf("%d %d\n", R, C);
     if (row>=1 && row<=R && col>=1 && col<=C){
         return (col-1)*1000+(row-1);
     }
@@ -50,21 +49,15 @@ char parser(char* input){
     char *celll=strtok(input , "=");
     char op = '\0';
     int lhs = cell_handler(celll);
-    printf("%d\n", lhs);
-    printf("%s\n", celll);
     if (lhs == -1){
         op = '1';
         return '1';
     }
     cell* lhscell=mysheet[lhs/1000]+(lhs%1000);
-
     char* exp=strtok(NULL, "=");
-    printf("%s\n", exp);
     char *cell1;
-    char *cell2;
-    
+    char *cell2;    
     char *range;
-    // printf("%s\n", exp);
     if (is_int(exp)) {
         lhscell->value = atoi(exp);
         return 'c';
@@ -109,51 +102,21 @@ char parser(char* input){
         }
         // handle the operations here
         return 's';
-        printf("%s %s\n", cell1, cell2);
     }
     else if (strpbrk(exp, "MINMAXAVGSUMSTDEVSLEEP")!=NULL){
-        // printf("Function\n");
-        printf("%d\n", 7777);
         char* func=strtok(exp, "(");
-        printf("%d\n", 8888);
         char* intmed1 =strtok(NULL, "(");
-        printf("%d\n", 7788);
-        printf("%s\n", intmed1);
         char* part1=strtok(intmed1, ":");
-        printf("%s\n", part1);
         char* intmed2 =strtok(NULL, ":");
-        printf("%s\n", intmed2);
         char* part2=strtok(intmed2, ")");
-        printf("%s\n", part2);
-        if (strtok(NULL, ")") != NULL){
-            printf("Invalid\n");
-            op = 'q';
-            return 'q';
-        }
-        printf("%s %s\n", part1, part2);
-        // char* arr1[3];
-        if (strstr(exp, "MIN")!=NULL){
-            // printf("MIN\n");
-            // arr1[0]='f';
-            // arr1[1]='1';
-            // arr1[2]='\0';
-            return 'm';
-        }
-        else if (strstr(exp, "MAX")!=NULL){
-            return 'M';
-        }
-        else if (strstr(exp, "AVG")!=NULL){
-            return 'a';
-        }
-        else if (strstr(exp, "SUM")!=NULL){
-            return 's';
-        }
-        else if (strstr(exp, "STDEV")!=NULL){
-            return 'S';
-        }
-        else if (strstr(exp, "SLEEP")!=NULL){
-            return '-';
-        }
+        if (strtok(NULL, ")") != NULL) return 'q';
+        if (stringcomp("MIN", exp, '\0')==1) return 'm';
+        else if (stringcomp("MAX", exp, '\0')==1) return 'M';
+        else if (stringcomp("AVG", exp, '\0')==1) return 'a';
+        else if (stringcomp("SUM", exp, '\0')==1) return 's';
+        else if (stringcomp("STDEV", exp, '\0')==1) return 'S';
+        else if (stringcomp("SLEEP", exp, '\0')==1) return '-';
+        else return 'q';
     }
     return 'q';
 }

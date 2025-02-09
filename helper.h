@@ -42,7 +42,7 @@ typedef struct {
 
 cell ** mysheet;
 void calc_value(cell *cell1);
-
+int stringcomp(const char* s1, const char* s2, char myc);
 // typedef struct Rowcol
 // {
 //     int row;
