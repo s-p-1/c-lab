@@ -198,4 +198,3 @@ void final_update(cell *cell1){
 //     printf("%d", mysheet[5][2].value);
 //     return 0;
 // }
-freeTree

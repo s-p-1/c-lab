@@ -53,7 +53,3 @@ void pro_graph(int address){
     }
 }
 
-
-int main(){
-    return 0;
-}
