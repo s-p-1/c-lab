@@ -52,21 +52,20 @@ AVLNode* buildAVLTree(int values[], int size);
 AVLNode* minValueNode(AVLNode* node);
 AVLNode* maxValueNode(AVLNode* node);
 
-
+//expcalc.c
 void calc_value(cell *cell1);
-bool stringcomp(const char* s1, const char* s2, char myc);
-// typedef struct Rowcol
-// {
-//     int row;
-//     int col;
-// } rowcol;
-int cell_handler(char *cell);
-
-
-void pro_graph(int address);
-
 void update_value(cell *cell1, int row, int col);
 void final_update(cell *cell1);
+
+//helper.c
+bool stringcomp(const char* s1, const char* s2, char myc);
+int cell_handler(char *cell);
+
+//graph.c
+void pro_graph(int address);
+bool dfs(int address, int lhs, bool flag);
+
+
 
 
 //global variables

@@ -1,30 +1,59 @@
 #include "helper.h"
 
-void dfs (int address){
+bool dfs (int address, int parent, bool isbase){
+    //detects for cycles and returns false if cycle is detected
+    if (!isbase && address == parent){
+        return false;
+    }
+    //objective of this function is to count the number of incoming 
+    //edges for each cell and detect the precence of cycles
+    bool myb=true;
+
+    if (mysheet[address%1000][address/1000].isv == 1){
+        return true;
+    }
+
+    mysheet[address%1000][address/1000].isv = 1;
+
     AVLNode* root = mysheet[address%1000][address/1000].cell_avl;
-    printf("dfs\n");
     int* myl= inorderTraversal(root);
-    
-    printf("dfs\n");
+    //doing dfs on the children    
+
     while (*myl!=-1){
-        
-        printf("dfs %d\n", *myl);
+
         int addr1= *myl;
         mysheet[addr1%1000][addr1/1000].count += 1;
-        printf("dfs count %d %d\n", addr1, mysheet[addr1%1000][addr1/1000].count);
-        printf("%d ", *myl);
-        dfs(*myl);
+        if (!dfs(*myl, parent, false)) myb = false;
+
         myl++;
     }
-    return;
+    
+    return myb;
 
+}
+
+void dfs2 (int address){
+    //reset all the variables to 0
+    if (mysheet[address%1000][address/1000].isv == 0) return;   
+    mysheet[address%1000][address/1000].isv = 0;
+
+    AVLNode* root = mysheet[address%1000][address/1000].cell_avl;
+    int* myl= inorderTraversal(root);
+
+    while (*myl!=-1){
+        int addr1= *myl;
+        mysheet[addr1%1000][addr1/1000].count = 0;
+        dfs2(*myl);
+        myl++;
+    }
+    return ;
 }
 
 
 
 void pro_graph(int address){
 
-    dfs(address);
+    
     printf("donedfs\n");
     int size = 5;
     int *queue = (int *)malloc(size * sizeof(int));
@@ -66,5 +95,7 @@ void pro_graph(int address){
         final_update(ptr);
         
     }
+
+    dfs2(address);
 }
 
