@@ -21,7 +21,7 @@ AVLNode* newNode(int value) {
 }
 void freeTree(AVLNode *root) {
     if (root == NULL) {
-        return;
+        return ;
     }
     freeTree(root->left);
     freeTree(root->right);

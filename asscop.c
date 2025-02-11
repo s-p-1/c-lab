@@ -3,7 +3,7 @@
 bool is_int (char *s){
     int i =0;
     if (s[i]=='+' || s[i]=='-') i++; //to allow the optional sign in the beginning
-    if (s[i]=='\0') return false; //if the string has no neumerals
+    if (s[i]=='\0') return false; //if the string has no numerals
     while (s[i]!='\0'){
         if (s[i]<'0' || s[i]>'9') return false;
         i++; //if the string has any non-numerals
@@ -44,85 +44,7 @@ int cell_handler(char *cell){
     return -1;
    
 }
-
-char parser(char* input){
-    char *celll=strtok(input , "=");
-    char op = 'q';
-    int lhs = cell_handler(celll);
-    if (lhs == -1) return 'q';
-    cell* lhscell=mysheet[lhs%1000]+(lhs/1000);
-    char* exp=strtok(NULL, "=");
-    char *cell1;
-    char *cell2;    
-    char *range;
-    if (is_int(exp)) {
-        printf("done_parser\n");
-        op=lhscell->operation;
-        if (op != '\0'){
-            if (op=='+'|| op =='*'|| op=='-'|| op=='/'){
-                mysheet[lhscell->row1][lhscell->col1].cell_avl = deleteNode(lhscell->cell_avl, lhs);
-                mysheet[lhscell->row2][lhscell->col2].cell_avl = deleteNode(lhscell->cell_avl, lhs);
-            }
-            else{
-                for (int i =lhscell->row1; i<=lhscell->row2; i++){
-                    for (int j = lhscell->col1; j<=lhscell->col2; j++){
-                        mysheet[i][j].cell_avl = deleteNode(mysheet[i][j].cell_avl, lhs);
-                    }
-                }
-            }
-        } 
-        lhscell->sum = atoi(exp);
-        lhscell->operation = '\0';
-
-        pro_graph(lhs);
-
-        return 'c';
-    }
-    if (cell_handler(exp) != -1){
-        op = 'C';
-    }
-    else if (strpbrk(exp, "+-*/")!=NULL){
-        if (strpbrk(exp, "+")!=NULL){
-            cell1=strtok(exp, "+");
-            cell2=strtok(NULL, "+");
-            op = '+';
-        }
-        else if (strpbrk(exp, "-")!=NULL){
-            cell1=strtok(exp, "-");
-            cell2=strtok(NULL, "-");
-            op = '-';
-        }
-        else if (strpbrk(exp, "*")!=NULL){
-            cell1=strtok(exp, "*");
-            cell2=strtok(NULL, "*");
-            op = '*';
-        }
-        else if (strpbrk(exp, "/")!=NULL){
-            cell1=strtok(exp, "/");
-            cell2=strtok(NULL, "/");
-            op = '/';
-        }
-        else return 'q';
-        if (cell_handler(cell1) == -1) return 'q';        
-        if (cell_handler(cell2) == -1) return 'q';
-        
-        // handle the operations here
-    }
-    else if (strpbrk(exp, "MINMAXAVGSUMSTDEVSLEEP")!=NULL){
-        char* func=strtok(exp, "(");
-        char* intmed1 =strtok(NULL, "(");
-        cell1=strtok(intmed1, ":");
-        char* intmed2 =strtok(NULL, ":");
-        cell2=strtok(intmed2, ")");
-        if (strtok(NULL, ")") != NULL) return 'q';
-        if (stringcomp("MIN", exp, '\0')==1) op='m';
-        else if (stringcomp("MAX", exp, '\0')==1) op='M';
-        else if (stringcomp("AVG", exp, '\0')==1) op='a';
-        else if (stringcomp("SUM", exp, '\0')==1) op='s';
-        else if (stringcomp("STDEV", exp, '\0')==1) op='S';
-        else if (stringcomp("SLEEP", exp, '\0')==1) op='-';
-        else return 'q';
-    }
+void deleteDependencies(cell *lhscell, int lhs){
     if (lhscell->operation != '\0'){
         if (lhscell->operation=='+'|| lhscell->operation =='*'|| lhscell->operation=='-'|| lhscell->operation=='/'){
             mysheet[lhscell->row1][lhscell->col1].cell_avl = deleteNode(lhscell->cell_avl, lhs);
@@ -135,8 +57,122 @@ char parser(char* input){
                 }
             }
         }
-    } 
-    printf("done_parserop\n");
+    }
+}
+
+char parser(char* input){
+    char *celll=strtok(input , "=");
+    char op = 'q';
+    int lhs = cell_handler(celll);
+    if (lhs == -1) return 'q';
+    cell* lhscell=mysheet[lhs%1000]+(lhs/1000);
+    char* exp=strtok(NULL, "=");
+    char *cell1;
+    char *cell2;    
+    char *range;
+    if (is_int(exp)) {
+        deleteDependencies(lhscell, lhs);
+        lhscell->sum = atoi(exp);
+        lhscell->operation = '\0';
+        pro_graph(lhs);
+        return 'c'; // cell assigned a constant value
+    }
+    else if (strpbrk(exp, "+-*/")!=NULL){
+        if (strpbrk(exp, "+")!=NULL){
+            cell1=strtok(exp, "+");
+            cell2=strtok(NULL, "+");
+            if(is_int(cell1) && is_int(cell2)) {
+                deleteDependencies(lhscell, lhs);
+                lhscell->sum = atoi(cell1) + atoi(cell2);
+                lhscell->operation = '\0';
+                pro_graph(lhs);
+                return 'c'; // cell assigned a constant value (a sum of two integers)
+            }
+            else if (is_int(cell1)) op = 'a';
+            else if (is_int(cell2)) op = 'A';
+            else op = '+';
+        }
+       
+    else if (strpbrk(exp, "*")!=NULL){
+            cell1=strtok(exp, "*");
+            cell2=strtok(NULL, "*");
+            if(is_int(cell1) && is_int(cell2)) {
+                deleteDependencies(lhscell, lhs);
+                lhscell->sum = atoi(cell1) * atoi(cell2);
+                lhscell->operation = '\0';
+                pro_graph(lhs);
+                return 'c'; // cell assigned a constant value (a product of two integers)
+            }
+            else if (is_int(cell1)) op = 'a';
+            else if (is_int(cell2)) op = 'A';
+            else op = '*';
+        }
+    else if (strpbrk(exp, "/")!=NULL){
+        cell1=strtok(exp, "/");
+        cell2=strtok(NULL, "/");
+        if(is_int(cell1) && is_int(cell2)) {
+            deleteDependencies(lhscell, lhs);
+            lhscell->sum = atoi(cell1) / atoi(cell2);
+            lhscell->operation = '\0';
+            pro_graph(lhs);
+            return 'c'; // cell assigned a constant value (a division of two integers)
+        }
+        else if (is_int(cell1)) op = 'a';
+        else if (is_int(cell2)) op = 'A';
+        else op = '/';
+    }
+    else if (strpbrk(exp, "-")!=NULL){
+        cell1=strtok(exp, "-");
+        cell2=strtok(NULL, "-");
+        if(is_int(cell1) && is_int(cell2)) {
+            deleteDependencies(lhscell, lhs);
+            lhscell->sum = atoi(cell1) - atoi(cell2);
+            lhscell->operation = '\0';
+            pro_graph(lhs);
+            return 'c'; // cell assigned a constant value (a difference of two integers)
+        }
+        else if (is_int(cell1)) op = 'a';
+        else if (is_int(cell2)) op = 'A';
+        else op = '-';
+    }
+    else return 'q';
+    if (cell_handler(cell1) == -1) return 'q';        
+    if (cell_handler(cell2) == -1) return 'q';
+    }
+    
+    else if (strpbrk(exp, "MINMAXAVGSUMSTDEVSLEEP")!=NULL){
+        char* func=strtok(exp, "(");
+        char* intmed1 =strtok(NULL, "(");
+        cell1=strtok(intmed1, ":");
+        char* intmed2 =strtok(NULL, ":");
+        cell2=strtok(intmed2, ")");
+        if (strtok(NULL, ")") != NULL) return 'q';
+        if (stringcomp("MIN", exp, '\0')==1) op='m';
+        else if (stringcomp("MAX", exp, '\0')==1) op='M';
+        else if (stringcomp("AVG", exp, '\0')==1) op='a';
+        else if (stringcomp("SUM", exp, '\0')==1) op='s';
+        else if (stringcomp("STDEV", exp, '\0')==1) op='S';
+        else if (stringcomp("SLEEP", exp, '\0')==1) op='z';
+        else return 'q';
+    }
+    else if (cell_handler(exp) != -1){
+        op = 'C'; // cell assigned another cell
+    }
+    
+    if (lhscell->operation != '\0'){
+        if (lhscell->operation=='+'|| lhscell->operation =='*'|| lhscell->operation=='-'|| lhscell->operation=='/'){
+            mysheet[lhscell->row1][lhscell->col1].cell_avl = deleteNode(lhscell->cell_avl, lhs);
+            mysheet[lhscell->row2][lhscell->col2].cell_avl = deleteNode(lhscell->cell_avl, lhs);
+        }
+
+        else{
+            for (int i =lhscell->row1; i<=lhscell->row2; i++){
+                for (int j = lhscell->col1; j<=lhscell->col2; j++){
+                    mysheet[i][j].cell_avl = deleteNode(mysheet[i][j].cell_avl, lhs);
+                }
+            }
+        }
+    }
     lhscell->operation = op;
     printf("%d\n", 1);
     printf("%s %s\n", cell1, cell2);
