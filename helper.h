@@ -13,20 +13,9 @@
 #define min(a, b) ((a) < (b) ? (a) : (b))
 
 
-char parser();
-
-int get_line();
-int R;
-int C;
-
-typedef struct AVLNode {
-    int value;
-    struct AVLNode *left;
-    struct AVLNode *right;
-    int height;
-    int count;
-} AVLNode;
+//display.c
 typedef struct {
+    char isv;
     int value; //initially 0
     int sum;
     int sq_sum;
@@ -41,7 +30,29 @@ typedef struct {
     AVLNode *range_min_max;
 } cell; 
 
-cell ** mysheet;
+char parser();
+
+int get_line();
+
+
+
+//avltree.c
+typedef struct AVLNode {
+    int value;
+    struct AVLNode *left;
+    struct AVLNode *right;
+    int height;
+    int count;
+} AVLNode;
+void freeTree(AVLNode *root);
+AVLNode* insert(AVLNode* node, int value);
+AVLNode* deleteNode(AVLNode* root, int value);
+int* inorderTraversal(AVLNode* root);
+AVLNode* buildAVLTree(int values[], int size);
+AVLNode* minValueNode(AVLNode* node);
+AVLNode* maxValueNode(AVLNode* node);
+
+
 void calc_value(cell *cell1);
 bool stringcomp(const char* s1, const char* s2, char myc);
 // typedef struct Rowcol
@@ -53,14 +64,14 @@ int cell_handler(char *cell);
 
 
 void pro_graph(int address);
-void freeTree(AVLNode *root);
-AVLNode* insert(AVLNode* node, int value);
-AVLNode* deleteNode(AVLNode* root, int value);
-int* inorderTraversal(AVLNode* root);
-AVLNode* buildAVLTree(int values[], int size);
-AVLNode* minValueNode(AVLNode* node);
-AVLNode* maxValueNode(AVLNode* node);
+
 void update_value(cell *cell1, int row, int col);
 void final_update(cell *cell1);
+
+
+//global variables
+int R;
+int C;
+cell ** mysheet;
 
 #endif

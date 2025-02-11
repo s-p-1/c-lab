@@ -60,35 +60,21 @@ int main(int argc, char *argv[]){
 
     int gl = get_line();
     while (gl != 5){
-        if (gl == 6){
-            flag=0;
-        }
-        if (gl == 7){
-            flag=1;
-        }
+
+        if (gl == 6) flag=0;
+        if (gl == 7) flag=1;
+        
         if (gl >=1000){
             x=gl%1000;
             y=gl/1000;
-            display(mysheet, R, C, x, y);
         }
-        if (flag==1){
-            if (gl == 2){
-                y = max(0, y-10);
-                display(mysheet, R, C, x, y);
-            }
-            if (gl == 4){
-                if ((y+10)<=(C-1))  y+=10;
-                display(mysheet, R, C, x, y);
-            }
-            if (gl == 1){
-                x = max(0, x-10);
-                display(mysheet, R, C, x, y);
-            }
-            if (gl == 3){
-                if ((x+10)<=(R-1)) x+=10;
-                display(mysheet, R, C, x, y);
-            }
-        }
+
+        if (gl == 2) y = max(0, y-10);
+        if (gl == 4) y = min(C-10, y+10);
+        if (gl == 1) x = max(0, x-10);
+        if (gl == 3) x = min(R-10, x+10);
+        
+        if (flag) display(mysheet, R, C, x, y);
         printf("[%.1f] (ok) > ", ((double)(clock()- st)/CLOCKS_PER_SEC));
         st=clock();
         gl = get_line();

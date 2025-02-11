@@ -191,6 +191,10 @@ char parser(char* input){
             }
         }
     }
+    if (!dfs(lhs, lhs, true)) {
+        printf("cycle detected\n");
+        return;
+    }
     printf("done_calc1\n");
     calc_value(lhscell);
     printf("done_calc\n");
