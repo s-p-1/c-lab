@@ -1,35 +1,69 @@
 #include "helper.h"
 void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     int val = 0;
-    cell1->sum = 0;     // Initialize sum
-    cell1->sq_sum = 0;  // Initialize square sum
+    // cell1->sum = 0;     // Initialize sum
+    // cell1->sq_sum = 0;  // Initialize square sum
     int count = 0;      // For counting elements in range
     
     // Calculate count of elements
     count = (cell1->row2 - cell1->row1 + 1) * (cell1->col2 - cell1->col1 + 1);
 
     if(cell1->operation == '+'){
+        cell1->err_cnt =0;
         val = mysheet[cell1->row1][cell1->col1].value+mysheet[cell1->row2][cell1->col2].value;
         cell1->sum = val;  //i will update sum and keep the init_value same while updating so that i can have both final_value and init_value and i don't have to make new variable for this
+        if(mysheet[cell1->row1][cell1->col1].err_cnt>0){
+            cell1->err_cnt+=1;
+        }
+        if(mysheet[cell1->row2][cell1->col2].err_cnt >0){
+            cell1->err_cnt+=1;
+        }
     }
 
     else if(cell1->operation == '-'){
+        cell1->err_cnt =0;
         val = mysheet[cell1->row1][cell1->col1].value-mysheet[cell1->row2][cell1->col2].value;
         cell1->sum = val;
+        if(mysheet[cell1->row1][cell1->col1].err_cnt>0){
+            cell1->err_cnt+=1;
+        }
+        if(mysheet[cell1->row2][cell1->col2].err_cnt >0){
+            cell1->err_cnt+=1;
+        }
     }
 
     else if(cell1->operation == '*'){
+        cell1->err_cnt =0;
         val = mysheet[cell1->row1][cell1->col1].value*mysheet[cell1->row2][cell1->col2].value;
         cell1->sum = val;
+        if(mysheet[cell1->row1][cell1->col1].err_cnt>0){
+            cell1->err_cnt+=1;
+        }
+        if(mysheet[cell1->row2][cell1->col2].err_cnt >0){
+            cell1->err_cnt+=1;
+        }
     }
 
     else if(cell1->operation == '/'){
+        cell1->err_cnt =0;
+        if(mysheet[cell1->row1][cell1->col1].err_cnt>0){
+            cell1->err_cnt+=1;
+        }
+        if(mysheet[cell1->row2][cell1->col2].err_cnt >0){
+            cell1->err_cnt+=1;
+        }
+        if(mysheet[cell1->row2][cell1->col2].value == 0){
+            if(!(mysheet[cell1->row2][cell1->col2].err_cnt >0))
+                cell1->err_cnt+=1;
+            return;
+        }
         val = mysheet[cell1->row1][cell1->col1].value/mysheet[cell1->row2][cell1->col2].value;
         cell1->sum = val;
     }
     
     // Min operation
     else if(cell1->operation == 'm') {
+        cell1->err_cnt = 0;
         val = INT_MAX;  // Initialize with maximum possible value
         freeTree(cell1->range_min_max);
         cell1->range_min_max = NULL;
@@ -37,6 +71,9 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
             for(int j = cell1->col1; j <= cell1->col2; j++) {
                 val = min(mysheet[i][j].value, val);
                 cell1->range_min_max = insert(cell1->range_min_max, mysheet[i][j].value);
+                if(mysheet[i][j].err_cnt>0){
+                    cell1->err_cnt+=1;
+                }
             }
         }
         cell1->sum = val;
@@ -44,6 +81,7 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     
     // Max operation
     else if(cell1->operation == 'M') {
+        cell1->err_cnt = 0;
         val = INT_MIN;  // Initialize with minimum possible value
         freeTree(cell1->range_min_max);
         cell1->range_min_max = NULL;
@@ -51,6 +89,9 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
             for(int j = cell1->col1; j <= cell1->col2; j++) {
                 val = max(mysheet[i][j].value, val);
                 cell1->range_min_max = insert(cell1->range_min_max, mysheet[i][j].value);
+                if(mysheet[i][j].err_cnt>0){
+                    cell1->err_cnt+=1;
+                }
             }
         }
         cell1->sum = val;
@@ -58,9 +99,13 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     
     // Sum operation
     else if(cell1->operation == 's') {
+        cell1->err_cnt = 0;
         for(int i = cell1->row1; i <= cell1->row2; i++) {
             for(int j = cell1->col1; j <= cell1->col2; j++) {
                 val += mysheet[i][j].value;
+                if(mysheet[i][j].err_cnt>0){
+                    cell1->err_cnt+=1;
+                }
             }
         }
         cell1->sum = val;  // Store sum for future use
@@ -68,43 +113,39 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     
     // Average operation
     else if(cell1->operation == 'a') {
+        cell1->err_cnt = 0;
         for(int i = cell1->row1; i <= cell1->row2; i++) {
             for(int j = cell1->col1; j <= cell1->col2; j++) {
                 val += mysheet[i][j].value;
+                if(mysheet[i][j].err_cnt>0){
+                    cell1->err_cnt+=1;
+                }
             }
         }
         cell1->sum = val;  // Store sum for future use
-        val = val / count;
+        // val = val / count;
     }
     
     // Standard deviation operation
     else if(cell1->operation == 'S') {
         // First pass: calculate sum and square sum
+        cell1->err_cnt = 0;
         for(int i = cell1->row1; i <= cell1->row2; i++) {
             for(int j = cell1->col1; j <= cell1->col2; j++) {
                 cell1->sum += mysheet[i][j].value;
                 cell1->sq_sum += mysheet[i][j].value * mysheet[i][j].value;
+                if(mysheet[i][j].err_cnt>0){
+                    cell1->err_cnt+=1;
+                }
             }
         }
-        
-        // Calculate mean
-        double mean = (double)cell1->sum / count;
-        
-        // Calculate variance: E(X^2) - (E(X))^2
-        double variance = ((double)cell1->sq_sum / count) - (mean * mean);
-        
-        // Calculate standard deviation
-        double x = sqrt(variance);
-        val = (int) x;
     }
     
-    cell1->value = val;
+    // cell1->value = val;
 }
 
-void update_value(cell *cell1, int row, int col){
-    int new_val = 0;
-    int old_val = mysheet[row][col].value;
-    printf("old_val %d\n", old_val);
+int new_value(int row, int col){
+    int new_val =0;
     if (mysheet[row][col].operation == 'S') {
         int count = (mysheet[row][col].row2 - mysheet[row][col].row1 + 1) * (mysheet[row][col].col2 - mysheet[row][col].col1 + 1);
         double mean = (double)mysheet[row][col].sum / count;
@@ -117,7 +158,12 @@ void update_value(cell *cell1, int row, int col){
     } else {
         new_val = mysheet[row][col].sum;
     }
-    printf("new_val %d\n", new_val);
+    return new_val;
+}
+
+void update_value(cell *cell1, int row, int col){
+    int new_val = new_value(row, col);
+    int old_val = mysheet[row][col].value;
 
     if (cell1->operation == '+') {
         cell1->sum += (new_val - old_val);
@@ -129,17 +175,20 @@ void update_value(cell *cell1, int row, int col){
         }
     } else if (cell1->operation == '*') {
         if (cell1->row1 == row && cell1->col1 == col) {
-            cell1->sum = new_val * (mysheet[cell1->row2][cell1->col2].sum);
+            cell1->sum = new_val * new_value(row2, col2);
         } else {
-            cell1->sum = (mysheet[cell1->row1][cell1->col1].sum) * new_val;
+            cell1->sum = new_value(row1, col1) * new_val;
         }
     } else if (cell1->operation == '/') {
         if (cell1->row1 == row && cell1->col1 == col) {
-            cell1->sum = new_val / (mysheet[cell1->row2][cell1->col2].sum);
+            if((int temp =new_value(row2, col2)!=0))
+                cell1->sum = new_val / temp;
         } else {
             if (new_val != 0) {
-                cell1->sum = (mysheet[cell1->row1][cell1->col1].sum) / new_val;
+                cell1->sum = new_value(row1, col1) / new_val;
             } else {
+                if(mysheet[row][col].err_cnt/100000000 == 0)
+                    cell1->err_cnt+=1;
                 cell1->sum = 0; // Avoid division by zero
             }
         }
@@ -183,6 +232,7 @@ void final_update(cell *cell1){
     else{
         cell1->value= cell1->sum;
     }
+    cell1->err_cnt = (cell1->err_cnt)%100000000 + 100000000;
 }
 
 // int main(){

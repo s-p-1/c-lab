@@ -31,11 +31,12 @@ typedef struct {
     int sum;
     int sq_sum;
     char operation; 
-    short row1;
+    short row1; 
     short col1;
     short row2;
     short col2;
     int count;
+    int err_cnt;
     AVLNode *cell_avl;
     AVLNode *range_min_max;
 } cell; 
