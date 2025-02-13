@@ -149,9 +149,9 @@ int new_value(int row, int col){
     if (mysheet[row][col].operation == 'S') {
         int count = (mysheet[row][col].row2 - mysheet[row][col].row1 + 1) * (mysheet[row][col].col2 - mysheet[row][col].col1 + 1);
         double mean = (double)mysheet[row][col].sum / count;
-        double variance = ((double)mysheet[row][col].sq_sum / count) - (mean * mean);
+        double variance = ((double)mysheet[row][col].sq_sum / count) - (double)(2*(double)mean*(int)mean) + (double)((int)mean * (int)mean);
         double std_dev = sqrt(variance);
-        new_val = (int)std_dev;
+        new_val = (int)round(std_dev);
     } else if (mysheet[row][col].operation == 'a') {
         int count = (mysheet[row][col].row2 - mysheet[row][col].row1 + 1) * (mysheet[row][col].col2 - mysheet[row][col].col1 + 1);
         new_val = mysheet[row][col].sum / count;
@@ -189,7 +189,6 @@ void update_value(cell *cell1, int row, int col){
             } else {
                 if(mysheet[row][col].err_cnt/100000000 == 0)
                     cell1->err_cnt+=1;
-                cell1->sum = 0; // Avoid division by zero
             }
         }
     } else if (cell1->operation == 'm') {
@@ -222,8 +221,8 @@ void final_update(cell *cell1){
     if(cell1->operation == 'S'){
         int count = (cell1->row2 - cell1->row1 + 1) * (cell1->col2 - cell1->col1 + 1);
         double mean = (double)cell1->sum / count;
-        double variance = ((double)cell1->sq_sum / count) - (mean * mean);
-        cell1->value = (int)sqrt(variance);
+        double variance = ((double)mysheet[row][col].sq_sum / count) - (double)(2*(double)mean*(int)mean) + (double)((int)mean * (int)mean);
+        cell1->value = (int)round(sqrt(variance));
     }
     else if(cell1->operation == 'a'){
         int count = (cell1->row2 - cell1->row1 + 1) * (cell1->col2 - cell1->col1 + 1);
