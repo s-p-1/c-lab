@@ -28,7 +28,7 @@ int mycomp(char s[20]){
         if (stringcomp("disable_output", s, '\0')) return 6;
         if (stringcomp("enable_output", s, '\0')) return 7;
         if (stringcomp("scroll_to ", s, ' ')){
-                return cell_handler(s+10);
+                return (1000+cell_handler(s+10));
         }
         printf("give correct input\n");
         return -1;

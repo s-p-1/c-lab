@@ -37,6 +37,7 @@ int cell_handler(char *cell){
 
         }cell++;
     }
+    // printf("row: %d col: %d\n", row, col);
     if (row>=1 && row<=R && col>=1 && col<=C){
         return (col-1)*1000+(row-1);
     }
@@ -200,7 +201,9 @@ char parser(char* input){
 
     if (!dfs(lhs, lhs, true)) {
         printf("cycle detected\n");
-        return;
+        deleteDependencies(lhscell, lhs);
+        dfs2(lhs);
+        return 'q';
     }
     printf("done_calc1\n");
     calc_value(lhscell);

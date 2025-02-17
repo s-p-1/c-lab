@@ -12,7 +12,13 @@
 #define max(a, b) ((a) > (b) ? (a) : (b))
 #define min(a, b) ((a) < (b) ? (a) : (b))
 
-
+typedef struct AVLNode {
+    int value;
+    struct AVLNode *left;
+    struct AVLNode *right;
+    int height;
+    int count;
+} AVLNode;
 //display.c
 typedef struct {
     char isv;
@@ -37,13 +43,7 @@ int get_line();
 
 
 //avltree.c
-typedef struct AVLNode {
-    int value;
-    struct AVLNode *left;
-    struct AVLNode *right;
-    int height;
-    int count;
-} AVLNode;
+
 void freeTree(AVLNode *root);
 AVLNode* insert(AVLNode* node, int value);
 AVLNode* deleteNode(AVLNode* root, int value);
@@ -64,6 +64,7 @@ int cell_handler(char *cell);
 //graph.c
 void pro_graph(int address);
 bool dfs(int address, int lhs, bool flag);
+void dfs2(int address);
 
 
 

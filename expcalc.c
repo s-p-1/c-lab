@@ -175,17 +175,18 @@ void update_value(cell *cell1, int row, int col){
         }
     } else if (cell1->operation == '*') {
         if (cell1->row1 == row && cell1->col1 == col) {
-            cell1->sum = new_val * new_value(row2, col2);
+            cell1->sum = new_val * new_value(cell1->row2, cell1->col2);
         } else {
-            cell1->sum = new_value(row1, col1) * new_val;
+            cell1->sum = new_value(cell1->row1, cell1->col1) * new_val;
         }
     } else if (cell1->operation == '/') {
         if (cell1->row1 == row && cell1->col1 == col) {
-            if((int temp =new_value(row2, col2)!=0))
+            int temp=0;
+            if((temp =new_value(cell1->row2, cell1->col2)!=0))
                 cell1->sum = new_val / temp;
         } else {
             if (new_val != 0) {
-                cell1->sum = new_value(row1, col1) / new_val;
+                cell1->sum = new_value(cell1->row1, cell1->col1) / new_val;
             } else {
                 if(mysheet[row][col].err_cnt/100000000 == 0)
                     cell1->err_cnt+=1;
@@ -221,7 +222,7 @@ void final_update(cell *cell1){
     if(cell1->operation == 'S'){
         int count = (cell1->row2 - cell1->row1 + 1) * (cell1->col2 - cell1->col1 + 1);
         double mean = (double)cell1->sum / count;
-        double variance = ((double)mysheet[row][col].sq_sum / count) - (double)(2*(double)mean*(int)mean) + (double)((int)mean * (int)mean);
+        double variance = ((double)cell1->sq_sum / count) - (double)(2*(double)mean*(int)mean) + (double)((int)mean * (int)mean);
         cell1->value = (int)round(sqrt(variance));
     }
     else if(cell1->operation == 'a'){

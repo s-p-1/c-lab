@@ -65,8 +65,8 @@ int main(int argc, char *argv[]){
         if (gl == 7) flag=1;
         
         if (gl >=1000){
-            x=gl%1000;
-            y=gl/1000;
+            x=(gl-1000)%1000;
+            y=(gl-1000)/1000;
         }
 
         if (gl == 2) y = max(0, y-10);
