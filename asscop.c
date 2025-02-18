@@ -46,7 +46,7 @@ int cell_handler(char *cell){
 
 }
 void deleteDependencies(cell *lhscell, int lhs){
-    printf("deleting dependencies op code %d\n", lhscell->operation);
+    printf("deleting dependencies op code %c\n", lhscell->operation);
     if (lhscell->operation != '\0'){
         if (lhscell->operation=='+'|| lhscell->operation =='*'|| lhscell->operation=='-'|| lhscell->operation=='/'){
             printf("deleted from %d %d: %d\n", lhscell->row1, lhscell->col1, lhs);
@@ -62,6 +62,7 @@ void deleteDependencies(cell *lhscell, int lhs){
             mysheet[lhscell->row1][lhscell->col1].cell_avl = deleteNode(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
         }
         else{
+            printf("deleted from %d %d: %d\n", lhscell->row1, lhscell->col1, lhs);
             for (int i =lhscell->row1; i<=lhscell->row2; i++){
                 for (int j = lhscell->col1; j<=lhscell->col2; j++){
                     mysheet[i][j].cell_avl = deleteNode(mysheet[i][j].cell_avl, lhs);
@@ -73,26 +74,42 @@ void deleteDependencies(cell *lhscell, int lhs){
 }
 
 
-bool edgehandler (int cellhandle, int lhs, cell* lhscell, int extra){
+bool edgehandler (int cellhandle, int lhs, cell* lhscell, int extra, cell oldcell){
     deleteDependencies(lhscell, lhs);
     printf("Adding to cellhandle: %d, lhs: %d\n", cellhandle, lhs);
     mysheet[cellhandle%1000][cellhandle/1000].cell_avl = insert(mysheet[cellhandle%1000][cellhandle/1000].cell_avl, lhs);
+    lhscell->row1 = cellhandle%1000;
+    lhscell->col1 = cellhandle/1000;
+    lhscell->row2 = cellhandle%1000;
+    lhscell->col2 = cellhandle/1000;
     lhscell->operation = 's';
     if (!dfs(lhs, lhs, true)) {
         printf("cycle detected\n");
         deleteDependencies(lhscell, lhs);
         dfs2(lhs);
-        if (mysheet[0][0].cell_avl==NULL) printf("NULL 0 0\n");
-        if (mysheet[0][1].cell_avl==NULL) printf("NULL 0 1\n");
-        printf("mysheet[0][0].count = %d, mysheet[0][1].count = %d\n", mysheet[0][0].count, mysheet[0][1].count);
+        *lhscell = oldcell;
+        char op = oldcell.operation;
+        if (op=='+'|| op =='*'|| op=='-'|| op=='/'){
+            mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
+            mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
+        }
+        else if (op=='t'|| op=='d'|| op=='r'){
+            mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
+        }
+        else if (op=='T'|| op=='D'|| op=='R'){
+            mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
+        }
+        else{
+            for (int i =lhscell->row1; i<=lhscell->row2; i++){
+                for (int j = lhscell->col1; j<=lhscell->col2; j++){
+                    mysheet[i][j].cell_avl = insert(mysheet[i][j].cell_avl, lhs);
+                }
+            }
+        }
         return false;
     }
     lhscell->sum = mysheet[cellhandle%1000][cellhandle/1000].value + extra;
 
-    lhscell->row1 = cellhandle%1000;
-    lhscell->col1 = cellhandle/1000;
-    lhscell->row2 = cellhandle%1000;
-    lhscell->col2 = cellhandle/1000;
     pro_graph(lhs);
     return true;
 }
@@ -104,6 +121,7 @@ char parser(char* input){
     int lhs = cell_handler(celll);
     if (lhs == -1) return -1;
     cell* lhscell=mysheet[lhs%1000]+(lhs/1000);
+    cell oldcell = *lhscell;
     char* exp=strtok(NULL, "=");
     char *cell1;
     char *cell2;
@@ -119,7 +137,7 @@ char parser(char* input){
         return 'c'; // cell assigned a constant value
     }
     else if (cellhandle!=-1){
-        if (!edgehandler(cellhandle, lhs, lhscell, 0)) return -2;
+        if (!edgehandler(cellhandle, lhs, lhscell, 0, oldcell)) return -2;
         lhscell->err_cnt=0;
         return '+'; // cell assigned another cell
     }
@@ -142,7 +160,7 @@ char parser(char* input){
         }
         else if (cell_handler(time) != -1){
             int rhs = cell_handler(time);
-            if (!edgehandler(rhs, lhs, lhscell, 0)) return -2;
+            if (!edgehandler(rhs, lhs, lhscell, 0, oldcell)) return -2;
             lhscell->err_cnt=0;
             int timer = mysheet[rhs%1000][rhs/1000].value;
             int err = mysheet[rhs%1000][rhs/1000].err_cnt%100000000;
@@ -176,14 +194,14 @@ char parser(char* input){
             else if (is_int(cell1)) {
                 int cell2handle = cell_handler(cell2);
                 if (cell2handle == -1) return -1;
-                if (!edgehandler(cell2handle, lhs, lhscell, atoi(cell1))) return -2;
+                if (!edgehandler(cell2handle, lhs, lhscell, atoi(cell1), oldcell)) return -2;
                 lhscell->err_cnt=0;
                 return '+';
             }
             else if (is_int(cell2)) {
                 int cell1handle = cell_handler(cell1);
                 if (cell1handle == -1) return -1;
-                if (!edgehandler(cell1handle, lhs, lhscell, atoi(cell2))) return -2;
+                if (!edgehandler(cell1handle, lhs, lhscell, atoi(cell2), oldcell)) return -2;
                 lhscell->err_cnt=0;
                 return '+';
             }
@@ -344,6 +362,25 @@ char parser(char* input){
         printf("cycle detected\n");
         deleteDependencies(lhscell, lhs);
         dfs2(lhs);
+        *lhscell = oldcell;
+        op = oldcell.operation;
+        if (op=='+'|| op =='*'|| op=='-'|| op=='/'){
+            mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
+            mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
+        }
+        else if (op=='t'|| op=='d'|| op=='r'){
+            mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
+        }
+        else if (op=='T'|| op=='D'|| op=='R'){
+            mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
+        }
+        else{
+            for (int i =lhscell->row1; i<=lhscell->row2; i++){
+                for (int j = lhscell->col1; j<=lhscell->col2; j++){
+                    mysheet[i][j].cell_avl = insert(mysheet[i][j].cell_avl, lhs);
+                }
+            }
+        }
         return -2;
     }
     printf("done_calc1\n");
