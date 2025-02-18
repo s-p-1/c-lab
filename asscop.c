@@ -20,7 +20,7 @@ int cell_handler(char *cell){
     while (*cell){
 
         if (flag==0){
-            
+
             if (*cell>='A' && *cell<='Z'){
                 col=col*26+(*cell-'A'+1);
             }else if (*cell>='1' && *cell<='9'){
@@ -28,8 +28,8 @@ int cell_handler(char *cell){
                 flag=1;
             }else return -1;
 
-        }
-        else{
+        }else{
+
             if (*cell>='0' && *cell<='9'){
                 row=10*row+(*cell-'0');
             }
@@ -43,13 +43,15 @@ int cell_handler(char *cell){
     }
 
     return -1;
-   
+
 }
 void deleteDependencies(cell *lhscell, int lhs){
+    printf("deleting dependencies op code %d\n", lhscell->operation);
     if (lhscell->operation != '\0'){
         if (lhscell->operation=='+'|| lhscell->operation =='*'|| lhscell->operation=='-'|| lhscell->operation=='/'){
-            mysheet[lhscell->row1][lhscell->col1].cell_avl = deleteNode(lhscell->cell_avl, lhs);
-            mysheet[lhscell->row2][lhscell->col2].cell_avl = deleteNode(lhscell->cell_avl, lhs);
+            printf("deleted from %d %d: %d\n", lhscell->row1, lhscell->col1, lhs);
+            mysheet[lhscell->row1][lhscell->col1].cell_avl = deleteNode(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
+            mysheet[lhscell->row2][lhscell->col2].cell_avl = deleteNode(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
         }
         else{
             for (int i =lhscell->row1; i<=lhscell->row2; i++){
@@ -66,9 +68,14 @@ bool edgehandler (int cellhandle, int lhs, cell* lhscell, int extra){
     deleteDependencies(lhscell, lhs);
     printf("Adding to cellhandle: %d, lhs: %d\n", cellhandle, lhs);
     mysheet[cellhandle%1000][cellhandle/1000].cell_avl = insert(mysheet[cellhandle%1000][cellhandle/1000].cell_avl, lhs);
+    lhscell->operation = 's';
     if (!dfs(lhs, lhs, true)) {
         printf("cycle detected\n");
+        deleteDependencies(lhscell, lhs);
         dfs2(lhs);
+        if (mysheet[0][0].cell_avl==NULL) printf("NULL 0 0\n");
+        if (mysheet[0][1].cell_avl==NULL) printf("NULL 0 1\n");
+        printf("mysheet[0][0].count = %d, mysheet[0][1].count = %d\n", mysheet[0][0].count, mysheet[0][1].count);
         return false;
     }
     lhscell->sum = mysheet[cellhandle%1000][cellhandle/1000].value + extra;
@@ -76,7 +83,6 @@ bool edgehandler (int cellhandle, int lhs, cell* lhscell, int extra){
     lhscell->col1 = cellhandle/1000;
     lhscell->row2 = cellhandle%1000;
     lhscell->col2 = cellhandle/1000;
-    lhscell->operation = 's';
     pro_graph(lhs);
     return true;
 }
@@ -86,11 +92,11 @@ char parser(char* input){
     char *celll=strtok(input , "=");
     char op = 'q';
     int lhs = cell_handler(celll);
-    if (lhs == -1) return 'q';
+    if (lhs == -1) return -1;
     cell* lhscell=mysheet[lhs%1000]+(lhs/1000);
     char* exp=strtok(NULL, "=");
     char *cell1;
-    char *cell2;    
+    char *cell2;
     char *range;
     int cellhandle=cell_handler(exp);
     if (is_int(exp)) {
@@ -102,41 +108,36 @@ char parser(char* input){
         return 'c'; // cell assigned a constant value
     }
     else if (cellhandle!=-1){
-        if (!edgehandler(cellhandle, lhs, lhscell, 0)) return 'q';
+        if (!edgehandler(cellhandle, lhs, lhscell, 0)) return -2;
         return '+'; // cell assigned another cell
     }
     else if (strpbrk(exp, "SLEEP")!=NULL){
         char* nub=strtok(exp, "(");
-        if(strcmp(nub, "SLEEP")!=0) return 'q';
+        if(strcmp(nub, "SLEEP")!=0) return -3;
         char* noob=strtok(NULL, "(");
         char* time=strtok(noob, ")");
-        if (strtok(NULL, ")") != NULL) return 'q';
+        if (strtok(NULL, ")") != NULL) return -3;
         if (is_int(time)){
+            clock_t curr = clock();
+            while (clock()-curr<CLOCKS_PER_SEC*atoi(time));
             deleteDependencies(lhscell, lhs);
-            if (atoi(time)<0){ //negative value of time do not sleep
-                lhscell->sum = atoi(time);
-                lhscell->operation = '\0';
-            }
-            else{
-                lhscell->sum = atoi(time);
-                lhscell->operation = '\0';
-                sleep(atoi(time));
-            } 
-            op = 'z'; 
-            return 'c'; // cell assigned a constant value
+            lhscell->sum = atoi(time);
+            lhscell->operation = '\0';
+            dfs(lhs, lhs, true);
+            pro_graph(lhs);
+            return 'c'; // cell sleeped for a constant value
         }
         else if (cell_handler(time) != -1){
             int rhs = cell_handler(time);
-            lhscell->operation = 'C'; //depends on another cell
-            op = 'z';
-            lhscell->row1 = rhs%1000;
-            lhscell->col1 = rhs/1000;
-            mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(lhscell->cell_avl, lhs);
-            
+            if (!edgehandler(rhs, lhs, lhscell, 0)) return -2;
+            int timer = mysheet[rhs%1000][rhs/1000].value;
+            clock_t curr = clock();
+            while (clock()-curr<CLOCKS_PER_SEC*timer);
+            lhscell->operation = 'z';
+            return 'z'; //sleep of cell
 
         }
-        else return 'q';
-        
+        else return -3;
     }
 
     else if (strpbrk(exp, "+-*/")!=NULL){
@@ -154,19 +155,19 @@ char parser(char* input){
             }
             else if (is_int(cell1)) {
                 int cell2handle = cell_handler(cell2);
-                if (cell2handle == -1) return 'q';
-                if (!edgehandler(cell2handle, lhs, lhscell, atoi(cell1))) return 'q';
+                if (cell2handle == -1) return -1;
+                if (!edgehandler(cell2handle, lhs, lhscell, atoi(cell1))) return -2;
                 return '+';
             }
             else if (is_int(cell2)) {
                 int cell1handle = cell_handler(cell1);
-                if (cell1handle == -1) return 'q';
-                if (!edgehandler(cell1handle, lhs, lhscell, atoi(cell2))) return 'q';
+                if (cell1handle == -1) return -1;
+                if (!edgehandler(cell1handle, lhs, lhscell, atoi(cell2))) return -2;
                 return '+';
             }
             else op = '+';
         }
-       
+
         else if (strpbrk(exp, "*")!=NULL){
             cell1=strtok(exp, "*");
             cell2=strtok(NULL, "*");
@@ -212,10 +213,10 @@ char parser(char* input){
             else if (is_int(cell2)) op = 'D';
             else op = '-';
         }
-        else return 'q';
+        else return -3;
         if (op=='+'||op=='-'||op=='*'||op=='/'){
-            if (cell_handler(cell1) == -1) return 'q';        
-            if (cell_handler(cell2) == -1) return 'q';
+            if (cell_handler(cell1) == -1) return -1;
+            if (cell_handler(cell2) == -1) return -1;
         }
     }
 
@@ -225,19 +226,24 @@ char parser(char* input){
         cell1=strtok(intmed1, ":");
         char* intmed2 =strtok(NULL, ":");
         cell2=strtok(intmed2, ")");
+
         if (strtok(NULL, ")") != NULL) return 'q';
         if (stringcomp("MIN", exp, '\0')==1) op='m';
         else if (stringcomp("MAX", exp, '\0')==1) op='M';
         else if (stringcomp("AVG", exp, '\0')==1) op='a';
         else if (stringcomp("SUM", exp, '\0')==1) op='s';
         else if (stringcomp("STDEV", exp, '\0')==1) op='S';
-        else return 'q';
+        else return -3;
     }
-    else if (cell_handler(exp) != -1){
-        op = 'C'; // cell assigned another cell
-        int rhs = cell_handler(exp);
+    else return -3;
+    int cellh1 = cell_handler(cell1);
+    int cellh2 = cell_handler(cell2);
+    if (cellh1 == -1) return -1;
+    if (cellh2 == -1) return -1;
+    if (op=='m'||op=='M'||op=='a'||op=='s'||op=='S'){
+        printf("cellh1, %d, cellh2, %d\n", cellh1, cellh2);
+        if (cellh1>cellh2) return -4;
     }
-    else return 'q';
     deleteDependencies(lhscell, lhs);
     lhscell->operation = op;
     if (op=='+'|| op =='*'|| op=='-'|| op=='/'){
@@ -248,20 +254,15 @@ char parser(char* input){
         mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
         mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
     }
-    else if (op=='t'|| op=='d'|| op=='p'|| op=='r'){
+    else if (op=='t'|| op=='d'|| op=='r'){
         lhscell->row2 = cell_handler(cell2)%1000;
         lhscell->col2 = cell_handler(cell2)/1000;
         mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
     }
-    
-    else if (op=='T'|| op=='D'|| op=='P'|| op=='R'){
+
+    else if (op=='T'|| op=='D'|| op=='R'){
         lhscell->row1 = cell_handler(cell1)%1000;
         lhscell->col1 = cell_handler(cell1)/1000;
-        mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
-    }
-    else if (op=='C'){
-        lhscell->row1 = cell_handler(exp)%1000;
-        lhscell->col1 = cell_handler(exp)/1000;
         mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
     }
     else{
@@ -282,7 +283,7 @@ char parser(char* input){
         printf("cycle detected\n");
         deleteDependencies(lhscell, lhs);
         dfs2(lhs);
-        return 'q';
+        return -2;
     }
     printf("done_calc1\n");
     calc_value(lhscell);
