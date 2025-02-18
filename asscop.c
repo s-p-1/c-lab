@@ -208,7 +208,11 @@ char parser(char* input){
                 int cell2handle = cell_handler(cell2);
                 if (cell2handle == -1) return -1;
             }
-            else if (is_int(cell2)) op = 'R';
+            else if (is_int(cell2)) {
+                op = 'R';
+                int cell1handle = cell_handler(cell1);
+                if (cell1handle == -1) return -1;
+            }
             else op = '/';
         }
         else if (strpbrk(exp, "-")!=NULL){
@@ -227,7 +231,11 @@ char parser(char* input){
                 int cell2handle = cell_handler(cell2);
                 if (cell2handle == -1) return -1;
             }
-            else if (is_int(cell2)) op = 'D';
+            else if (is_int(cell2)) {
+                op = 'D';
+                int cell1handle = cell_handler(cell1);
+                if (cell1handle == -1) return -1;
+            }
             else op = '-';
         }
         else return -3;
@@ -244,7 +252,7 @@ char parser(char* input){
         char* intmed2 =strtok(NULL, ":");
         cell2=strtok(intmed2, ")");
 
-        if (strtok(NULL, ")") != NULL) return 'q';
+        if (strtok(NULL, ")") != NULL) return -3;
         if (stringcomp("MIN", exp, '\0')==1) op='m';
         else if (stringcomp("MAX", exp, '\0')==1) op='M';
         else if (stringcomp("AVG", exp, '\0')==1) op='a';
@@ -255,20 +263,11 @@ char parser(char* input){
         int cellh2 = cell_handler(cell2);
         if (cellh1 == -1) return -1;
         if (cellh2 == -1) return -1;
-        if (op=='m'||op=='M'||op=='a'||op=='s'||op=='S'){
         printf("cellh1, %d, cellh2, %d\n", cellh1, cellh2);
         if (cellh1>cellh2) return -4;
-    }
     }
     else return -3;
-    int cellh1 = cell_handler(cell1);
-    int cellh2 = cell_handler(cell2);
-    if (cellh1 == -1) return -1;
-    if (cellh2 == -1) return -1;
-    if (op=='m'||op=='M'||op=='a'||op=='s'||op=='S'){
-        printf("cellh1, %d, cellh2, %d\n", cellh1, cellh2);
-        if (cellh1>cellh2) return -4;
-    }
+    
     deleteDependencies(lhscell, lhs);
     lhscell->operation = op;
     if (op=='+'|| op =='*'|| op=='-'|| op=='/'){
