@@ -167,13 +167,21 @@ void update_value(cell *cell1, int row, int col){
     int old_val = mysheet[row][col].value;
     int err1 = mysheet[row][col].err_cnt/100000000;
     int err2 = mysheet[row][col].err_cnt%100000000;
-    if (cell1->operation == '+') {
+    if (cell1->operation == 'z') {
+        clock_t curr = clock();
+        while (clock()-curr<CLOCKS_PER_SEC*new_val);
+        cell1->sum = new_val;
+        if(err1 > 0 && err2 == 0)
+            cell1->err_cnt-=1;
+        else if(err1 == 0  && err2 > 0)
+            cell1->err_cnt+=1;
+    } else if (cell1->operation == '+') {
         cell1->sum += (new_val - old_val);
         if(err1 > 0 && err2 == 0)
             cell1->err_cnt-=1;
         else if(err1 == 0  && err2 > 0)
             cell1->err_cnt+=1;
-    } else if (cell1->operation == '-') {
+    } else if (cell1->operation == '-' || cell1->operation == 'd' || cell1->operation == 'D') {
         if (cell1->row1 == row && cell1->col1 == col) {
             cell1->sum += (new_val - old_val);
         } else {
@@ -183,7 +191,7 @@ void update_value(cell *cell1, int row, int col){
             cell1->err_cnt-=1;
         else if(err1 == 0  && err2 > 0)
             cell1->err_cnt+=1;
-    } else if (cell1->operation == '*') {
+    } else if (cell1->operation == '*' || cell1->operation == 't' || cell1->operation == 'T') {
         if (cell1->row1 == row && cell1->col1 == col) {
             cell1->sum = new_val * new_value(cell1->row2, cell1->col2, cell1->sq_sum);
         } else {
@@ -193,7 +201,7 @@ void update_value(cell *cell1, int row, int col){
             cell1->err_cnt-=1;
         else if(err1 == 0  && err2 > 0)
             cell1->err_cnt+=1;
-    } else if (cell1->operation == '/') {
+    } else if (cell1->operation == '/' || cell1->operation == 'r' || cell1->operation == 'R') {
         if (cell1->row1 == row && cell1->col1 == col) {
             int temp=0;
             if((temp =new_value(cell1->row2, cell1->col2, cell1->sq_sum))!=0)
