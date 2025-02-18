@@ -168,13 +168,15 @@ void update_value(cell *cell1, int row, int col){
     int err1 = mysheet[row][col].err_cnt/100000000;
     int err2 = mysheet[row][col].err_cnt%100000000;
     if (cell1->operation == 'z') {
-        clock_t curr = clock();
-        while (clock()-curr<CLOCKS_PER_SEC*new_val);
-        cell1->sum = new_val;
         if(err1 > 0 && err2 == 0)
             cell1->err_cnt-=1;
         else if(err1 == 0  && err2 > 0)
             cell1->err_cnt+=1;
+        if(cell1->err_cnt%100000000 > 0){
+            clock_t curr = clock();
+            while (clock()-curr<CLOCKS_PER_SEC*new_val);
+        }
+        cell1->sum = new_val;
     } else if (cell1->operation == '+') {
         cell1->sum += (new_val - old_val);
         if(err1 > 0 && err2 == 0)
@@ -264,8 +266,6 @@ void update_value(cell *cell1, int row, int col){
         else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
             cell1->err_cnt+=1;
     }
-    printf("cell1->sum %d\n", cell1->sum);
-    printf("cell1->value %d\n", cell1->value);
 }
 
 void final_update(cell *cell1){
