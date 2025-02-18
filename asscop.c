@@ -28,8 +28,8 @@ int cell_handler(char *cell){
                 flag=1;
             }else return -1;
 
-        }else{
-
+        }
+        else{
             if (*cell>='0' && *cell<='9'){
                 row=10*row+(*cell-'0');
             }
@@ -41,7 +41,7 @@ int cell_handler(char *cell){
     if (row>=1 && row<=R && col>=1 && col<=C){
         return (col-1)*1000+(row-1);
     }
-    
+
     return -1;
    
 }
@@ -113,7 +113,7 @@ char parser(char* input){
         if (strtok(NULL, ")") != NULL) return 'q';
         if (is_int(time)){
             deleteDependencies(lhscell, lhs);
-            if (atoi(time)<0){
+            if (atoi(time)<0){ //negative value of time do not sleep
                 lhscell->sum = atoi(time);
                 lhscell->operation = '\0';
             }
@@ -121,17 +121,22 @@ char parser(char* input){
                 lhscell->sum = atoi(time);
                 lhscell->operation = '\0';
                 sleep(atoi(time));
-
-            }  
+            } 
+            op = 'z'; 
             return 'c'; // cell assigned a constant value
         }
         else if (cell_handler(time) != -1){
             int rhs = cell_handler(time);
+            lhscell->operation = 'C'; //depends on another cell
+            op = 'z';
+            lhscell->row1 = rhs%1000;
+            lhscell->col1 = rhs/1000;
+            mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(lhscell->cell_avl, lhs);
+            
+
         }
         else return 'q';
         
-
-        op = 'z';
     }
 
     else if (strpbrk(exp, "+-*/")!=NULL){
