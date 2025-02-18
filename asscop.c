@@ -111,6 +111,7 @@ char parser(char* input){
 
     else if (strpbrk(exp, "+-*/")!=NULL){
         if (strpbrk(exp, "+")!=NULL){
+            printf("here in +\n");
             cell1=strtok(exp, "+");
             cell2=strtok(NULL, "+");
             if(is_int(cell1) && is_int(cell2)) {
@@ -121,12 +122,18 @@ char parser(char* input){
                 pro_graph(lhs);
                 return 'c'; // cell assigned a constant value (a sum of two integers)
             }
-            else if (is_int(cell1)) op = 'a';
-            else if (is_int(cell2)) op = 'A';
+            else if (is_int(cell1)) {
+                op = 'p';
+                printf("here in +a\n");
+            }
+            else if (is_int(cell2)) {
+                op = 'P';
+                printf("here in +A\n");
+            }
             else op = '+';
         }
        
-    else if (strpbrk(exp, "*")!=NULL){
+        else if (strpbrk(exp, "*")!=NULL){
             cell1=strtok(exp, "*");
             cell2=strtok(NULL, "*");
             if(is_int(cell1) && is_int(cell2)) {
@@ -137,43 +144,45 @@ char parser(char* input){
                 pro_graph(lhs);
                 return 'c'; // cell assigned a constant value (a product of two integers)
             }
-            else if (is_int(cell1)) op = 'p';
-            else if (is_int(cell2)) op = 'P';
+            else if (is_int(cell1)) op = 't';
+            else if (is_int(cell2)) op = 'T';
             else op = '*';
         }
-    else if (strpbrk(exp, "/")!=NULL){
-        cell1=strtok(exp, "/");
-        cell2=strtok(NULL, "/");
-        if(is_int(cell1) && is_int(cell2)) {
-            deleteDependencies(lhscell, lhs);
-            lhscell->sum = atoi(cell1) / atoi(cell2);
-            lhscell->operation = '\0';
-            dfs(lhs, lhs, true);
-            pro_graph(lhs);
-            return 'c'; // cell assigned a constant value (a division of two integers)
+        else if (strpbrk(exp, "/")!=NULL){
+            cell1=strtok(exp, "/");
+            cell2=strtok(NULL, "/");
+            if(is_int(cell1) && is_int(cell2)) {
+                deleteDependencies(lhscell, lhs);
+                lhscell->sum = atoi(cell1) / atoi(cell2);
+                lhscell->operation = '\0';
+                dfs(lhs, lhs, true);
+                pro_graph(lhs);
+                return 'c'; // cell assigned a constant value (a division of two integers)
+            }
+            else if (is_int(cell1)) op = 'r';
+            else if (is_int(cell2)) op = 'R';
+            else op = '/';
         }
-        else if (is_int(cell1)) op = 'r';
-        else if (is_int(cell2)) op = 'R';
-        else op = '/';
-    }
-    else if (strpbrk(exp, "-")!=NULL){
-        cell1=strtok(exp, "-");
-        cell2=strtok(NULL, "-");
-        if(is_int(cell1) && is_int(cell2)) {
-            deleteDependencies(lhscell, lhs);
-            lhscell->sum = atoi(cell1) - atoi(cell2);
-            lhscell->operation = '\0';
-            dfs(lhs, lhs, true);
-            pro_graph(lhs);
-            return 'c'; // cell assigned a constant value (a difference of two integers)
+        else if (strpbrk(exp, "-")!=NULL){
+            cell1=strtok(exp, "-");
+            cell2=strtok(NULL, "-");
+            if(is_int(cell1) && is_int(cell2)) {
+                deleteDependencies(lhscell, lhs);
+                lhscell->sum = atoi(cell1) - atoi(cell2);
+                lhscell->operation = '\0';
+                dfs(lhs, lhs, true);
+                pro_graph(lhs);
+                return 'c'; // cell assigned a constant value (a difference of two integers)
+            }
+            else if (is_int(cell1)) op = 'd';
+            else if (is_int(cell2)) op = 'D';
+            else op = '-';
         }
-        else if (is_int(cell1)) op = 'd';
-        else if (is_int(cell2)) op = 'D';
-        else op = '-';
-    }
-    else return 'q';
-    if (cell_handler(cell1) == -1) return 'q';        
-    if (cell_handler(cell2) == -1) return 'q';
+        else return 'q';
+        if (op=='+'||op=='-'||op=='*'||op=='/'){
+            if (cell_handler(cell1) == -1) return 'q';        
+            if (cell_handler(cell2) == -1) return 'q';
+        }
     }
 
     else if (strpbrk(exp, "MINMAXAVGSUMSTDEV")!=NULL){
@@ -205,13 +214,13 @@ char parser(char* input){
         mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
         mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
     }
-    else if (op=='a'|| op=='d'|| op=='p'|| op=='r'){
+    else if (op=='t'|| op=='d'|| op=='p'|| op=='r'){
         lhscell->row2 = cell_handler(cell2)%1000;
         lhscell->col2 = cell_handler(cell2)/1000;
         mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
     }
     
-    else if (op=='A'|| op=='D'|| op=='P'|| op=='R'){
+    else if (op=='T'|| op=='D'|| op=='P'|| op=='R'){
         lhscell->row1 = cell_handler(cell1)%1000;
         lhscell->col1 = cell_handler(cell1)/1000;
         mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
