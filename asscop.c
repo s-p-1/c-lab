@@ -62,6 +62,26 @@ void deleteDependencies(cell *lhscell, int lhs){
     }
 }
 
+bool edgehandler (int cellhandle, int lhs, cell* lhscell, int extra){
+    deleteDependencies(lhscell, lhs);
+    printf("Adding to cellhandle: %d, lhs: %d\n", cellhandle, lhs);
+    mysheet[cellhandle%1000][cellhandle/1000].cell_avl = insert(mysheet[cellhandle%1000][cellhandle/1000].cell_avl, lhs);
+    if (!dfs(lhs, lhs, true)) {
+        printf("cycle detected\n");
+        dfs2(lhs);
+        return false;
+    }
+    lhscell->sum = mysheet[cellhandle%1000][cellhandle/1000].value + extra;
+    lhscell->row1 = cellhandle%1000;
+    lhscell->col1 = cellhandle/1000;
+    lhscell->row2 = cellhandle%1000;
+    lhscell->col2 = cellhandle/1000;
+    lhscell->operation = 's';
+    pro_graph(lhs);
+    return true;
+}
+
+
 char parser(char* input){
     char *celll=strtok(input , "=");
     char op = 'q';
@@ -72,6 +92,7 @@ char parser(char* input){
     char *cell1;
     char *cell2;    
     char *range;
+    int cellhandle=cell_handler(exp);
     if (is_int(exp)) {
         deleteDependencies(lhscell, lhs);
         lhscell->sum = atoi(exp);
@@ -79,6 +100,10 @@ char parser(char* input){
         dfs(lhs, lhs, true);
         pro_graph(lhs);
         return 'c'; // cell assigned a constant value
+    }
+    else if (cellhandle!=-1){
+        if (!edgehandler(cellhandle, lhs, lhscell, 0)) return 'q';
+        return '+'; // cell assigned another cell
     }
     else if (strpbrk(exp, "SLEEP")!=NULL){
         char* nub=strtok(exp, "(");
@@ -123,12 +148,16 @@ char parser(char* input){
                 return 'c'; // cell assigned a constant value (a sum of two integers)
             }
             else if (is_int(cell1)) {
-                op = 'p';
-                printf("here in +a\n");
+                int cell2handle = cell_handler(cell2);
+                if (cell2handle == -1) return 'q';
+                if (!edgehandler(cell2handle, lhs, lhscell, atoi(cell1))) return 'q';
+                return '+';
             }
             else if (is_int(cell2)) {
-                op = 'P';
-                printf("here in +A\n");
+                int cell1handle = cell_handler(cell1);
+                if (cell1handle == -1) return 'q';
+                if (!edgehandler(cell1handle, lhs, lhscell, atoi(cell2))) return 'q';
+                return '+';
             }
             else op = '+';
         }
