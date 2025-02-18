@@ -139,8 +139,16 @@ char parser(char* input){
             int rhs = cell_handler(time);
             if (!edgehandler(rhs, lhs, lhscell, 0)) return -2;
             int timer = mysheet[rhs%1000][rhs/1000].value;
-            clock_t curr = clock();
-            while (clock()-curr<CLOCKS_PER_SEC*timer);
+            int err1 = mysheet[rhs%1000][rhs/1000].err_cnt/100000000;
+            int err2 = mysheet[rhs%1000][rhs/1000].err_cnt%100000000;
+            if(err1 > 0 && err2 == 0)
+                lhscell->err_cnt-=1;
+            else if(err1 == 0  && err2 > 0)
+                lhscell->err_cnt+=1;
+            if(cell1->err_cnt%100000000 > 0){
+                clock_t curr = clock();
+                while (clock()-curr<CLOCKS_PER_SEC*timer);
+            }
             lhscell->operation = 'z';
             return 'z'; //sleep of cell
 
