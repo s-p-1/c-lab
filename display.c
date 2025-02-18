@@ -36,7 +36,8 @@ void display (cell ** mysheet, int R, int C, int x, int y){
     for (int i = x; i < min(R, x+10); i++){
         printf("%3d", i+1);
         for (int j = y; j < min(C, y+10); j++){
-            printf("%12d", mysheet[i][j].value);
+            if (mysheet[i][j].err_cnt>0) printf("%12s", "ERR");
+            else printf("%12d", mysheet[i][j].value);
         }
         printf("\n");
 

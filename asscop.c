@@ -180,10 +180,16 @@ char parser(char* input){
                 return 'c'; // cell assigned a constant value (a product of two integers)
             }
             else if (is_int(cell1)) {
+                int cell2handle = cell_handler(cell2);
+                if (cell2handle == -1) return -1;
                 op = 't';
 
             }
-            else if (is_int(cell2)) op = 'T';
+            else if (is_int(cell2)) {
+                op = 'T';
+                int cell1handle = cell_handler(cell1);
+                if (cell1handle == -1) return -1;
+            }
             else op = '*';
         }
         else if (strpbrk(exp, "/")!=NULL){
@@ -197,7 +203,11 @@ char parser(char* input){
                 pro_graph(lhs);
                 return 'c'; // cell assigned a constant value (a division of two integers)
             }
-            else if (is_int(cell1)) op = 'r';
+            else if (is_int(cell1)) {
+                op = 'r';
+                int cell2handle = cell_handler(cell2);
+                if (cell2handle == -1) return -1;
+            }
             else if (is_int(cell2)) op = 'R';
             else op = '/';
         }
@@ -212,7 +222,11 @@ char parser(char* input){
                 pro_graph(lhs);
                 return 'c'; // cell assigned a constant value (a difference of two integers)
             }
-            else if (is_int(cell1)) op = 'd';
+            else if (is_int(cell1)) {
+                op = 'd';
+                int cell2handle = cell_handler(cell2);
+                if (cell2handle == -1) return -1;
+            }
             else if (is_int(cell2)) op = 'D';
             else op = '-';
         }
@@ -237,6 +251,14 @@ char parser(char* input){
         else if (stringcomp("SUM", exp, '\0')==1) op='s';
         else if (stringcomp("STDEV", exp, '\0')==1) op='S';
         else return -3;
+        int cellh1 = cell_handler(cell1);
+        int cellh2 = cell_handler(cell2);
+        if (cellh1 == -1) return -1;
+        if (cellh2 == -1) return -1;
+        if (op=='m'||op=='M'||op=='a'||op=='s'||op=='S'){
+        printf("cellh1, %d, cellh2, %d\n", cellh1, cellh2);
+        if (cellh1>cellh2) return -4;
+    }
     }
     else return -3;
     int cellh1 = cell_handler(cell1);
