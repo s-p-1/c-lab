@@ -244,6 +244,15 @@ char parser(char* input){
         printf("cellh1, %d, cellh2, %d\n", cellh1, cellh2);
         if (cellh1>cellh2) return -4;
     }
+    else return -3;
+    int cellh1 = cell_handler(cell1);
+    int cellh2 = cell_handler(cell2);
+    if (cellh1 == -1) return -1;
+    if (cellh2 == -1) return -1;
+    if (op=='m'||op=='M'||op=='a'||op=='s'||op=='S'){
+        printf("cellh1, %d, cellh2, %d\n", cellh1, cellh2);
+        if (cellh1>cellh2) return -4;
+    }
     deleteDependencies(lhscell, lhs);
     lhscell->operation = op;
     if (op=='+'|| op =='*'|| op=='-'|| op=='/'){
