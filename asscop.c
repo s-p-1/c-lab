@@ -265,7 +265,7 @@ char parser(char* input){
                 op = 'D';
                 int cell1handle = cell_handler(cell1);
                 if (cell1handle == -1) return -1;
-                lhscell->sum = mysheet[cell1handle%1000][cell1handle/1000].value/atoi(cell2);
+                lhscell->sum = mysheet[cell1handle%1000][cell1handle/1000].value-atoi(cell2);
             }
             else op = '-';
         }
