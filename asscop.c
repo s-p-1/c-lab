@@ -267,8 +267,11 @@ char parser(char* input){
     }
 
     else if (op=='T'|| op=='D'|| op=='R'){
+        lhscell->row2 =-1;
+        lhscell->col2 =-1;
         lhscell->row1 = cell_handler(cell1)%1000;
         lhscell->col1 = cell_handler(cell1)/1000;
+        lhscell->sq_sum = atoi(cell2);
         mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
     }
     else{
