@@ -19,6 +19,7 @@ bool stringcomp(const char* s1, const char* s2, char myc){
         return flag;
 }
 
+
 int mycomp(char s[20]){
         if (stringcomp("w", s, '\0')) return 1;
         if (stringcomp("a", s, '\0')) return 2;

@@ -20,7 +20,7 @@ int cell_handler(char *cell){
     while (*cell){
 
         if (flag==0){
-
+            
             if (*cell>='A' && *cell<='Z'){
                 col=col*26+(*cell-'A'+1);
             }else if (*cell>='1' && *cell<='9'){
@@ -80,6 +80,35 @@ char parser(char* input){
         pro_graph(lhs);
         return 'c'; // cell assigned a constant value
     }
+    else if (strpbrk(exp, "SLEEP")!=NULL){
+        char* nub=strtok(exp, "(");
+        if(strcmp(nub, "SLEEP")!=0) return 'q';
+        char* noob=strtok(NULL, "(");
+        char* time=strtok(noob, ")");
+        if (strtok(NULL, ")") != NULL) return 'q';
+        if (is_int(time)){
+            deleteDependencies(lhscell, lhs);
+            if (atoi(time)<0){
+                lhscell->sum = atoi(time);
+                lhscell->operation = '\0';
+            }
+            else{
+                lhscell->sum = atoi(time);
+                lhscell->operation = '\0';
+                sleep(atoi(time));
+
+            }  
+            return 'c'; // cell assigned a constant value
+        }
+        else if (cell_handler(time) != -1){
+            int rhs = cell_handler(time);
+        }
+        else return 'q';
+        
+
+        op = 'z';
+    }
+
     else if (strpbrk(exp, "+-*/")!=NULL){
         if (strpbrk(exp, "+")!=NULL){
             cell1=strtok(exp, "+");
@@ -147,7 +176,7 @@ char parser(char* input){
     if (cell_handler(cell2) == -1) return 'q';
     }
 
-    else if (strpbrk(exp, "MINMAXAVGSUMSTDEVSLEEP")!=NULL){
+    else if (strpbrk(exp, "MINMAXAVGSUMSTDEV")!=NULL){
         char* func=strtok(exp, "(");
         char* intmed1 =strtok(NULL, "(");
         cell1=strtok(intmed1, ":");
@@ -159,7 +188,6 @@ char parser(char* input){
         else if (stringcomp("AVG", exp, '\0')==1) op='a';
         else if (stringcomp("SUM", exp, '\0')==1) op='s';
         else if (stringcomp("STDEV", exp, '\0')==1) op='S';
-        else if (stringcomp("SLEEP", exp, '\0')==1) op='z';
         else return 'q';
     }
     else if (cell_handler(exp) != -1){
