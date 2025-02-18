@@ -141,7 +141,7 @@ char parser(char* input){
         lhscell->err_cnt=0;
         return '+'; // cell assigned another cell
     }
-    else if (strpbrk(exp, "SLEEP")!=NULL){
+    else if (stringcomp(exp, "SLEEP(", '(')){
         char* nub=strtok(exp, "(");
         if(strcmp(nub, "SLEEP")!=0) return -3;
         char* noob=strtok(NULL, "(");
