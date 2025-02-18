@@ -67,8 +67,8 @@ int get_line(){
                 arr[i]='\0';
                 char myc= parser(arr);
                 printf("%c\n", myc);
-                if (myc!='q') printf("do the functional assignment now\n");
-                return -2;
+                if (myc>=0) printf("do the functional assignment now\n");
+                else return myc;
         }
 }
 

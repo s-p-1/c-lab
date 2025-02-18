@@ -75,7 +75,11 @@ int main(int argc, char *argv[]){
         if (gl == 3) x = min(R-10, x+10);
         
         if (flag) display(mysheet, R, C, x, y);
-        printf("[%.1f] (ok) > ", ((double)(clock()- st)/CLOCKS_PER_SEC));
+        if (gl ==-1) printf("[%.1f] (invalid cell) > ", ((double)(clock()- st)/CLOCKS_PER_SEC));
+        else if (gl ==-2) printf("[%.1f] (cycle detected) > ", ((double)(clock()- st)/CLOCKS_PER_SEC));
+        else if (gl ==-3) printf("[%.1f] (unrecognized cmd) > ", ((double)(clock()- st)/CLOCKS_PER_SEC));
+        else if (gl ==-4) printf("[%.1f] (Invalid range) > ", ((double)(clock()- st)/CLOCKS_PER_SEC));
+        else printf("[%.1f] (ok) > ", ((double)(clock()- st)/CLOCKS_PER_SEC));
         st=clock();
         gl = get_line();
         if (gl == 5){
