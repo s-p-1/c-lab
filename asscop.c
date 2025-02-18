@@ -145,7 +145,7 @@ char parser(char* input){
                 lhscell->err_cnt-=1;
             else if(err1 == 0  && err2 > 0)
                 lhscell->err_cnt+=1;
-            if(lhscell->err_cnt%100000000 > 0){
+            if(lhscell->err_cnt%100000000 == 0){
                 clock_t curr = clock();
                 while (clock()-curr<CLOCKS_PER_SEC*timer);
             }

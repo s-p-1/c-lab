@@ -172,7 +172,7 @@ void update_value(cell *cell1, int row, int col){
             cell1->err_cnt-=1;
         else if(err1 == 0  && err2 > 0)
             cell1->err_cnt+=1;
-        if(cell1->err_cnt%100000000 > 0){
+        if(cell1->err_cnt%100000000 == 0){
             clock_t curr = clock();
             while (clock()-curr<CLOCKS_PER_SEC*new_val);
         }
