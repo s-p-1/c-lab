@@ -7,7 +7,7 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     
     // Calculate count of elements
     count = (cell1->row2 - cell1->row1 + 1) * (cell1->col2 - cell1->col1 + 1);
-    lhscell->err_cnt=0;
+    cell1->err_cnt=0;
     if(cell1->operation == '+'){
         cell1->err_cnt =0;
         val = mysheet[cell1->row1][cell1->col1].value+mysheet[cell1->row2][cell1->col2].value;
