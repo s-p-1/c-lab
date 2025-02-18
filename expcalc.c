@@ -144,7 +144,8 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     // cell1->value = val;
 }
 
-int new_value(int row, int col){
+int new_value(int row, int col, int sq_sum) {
+    if (row < 0 || col < 0) return sq_sum;
     int new_val =0;
     if (mysheet[row][col].operation == 'S') {
         int count = (mysheet[row][col].row2 - mysheet[row][col].row1 + 1) * (mysheet[row][col].col2 - mysheet[row][col].col1 + 1);
@@ -162,14 +163,15 @@ int new_value(int row, int col){
 }
 
 void update_value(cell *cell1, int row, int col){
-    int new_val = new_value(row, col);
+    int new_val = new_value(row, col, 0);
     int old_val = mysheet[row][col].value;
-
+    int err1 = mysheet[row][col].err_cnt/100000000;
+    int err2 = mysheet[row][col].err_cnt%100000000;
     if (cell1->operation == '+') {
         cell1->sum += (new_val - old_val);
-        if(mysheet[row][col].err_cnt/100000000 > 0 && mysheet[row][col].err_cnt%100000000 == 0)
+        if(err1 > 0 && err2 == 0)
             cell1->err_cnt-=1;
-        else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
+        else if(err1 == 0  && err2 > 0)
             cell1->err_cnt+=1;
     } else if (cell1->operation == '-') {
         if (cell1->row1 == row && cell1->col1 == col) {
@@ -177,24 +179,24 @@ void update_value(cell *cell1, int row, int col){
         } else {
             cell1->sum -= (new_val - old_val);
         }
-        if(mysheet[row][col].err_cnt/100000000 > 0 && mysheet[row][col].err_cnt%100000000 == 0)
+        if(err1 > 0 && err2 == 0)
             cell1->err_cnt-=1;
-        else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
+        else if(err1 == 0  && err2 > 0)
             cell1->err_cnt+=1;
     } else if (cell1->operation == '*') {
         if (cell1->row1 == row && cell1->col1 == col) {
-            cell1->sum = new_val * new_value(cell1->row2, cell1->col2);
+            cell1->sum = new_val * new_value(cell1->row2, cell1->col2, cell1->sq_sum);
         } else {
-            cell1->sum = new_value(cell1->row1, cell1->col1) * new_val;
+            cell1->sum = new_value(cell1->row1, cell1->col1, cell1->sq_sum) * new_val;
         }
-        if(mysheet[row][col].err_cnt/100000000 > 0 && mysheet[row][col].err_cnt%100000000 == 0)
+        if(err1 > 0 && err2 == 0)
             cell1->err_cnt-=1;
-        else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
+        else if(err1 == 0  && err2 > 0)
             cell1->err_cnt+=1;
     } else if (cell1->operation == '/') {
         if (cell1->row1 == row && cell1->col1 == col) {
             int temp=0;
-            if((temp =new_value(cell1->row2, cell1->col2)!=0))
+            if((temp =new_value(cell1->row2, cell1->col2, cell1->sq_sum)!=0))
                 cell1->sum = new_val / temp;
             if(mysheet[row][col].err_cnt/100000000 > 0  && mysheet[row][col].err_cnt%100000000 == 0)
                 cell1->err_cnt-=1;
@@ -202,7 +204,7 @@ void update_value(cell *cell1, int row, int col){
                 cell1->err_cnt+=1;
         } else {
             if (new_val != 0) {
-                cell1->sum = new_value(cell1->row1, cell1->col1) / new_val;
+                cell1->sum = new_value(cell1->row1, cell1->col1, cell1->sq_sum) / new_val;
                 if(mysheet[row][col].err_cnt/100000000 > 0  && mysheet[row][col].err_cnt%100000000 == 0)
                     cell1->err_cnt-=1;
                 else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
