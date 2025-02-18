@@ -54,8 +54,7 @@ void dfs2 (int address){
 
 void pro_graph(int address){
 
-    
-    printf("donedfs\n");
+    // printf("donedfs\n");
     int size = 5;
     int *queue = (int *)malloc(size * sizeof(int));
     
@@ -63,36 +62,25 @@ void pro_graph(int address){
     int front = 0;
     int rear = 1;
     AVLNode* root = mysheet[address%1000][address/1000].cell_avl;
-    printf("front, rear %d %d\n", front, rear);
+    // printf("front, rear %d %d\n", front, rear);
     while (rear != front) {
-        printf("%d entered front\n", front);
+
         int address = queue[front];
-        printf("%d address of front\n", address);
-        printf("%d count of front\n", mysheet[address%1000][address/1000].count);
+        // printf("%d address of front\n", address);
+        // printf("%d count of front\n", mysheet[address%1000][address/1000].count);
         cell* ptr = mysheet[address%1000]+(address/1000);
         AVLNode* root = mysheet[address%1000][address/1000].cell_avl;
-        if (root == NULL) {
-            printf("root is null\n");
-            front++;
-            continue;
-        }
+
         int* myl= inorderTraversal(root);
-        // printf("myl\n");
-        // if (myl ==NULL) printf("myl is null\n");
-        // for (int i = 0; i < 5; i++){
-        //     printf("printing myl %d\n", i);
-        //     printf("%d\n", *myl);
-        //     myl++;
-        // }
         //this array contains adddress of the cells
-        int stack = 1;
-        while (*myl!=-1 && stack>0){
-            stack--;
+
+        while (*myl!=-1){
+
             int addr1= *myl;
-            printf("count of child %d : %d\n", addr1, mysheet[addr1%1000][addr1/1000].count);
+            // printf("count of child %d : %d\n", addr1, mysheet[addr1%1000][addr1/1000].count);
             update_value(mysheet[addr1%1000]+(addr1/1000), address%1000, address/1000);
-            //update the value here
             mysheet[addr1%1000][addr1/1000].count -= 1;
+            
             if (mysheet[addr1%1000][addr1/1000].count <= 0){
                 printf("dfs %d\n", addr1);
                 queue[rear] = addr1;
