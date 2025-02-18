@@ -53,6 +53,14 @@ void deleteDependencies(cell *lhscell, int lhs){
             mysheet[lhscell->row1][lhscell->col1].cell_avl = deleteNode(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
             mysheet[lhscell->row2][lhscell->col2].cell_avl = deleteNode(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
         }
+        else if (lhscell->operation=='t'|| lhscell->operation=='d'|| lhscell->operation=='r'){
+            printf("deleted from %d %d: %d\n", lhscell->row2, lhscell->col2, lhs);
+            mysheet[lhscell->row2][lhscell->col2].cell_avl = deleteNode(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
+        }
+        else if (lhscell->operation=='T'|| lhscell->operation=='D'|| lhscell->operation=='R'){
+            printf("deleted from %d %d: %d\n", lhscell->row1, lhscell->col1, lhs);
+            mysheet[lhscell->row1][lhscell->col1].cell_avl = deleteNode(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
+        }
         else{
             for (int i =lhscell->row1; i<=lhscell->row2; i++){
                 for (int j = lhscell->col1; j<=lhscell->col2; j++){
