@@ -72,6 +72,7 @@ void deleteDependencies(cell *lhscell, int lhs){
     }
 }
 
+
 bool edgehandler (int cellhandle, int lhs, cell* lhscell, int extra){
     deleteDependencies(lhscell, lhs);
     printf("Adding to cellhandle: %d, lhs: %d\n", cellhandle, lhs);
@@ -87,6 +88,7 @@ bool edgehandler (int cellhandle, int lhs, cell* lhscell, int extra){
         return false;
     }
     lhscell->sum = mysheet[cellhandle%1000][cellhandle/1000].value + extra;
+
     lhscell->row1 = cellhandle%1000;
     lhscell->col1 = cellhandle/1000;
     lhscell->row2 = cellhandle%1000;
@@ -139,9 +141,12 @@ char parser(char* input){
             int rhs = cell_handler(time);
             if (!edgehandler(rhs, lhs, lhscell, 0)) return -2;
             int timer = mysheet[rhs%1000][rhs/1000].value;
-            int err = mysheet[rhs%1000][rhs/1000].err_cnt%100000000;
-            printf("error is %d", err);
-            if(err > 0)
+            int err1 = mysheet[rhs%1000][rhs/1000].err_cnt/100000000;
+            int err2 = mysheet[rhs%1000][rhs/1000].err_cnt%100000000;
+            printf("errors are %d %d", err1, err2);
+            if(err1 > 0 && err2 == 0)
+                lhscell->err_cnt-=1;
+            else if(err1 == 0  && err2 > 0)
                 lhscell->err_cnt+=1;
             printf("lhscell->err_cnt is %d", lhscell->err_cnt);
             if(lhscell->err_cnt%100000000 == 0){
@@ -197,6 +202,7 @@ char parser(char* input){
             else if (is_int(cell1)) {
                 int cell2handle = cell_handler(cell2);
                 if (cell2handle == -1) return -1;
+                lhscell->sum = atoi(cell1)*mysheet[cell2handle%1000][cell2handle/1000].value;
                 op = 't';
 
             }
@@ -204,6 +210,7 @@ char parser(char* input){
                 op = 'T';
                 int cell1handle = cell_handler(cell1);
                 if (cell1handle == -1) return -1;
+                lhscell->sum = mysheet[cell1handle%1000][cell1handle/1000].value*atoi(cell2);
             }
             else op = '*';
         }
@@ -222,11 +229,13 @@ char parser(char* input){
                 op = 'r';
                 int cell2handle = cell_handler(cell2);
                 if (cell2handle == -1) return -1;
+                lhscell->sum= atoi(cell1)/mysheet[cell2handle%1000][cell2handle/1000].value;
             }
             else if (is_int(cell2)) {
                 op = 'R';
                 int cell1handle = cell_handler(cell1);
                 if (cell1handle == -1) return -1;
+                lhscell->sum = mysheet[cell1handle%1000][cell1handle/1000].value/atoi(cell2);
             }
             else op = '/';
         }
@@ -245,11 +254,13 @@ char parser(char* input){
                 op = 'd';
                 int cell2handle = cell_handler(cell2);
                 if (cell2handle == -1) return -1;
+                lhscell->sum = atoi(cell1)-mysheet[cell2handle%1000][cell2handle/1000].value;
             }
             else if (is_int(cell2)) {
                 op = 'D';
                 int cell1handle = cell_handler(cell1);
                 if (cell1handle == -1) return -1;
+                lhscell->sum = mysheet[cell1handle%1000][cell1handle/1000].value/atoi(cell2);
             }
             else op = '-';
         }
