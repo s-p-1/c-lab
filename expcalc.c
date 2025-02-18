@@ -169,7 +169,7 @@ void update_value(cell *cell1, int row, int col){
         cell1->sum += (new_val - old_val);
         if(mysheet[row][col].err_cnt/100000000 > 0 && mysheet[row][col].err_cnt%100000000 == 0)
             cell1->err_cnt-=1;
-        else(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
+        else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
             cell1->err_cnt+=1;
     } else if (cell1->operation == '-') {
         if (cell1->row1 == row && cell1->col1 == col) {
@@ -179,7 +179,7 @@ void update_value(cell *cell1, int row, int col){
         }
         if(mysheet[row][col].err_cnt/100000000 > 0 && mysheet[row][col].err_cnt%100000000 == 0)
             cell1->err_cnt-=1;
-        else(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
+        else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
             cell1->err_cnt+=1;
     } else if (cell1->operation == '*') {
         if (cell1->row1 == row && cell1->col1 == col) {
@@ -189,7 +189,7 @@ void update_value(cell *cell1, int row, int col){
         }
         if(mysheet[row][col].err_cnt/100000000 > 0 && mysheet[row][col].err_cnt%100000000 == 0)
             cell1->err_cnt-=1;
-        else(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
+        else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
             cell1->err_cnt+=1;
     } else if (cell1->operation == '/') {
         if (cell1->row1 == row && cell1->col1 == col) {
@@ -198,11 +198,15 @@ void update_value(cell *cell1, int row, int col){
                 cell1->sum = new_val / temp;
             if(mysheet[row][col].err_cnt/100000000 > 0  && mysheet[row][col].err_cnt%100000000 == 0)
                 cell1->err_cnt-=1;
-            else(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
+            else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
                 cell1->err_cnt+=1;
         } else {
             if (new_val != 0) {
                 cell1->sum = new_value(cell1->row1, cell1->col1) / new_val;
+                if(mysheet[row][col].err_cnt/100000000 > 0  && mysheet[row][col].err_cnt%100000000 == 0)
+                    cell1->err_cnt-=1;
+                else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
+                    cell1->err_cnt+=1;
             } else {
                 if(mysheet[row][col].err_cnt/100000000 == 0)
                     cell1->err_cnt+=1;
@@ -214,7 +218,7 @@ void update_value(cell *cell1, int row, int col){
         cell1->sum = (minValueNode(cell1->range_min_max))->value;
         if(mysheet[row][col].err_cnt/100000000 > 0  && mysheet[row][col].err_cnt%100000000 == 0)
             cell1->err_cnt-=1;
-        else(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
+        else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
             cell1->err_cnt+=1;
     } else if (cell1->operation == 'M') {
         cell1->range_min_max = deleteNode(cell1->range_min_max, old_val);
@@ -222,13 +226,13 @@ void update_value(cell *cell1, int row, int col){
         cell1->sum = (maxValueNode(cell1->range_min_max))->value;
         if(mysheet[row][col].err_cnt/100000000 > 0  && mysheet[row][col].err_cnt%100000000 == 0)
             cell1->err_cnt-=1;
-        else(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
+        else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
             cell1->err_cnt+=1;
     } else if (cell1->operation == 's') {
         cell1->sum += (new_val - old_val);
         if(mysheet[row][col].err_cnt/100000000 > 0  && mysheet[row][col].err_cnt%100000000 == 0)
             cell1->err_cnt-=1;
-        else(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
+        else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
             cell1->err_cnt+=1;
     } else if (cell1->operation == 'a') {
         int count = (cell1->row2 - cell1->row1 + 1) * (cell1->col2 - cell1->col1 + 1);
@@ -236,7 +240,7 @@ void update_value(cell *cell1, int row, int col){
         cell1->value = cell1->sum / count;
         if(mysheet[row][col].err_cnt/100000000 > 0  && mysheet[row][col].err_cnt%100000000 == 0)
             cell1->err_cnt-=1;
-        else(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
+        else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
             cell1->err_cnt+=1;
     } else if (cell1->operation == 'S') {
         int count = (cell1->row2 - cell1->row1 + 1) * (cell1->col2 - cell1->col1 + 1);
@@ -247,7 +251,7 @@ void update_value(cell *cell1, int row, int col){
         cell1->value = (int)sqrt(variance);
         if(mysheet[row][col].err_cnt/100000000 > 0  && mysheet[row][col].err_cnt%100000000 == 0)
             cell1->err_cnt-=1;
-        else(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
+        else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
             cell1->err_cnt+=1;
     }
     printf("cell1->sum %d\n", cell1->sum);
