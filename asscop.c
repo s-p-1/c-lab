@@ -179,7 +179,10 @@ char parser(char* input){
                 pro_graph(lhs);
                 return 'c'; // cell assigned a constant value (a product of two integers)
             }
-            else if (is_int(cell1)) op = 't';
+            else if (is_int(cell1)) {
+                op = 't';
+
+            }
             else if (is_int(cell2)) op = 'T';
             else op = '*';
         }
@@ -244,7 +247,6 @@ char parser(char* input){
         printf("cellh1, %d, cellh2, %d\n", cellh1, cellh2);
         if (cellh1>cellh2) return -4;
     }
-    else return -3;
     deleteDependencies(lhscell, lhs);
     lhscell->operation = op;
     if (op=='+'|| op =='*'|| op=='-'|| op=='/'){
@@ -256,8 +258,11 @@ char parser(char* input){
         mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
     }
     else if (op=='t'|| op=='d'|| op=='r'){
+        lhscell->row1 =-1;
+        lhscell->col1 =-1;
         lhscell->row2 = cell_handler(cell2)%1000;
         lhscell->col2 = cell_handler(cell2)/1000;
+        lhscell->sq_sum = atoi(cell1);
         mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
     }
 
