@@ -140,7 +140,7 @@ char parser(char* input){
             if (!edgehandler(rhs, lhs, lhscell, 0)) return -2;
             int timer = mysheet[rhs%1000][rhs/1000].value;
             int err = mysheet[rhs%1000][rhs/1000].err_cnt%100000000;
-            printf("errors are %d %d", err1, err2);
+            printf("error is %d", err);
             if(err > 0)
                 lhscell->err_cnt+=1;
             printf("lhscell->err_cnt is %d", lhscell->err_cnt);
