@@ -205,7 +205,7 @@ void update_value(cell *cell1, int row, int col){
         } else {
             if (new_val != 0) {
                 cell1->sum = new_value(cell1->row1, cell1->col1, cell1->sq_sum) / new_val;
-                if(mysheet[row][col].err_cnt/100000000 > 0  && mysheet[row][col].err_cnt%100000000 == 0)
+                if(old_val == 0 || (mysheet[row][col].err_cnt/100000000 > 0  && mysheet[row][col].err_cnt%100000000 == 0))
                     cell1->err_cnt-=1;
                 else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
                     cell1->err_cnt+=1;
