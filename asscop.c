@@ -55,6 +55,7 @@ void deleteDependencies(cell *lhscell, int lhs){
             for (int i =lhscell->row1; i<=lhscell->row2; i++){
                 for (int j = lhscell->col1; j<=lhscell->col2; j++){
                     mysheet[i][j].cell_avl = deleteNode(mysheet[i][j].cell_avl, lhs);
+                    printf("deleted from %d %d: %d\n", i, j, lhs);
                 }
             }
         }
@@ -75,6 +76,7 @@ char parser(char* input){
         deleteDependencies(lhscell, lhs);
         lhscell->sum = atoi(exp);
         lhscell->operation = '\0';
+        dfs(lhs, lhs, true);
         pro_graph(lhs);
         return 'c'; // cell assigned a constant value
     }
@@ -86,6 +88,7 @@ char parser(char* input){
                 deleteDependencies(lhscell, lhs);
                 lhscell->sum = atoi(cell1) + atoi(cell2);
                 lhscell->operation = '\0';
+                dfs(lhs, lhs, true);
                 pro_graph(lhs);
                 return 'c'; // cell assigned a constant value (a sum of two integers)
             }
@@ -101,6 +104,7 @@ char parser(char* input){
                 deleteDependencies(lhscell, lhs);
                 lhscell->sum = atoi(cell1) * atoi(cell2);
                 lhscell->operation = '\0';
+                dfs(lhs, lhs, true);
                 pro_graph(lhs);
                 return 'c'; // cell assigned a constant value (a product of two integers)
             }
@@ -115,6 +119,7 @@ char parser(char* input){
             deleteDependencies(lhscell, lhs);
             lhscell->sum = atoi(cell1) / atoi(cell2);
             lhscell->operation = '\0';
+            dfs(lhs, lhs, true);
             pro_graph(lhs);
             return 'c'; // cell assigned a constant value (a division of two integers)
         }
@@ -129,6 +134,7 @@ char parser(char* input){
             deleteDependencies(lhscell, lhs);
             lhscell->sum = atoi(cell1) - atoi(cell2);
             lhscell->operation = '\0';
+            dfs(lhs, lhs, true);
             pro_graph(lhs);
             return 'c'; // cell assigned a constant value (a difference of two integers)
         }
@@ -194,7 +200,9 @@ char parser(char* input){
         lhscell->col2 = cell_handler(cell2)/1000;
         for (int i =lhscell->row1; i<=lhscell->row2; i++){
             for (int j = lhscell->col1; j<=lhscell->col2; j++){
+                if (mysheet[i][j].cell_avl==NULL) printf("NULL1\n");
                 mysheet[i][j].cell_avl = insert(mysheet[i][j].cell_avl, lhs);
+                if (mysheet[i][j].cell_avl==NULL) printf("NULL2\n");
             }
         }
     }
