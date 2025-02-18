@@ -196,7 +196,7 @@ void update_value(cell *cell1, int row, int col){
     } else if (cell1->operation == '/') {
         if (cell1->row1 == row && cell1->col1 == col) {
             int temp=0;
-            if((temp =new_value(cell1->row2, cell1->col2, cell1->sq_sum)!=0))
+            if((temp =new_value(cell1->row2, cell1->col2, cell1->sq_sum))!=0)
                 cell1->sum = new_val / temp;
             if(mysheet[row][col].err_cnt/100000000 > 0  && mysheet[row][col].err_cnt%100000000 == 0)
                 cell1->err_cnt-=1;
