@@ -165,7 +165,12 @@ void update_value(cell *cell1, int row, int col){
     int new_val = new_value(row, col);
     int old_val = mysheet[row][col].value;
 
-    if (cell1->operation == '+') {
+    if (cell1->operation == 'z'){
+        clock_t curr = clock();
+        while (clock()-curr<CLOCKS_PER_SEC*new_val);
+        cell1->sum = new_val;
+        return;
+    }else if (cell1->operation == '+') {
         cell1->sum += (new_val - old_val);
     } else if (cell1->operation == '-') {
         if (cell1->row1 == row && cell1->col1 == col) {
