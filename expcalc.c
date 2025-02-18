@@ -9,6 +9,7 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     count = (cell1->row2 - cell1->row1 + 1) * (cell1->col2 - cell1->col1 + 1);
     cell1->err_cnt=0;
     if(cell1->operation == '+'){
+        freeTree(cell1->range_min_max);
         cell1->err_cnt =0;
         val = mysheet[cell1->row1][cell1->col1].value+mysheet[cell1->row2][cell1->col2].value;
         cell1->sum = val;  //i will update sum and keep the init_value same while updating so that i can have both final_value and init_value and i don't have to make new variable for this
@@ -21,6 +22,7 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     }
 
     else if(cell1->operation == '-'){
+        freeTree(cell1->range_min_max);
         cell1->err_cnt =0;
         val = mysheet[cell1->row1][cell1->col1].value-mysheet[cell1->row2][cell1->col2].value;
         cell1->sum = val;
@@ -33,6 +35,7 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     }
 
     else if(cell1->operation == '*'){
+        freeTree(cell1->range_min_max);
         cell1->err_cnt =0;
         val = mysheet[cell1->row1][cell1->col1].value*mysheet[cell1->row2][cell1->col2].value;
         cell1->sum = val;
@@ -45,6 +48,7 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     }
 
     else if(cell1->operation == '/'){
+        freeTree(cell1->range_min_max);
         cell1->err_cnt =0;
         if(mysheet[cell1->row1][cell1->col1].err_cnt>0){
             cell1->err_cnt+=1;
@@ -99,6 +103,7 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     
     // Sum operation
     else if(cell1->operation == 's') {
+        freeTree(cell1->range_min_max);
         cell1->err_cnt = 0;
         for(int i = cell1->row1; i <= cell1->row2; i++) {
             for(int j = cell1->col1; j <= cell1->col2; j++) {
@@ -114,6 +119,7 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     
     // Average operation
     else if(cell1->operation == 'a') {
+        freeTree(cell1->range_min_max);
         cell1->err_cnt = 0;
         for(int i = cell1->row1; i <= cell1->row2; i++) {
             for(int j = cell1->col1; j <= cell1->col2; j++) {
@@ -130,6 +136,7 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     // Standard deviation operation
     else if(cell1->operation == 'S') {
         // First pass: calculate sum and square sum
+        freeTree(cell1->range_min_max);
         cell1->err_cnt = 0;
         for(int i = cell1->row1; i <= cell1->row2; i++) {
             for(int j = cell1->col1; j <= cell1->col2; j++) {
