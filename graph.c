@@ -24,6 +24,7 @@ bool dfs (int address, int parent, bool isbase){
         int addr1= *myl;
         mysheet[addr1%1000][addr1/1000].count += 1;
         printf("Added now count of child %d : %d\n", addr1, mysheet[addr1%1000][addr1/1000].count);
+        printf("parent %d\n", address);
         if (!dfs(*myl, parent, false)) myb = false;
 
         myl++;
@@ -82,7 +83,7 @@ void pro_graph(int address){
             mysheet[addr1%1000][addr1/1000].count -= 1;
             
             if (mysheet[addr1%1000][addr1/1000].count <= 0){
-                printf("dfs %d\n", addr1);
+                // printf("dfs %d\n", addr1);
                 queue[rear] = addr1;
                 rear++;
                 if (rear == size){
@@ -93,7 +94,7 @@ void pro_graph(int address){
             myl++;
         }
         front++;
-        printf("%d %d before final update\n", ptr->sum, address);
+        // printf("%d %d before final update\n", ptr->sum, address);
         final_update(ptr);
         
     }

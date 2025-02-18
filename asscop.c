@@ -202,24 +202,24 @@ char parser(char* input){
         lhscell->col1 = cell_handler(cell1)/1000;
         lhscell->row2 = cell_handler(cell2)%1000;
         lhscell->col2 = cell_handler(cell2)/1000;
-        mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(lhscell->cell_avl, lhs);
-        mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(lhscell->cell_avl, lhs);
+        mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
+        mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
     }
     else if (op=='a'|| op=='d'|| op=='p'|| op=='r'){
         lhscell->row2 = cell_handler(cell2)%1000;
         lhscell->col2 = cell_handler(cell2)/1000;
-        mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(lhscell->cell_avl, lhs);
+        mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
     }
     
     else if (op=='A'|| op=='D'|| op=='P'|| op=='R'){
         lhscell->row1 = cell_handler(cell1)%1000;
         lhscell->col1 = cell_handler(cell1)/1000;
-        mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(lhscell->cell_avl, lhs);
+        mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
     }
     else if (op=='C'){
         lhscell->row1 = cell_handler(exp)%1000;
         lhscell->col1 = cell_handler(exp)/1000;
-        mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(lhscell->cell_avl, lhs);
+        mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
     }
     else{
         lhscell->row1 = cell_handler(cell1)%1000;
