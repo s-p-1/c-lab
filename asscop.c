@@ -111,6 +111,7 @@ char parser(char* input){
     int cellhandle=cell_handler(exp);
     if (is_int(exp)) {
         deleteDependencies(lhscell, lhs);
+        lhscell->err_cnt=0;
         lhscell->sum = atoi(exp);
         lhscell->operation = '\0';
         dfs(lhs, lhs, true);
@@ -119,6 +120,7 @@ char parser(char* input){
     }
     else if (cellhandle!=-1){
         if (!edgehandler(cellhandle, lhs, lhscell, 0)) return -2;
+        lhscell->err_cnt=0;
         return '+'; // cell assigned another cell
     }
     else if (strpbrk(exp, "SLEEP")!=NULL){
@@ -128,6 +130,7 @@ char parser(char* input){
         char* time=strtok(noob, ")");
         if (strtok(NULL, ")") != NULL) return -3;
         if (is_int(time)){
+            lhscell->err_cnt=0;
             clock_t curr = clock();
             while (clock()-curr<CLOCKS_PER_SEC*atoi(time));
             deleteDependencies(lhscell, lhs);
@@ -140,15 +143,20 @@ char parser(char* input){
         else if (cell_handler(time) != -1){
             int rhs = cell_handler(time);
             if (!edgehandler(rhs, lhs, lhscell, 0)) return -2;
+            lhscell->err_cnt=0;
             int timer = mysheet[rhs%1000][rhs/1000].value;
+<<<<<<< Updated upstream
             int err1 = mysheet[rhs%1000][rhs/1000].err_cnt/100000000;
             int err2 = mysheet[rhs%1000][rhs/1000].err_cnt%100000000;
             printf("errors are %d %d", err1, err2);
             if(err1 > 0 && err2 == 0)
                 lhscell->err_cnt-=1;
             else if(err1 == 0  && err2 > 0)
+=======
+            int err = mysheet[rhs%1000][rhs/1000].err_cnt%100000000;
+            if(err > 0)
+>>>>>>> Stashed changes
                 lhscell->err_cnt+=1;
-            printf("lhscell->err_cnt is %d", lhscell->err_cnt);
             if(lhscell->err_cnt%100000000 == 0){
                 clock_t curr = clock();
                 while (clock()-curr<CLOCKS_PER_SEC*timer);
@@ -169,6 +177,7 @@ char parser(char* input){
                 deleteDependencies(lhscell, lhs);
                 lhscell->sum = atoi(cell1) + atoi(cell2);
                 lhscell->operation = '\0';
+                lhscell->err_cnt=0;
                 dfs(lhs, lhs, true);
                 pro_graph(lhs);
                 return 'c'; // cell assigned a constant value (a sum of two integers)
@@ -177,12 +186,14 @@ char parser(char* input){
                 int cell2handle = cell_handler(cell2);
                 if (cell2handle == -1) return -1;
                 if (!edgehandler(cell2handle, lhs, lhscell, atoi(cell1))) return -2;
+                lhscell->err_cnt=0;
                 return '+';
             }
             else if (is_int(cell2)) {
                 int cell1handle = cell_handler(cell1);
                 if (cell1handle == -1) return -1;
                 if (!edgehandler(cell1handle, lhs, lhscell, atoi(cell2))) return -2;
+                lhscell->err_cnt=0;
                 return '+';
             }
             else op = '+';
@@ -195,6 +206,7 @@ char parser(char* input){
                 deleteDependencies(lhscell, lhs);
                 lhscell->sum = atoi(cell1) * atoi(cell2);
                 lhscell->operation = '\0';
+                lhscell->err_cnt=0;
                 dfs(lhs, lhs, true);
                 pro_graph(lhs);
                 return 'c'; // cell assigned a constant value (a product of two integers)
@@ -221,6 +233,7 @@ char parser(char* input){
                 deleteDependencies(lhscell, lhs);
                 lhscell->sum = atoi(cell1) / atoi(cell2);
                 lhscell->operation = '\0';
+                lhscell->err_cnt=0;
                 dfs(lhs, lhs, true);
                 pro_graph(lhs);
                 return 'c'; // cell assigned a constant value (a division of two integers)
@@ -246,6 +259,7 @@ char parser(char* input){
                 deleteDependencies(lhscell, lhs);
                 lhscell->sum = atoi(cell1) - atoi(cell2);
                 lhscell->operation = '\0';
+                lhscell->err_cnt=0;
                 dfs(lhs, lhs, true);
                 pro_graph(lhs);
                 return 'c'; // cell assigned a constant value (a difference of two integers)
