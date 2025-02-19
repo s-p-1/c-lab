@@ -56,7 +56,7 @@ int main(int argc, char *argv[]){
     //initializatoin
     R = atoi (argv[1]);
     C = atoi (argv[2]);
-    
+
     int maxbigies = 30000;
     bigies = (bigdeps *)malloc(maxbigies*sizeof(bigdeps));
 
@@ -96,6 +96,7 @@ int main(int argc, char *argv[]){
                 free(mysheet[i]);
             }
             free(mysheet);
+            free(bigies);
         }
     }
     return 0;
