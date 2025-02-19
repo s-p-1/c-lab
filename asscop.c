@@ -46,7 +46,7 @@ int cell_handler(char *cell){
 
 }
 void deleteDependencies(cell *lhscell, int lhs){
-    printf("deleting dependencies op code %c\n", lhscell->operation);
+    // printf("deleting dependencies op code %c\n", lhscell->operation);
     if (lhscell->operation != '\0'){
         if (lhscell->operation=='+'|| lhscell->operation =='*'|| lhscell->operation=='-'|| lhscell->operation=='/'){
             printf("deleted from %d %d: %d\n", lhscell->row1, lhscell->col1, lhs);
@@ -76,7 +76,7 @@ void deleteDependencies(cell *lhscell, int lhs){
 
 bool edgehandler (int cellhandle, int lhs, cell* lhscell, int extra, cell oldcell){
     deleteDependencies(lhscell, lhs);
-    printf("Adding to cellhandle: %d, lhs: %d\n", cellhandle, lhs);
+    // printf("Adding to cellhandle: %d, lhs: %d\n", cellhandle, lhs);
     mysheet[cellhandle%1000][cellhandle/1000].cell_avl = insert(mysheet[cellhandle%1000][cellhandle/1000].cell_avl, lhs);
     lhscell->row1 = cellhandle%1000;
     lhscell->col1 = cellhandle/1000;
@@ -84,7 +84,7 @@ bool edgehandler (int cellhandle, int lhs, cell* lhscell, int extra, cell oldcel
     lhscell->col2 = cellhandle/1000;
     lhscell->operation = 's';
     if (!dfs(lhs, lhs, true)) {
-        printf("cycle detected\n");
+        // printf("cycle detected\n");
         deleteDependencies(lhscell, lhs);
         dfs2(lhs);
         *lhscell = oldcell;
@@ -179,7 +179,7 @@ char parser(char* input){
 
     else if (strpbrk(exp, "+-*/")!=NULL){
         if (strpbrk(exp, "+")!=NULL){
-            printf("here in +\n");
+            // printf("here in +\n");
             cell1=strtok(exp, "+");
             cell2=strtok(NULL, "+");
             if(is_int(cell1) && is_int(cell2)) {
@@ -312,7 +312,7 @@ char parser(char* input){
         int cellh2 = cell_handler(cell2);
         if (cellh1 == -1) return -1;
         if (cellh2 == -1) return -1;
-        printf("cellh1, %d, cellh2, %d\n", cellh1, cellh2);
+        // printf("cellh1, %d, cellh2, %d\n", cellh1, cellh2);
         if (cellh1>cellh2) return -4;
     }
     else return -3;
@@ -357,7 +357,7 @@ char parser(char* input){
     }
 
     if (!dfs(lhs, lhs, true)) {
-        printf("cycle detected\n");
+        // printf("cycle detected\n");
         deleteDependencies(lhscell, lhs);
         dfs2(lhs);
         *lhscell = oldcell;
@@ -376,7 +376,7 @@ char parser(char* input){
             else{
                 for (int i =lhscell->row1; i<=lhscell->row2; i++){
                     for (int j = lhscell->col1; j<=lhscell->col2; j++){
-                        printf("inserting in %d %d: %d\n", i, j, lhs);
+                        // printf("inserting in %d %d: %d\n", i, j, lhs);
                         mysheet[i][j].cell_avl = insert(mysheet[i][j].cell_avl, lhs);
                     }
                 }
@@ -384,11 +384,11 @@ char parser(char* input){
         }
         return -2;
     }
-    printf("done_calc1\n");
+    // printf("done_calc1\n");
     calc_value(lhscell);
-    printf("done_calc\n");
+    // printf("done_calc\n");
     pro_graph(lhs);
-    printf("done_parser\n");
+    // printf("done_parser\n");
     return op;
 }
 // int main() {

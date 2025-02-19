@@ -23,8 +23,8 @@ bool dfs (int address, int parent, bool isbase){
 
         int addr1= *myl;
         mysheet[addr1%1000][addr1/1000].count += 1;
-        printf("Added now count of child %d : %d\n", addr1, mysheet[addr1%1000][addr1/1000].count);
-        printf("parent %d\n", address);
+        // printf("Added now count of child %d : %d\n", addr1, mysheet[addr1%1000][addr1/1000].count);
+        // printf("parent %d\n", address);
         if (!dfs(*myl, parent, false)) myb = false;
 
         myl++;

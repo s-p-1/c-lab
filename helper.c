@@ -66,9 +66,9 @@ int get_line(){
                 }
                 arr[i]='\0';
                 char myc= parser(arr);
-                printf("%c\n", myc);
-                if (myc>=0) printf("do the functional assignment now\n");
-                else return myc;
+                // printf("%c\n", myc);
+                if (myc<0) return myc;
+                else return 999;
         }
 }
 
