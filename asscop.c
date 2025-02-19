@@ -351,9 +351,7 @@ char parser(char* input){
         lhscell->col2 = cell_handler(cell2)/1000;
         for (int i =lhscell->row1; i<=lhscell->row2; i++){
             for (int j = lhscell->col1; j<=lhscell->col2; j++){
-                if (mysheet[i][j].cell_avl==NULL) printf("NULL1\n");
                 mysheet[i][j].cell_avl = insert(mysheet[i][j].cell_avl, lhs);
-                if (mysheet[i][j].cell_avl==NULL) printf("NULL2\n");
             }
         }
     }
