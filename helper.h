@@ -71,8 +71,8 @@ void dfs2(int address);
 
 
 //global variables
-int R;
-int C;
-cell ** mysheet;
+extern int R;
+extern int C;
+extern cell ** mysheet;
 
 #endif

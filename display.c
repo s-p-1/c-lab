@@ -1,5 +1,7 @@
 #include "helper.h"
 
+int R, C;
+cell ** mysheet; //2D array of cells
 //a file that runs until q and initializes display
 
 char * return_string(int n){
