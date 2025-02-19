@@ -67,12 +67,18 @@ void pro_graph(int address);
 bool dfs(int address, int lhs, bool flag);
 void dfs2(int address);
 
-
+typedef struct {
+    int l;
+    int r;
+    int x;
+} bigdeps;
 
 
 //global variables
 extern int R;
 extern int C;
 extern cell ** mysheet;
+extern bigdeps * bigies;
+extern int bigifront;
 
 #endif

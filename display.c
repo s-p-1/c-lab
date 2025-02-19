@@ -1,6 +1,8 @@
 #include "helper.h"
 
 int R, C;
+bigdeps * bigies;
+int bigifront=0;
 cell ** mysheet; //2D array of cells
 //a file that runs until q and initializes display
 
@@ -54,6 +56,10 @@ int main(int argc, char *argv[]){
     //initializatoin
     R = atoi (argv[1]);
     C = atoi (argv[2]);
+    
+    int maxbigies = 30000;
+    bigies = (bigdeps *)malloc(maxbigies*sizeof(bigdeps));
+
     mysheet = (cell **)malloc(R * sizeof(cell *));
     for (int i = 0; i < R; i++) mysheet[i] = (cell *)calloc(C , sizeof(cell));
     int x=0, y=0, flag=1;
