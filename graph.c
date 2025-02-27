@@ -18,7 +18,7 @@ bool dfs (int address, int parent, bool isbase){
     AVLNode* root = mysheet[address%1000][address/1000].cell_avl;
     int* myl= inorderTraversal(root);
     //doing dfs on the children    
-
+    int* tofree = myl;
     while (*myl!=-1){
 
         int addr1= *myl;
@@ -29,6 +29,7 @@ bool dfs (int address, int parent, bool isbase){
 
         myl++;
     }
+    free(tofree);
     for (int i =0; i<bigifront; i++){
         if (bigies[i].l<=address && address<=bigies[i].r){
             mysheet[(bigies[i].x)%1000][(bigies[i].x)/1000].count += 1;
@@ -47,13 +48,14 @@ void dfs2 (int address){
 
     AVLNode* root = mysheet[address%1000][address/1000].cell_avl;
     int* myl= inorderTraversal(root);
-
+    int* tofree = myl;
     while (*myl!=-1){
         int addr1= *myl;
         mysheet[addr1%1000][addr1/1000].count = 0;
         dfs2(*myl);
         myl++;
     }
+    free(tofree);
     for (int i =0; i<bigifront; i++){
         if (bigies[i].l<=address && address<=bigies[i].r){
             mysheet[(bigies[i].x)%1000][(bigies[i].x)/1000].count = 0;
@@ -86,7 +88,7 @@ void pro_graph(int address){
 
         int* myl= inorderTraversal(root);
         //this array contains adddress of the cells
-
+        int* tofree = myl;
         while (*myl!=-1){
 
             int addr1= *myl;
@@ -105,6 +107,7 @@ void pro_graph(int address){
             }
             myl++;
         }
+        free(tofree);
         for (int i =0; i<bigifront; i++){
             if (bigies[i].l<=address && address<=bigies[i].r){
                 int addr1 = bigies[i].x;
@@ -127,7 +130,7 @@ void pro_graph(int address){
         final_update(ptr);
         
     }
-
+    free(queue);
     dfs2(address);
 }
 

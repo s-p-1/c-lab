@@ -6,19 +6,21 @@ int bigifront=0;
 cell ** mysheet; //2D array of cells
 //a file that runs until q and initializes display
 
-char * return_string(int n){
+char * print_string(int n, int padding){
     if (n<26){
         char * s = (char *)malloc(2 * sizeof(char));
         s[0] = 'A' + n;
         s[1] = '\0';
-        return s;
+        printf("%*s", padding, s);
+        free(s);
     }
     else if (n<26+26*26){
         char * s = (char *)malloc(3 * sizeof(char));
         s[0] = 'A' + n/26 - 1;
         s[1] = 'A' + n%26;
         s[2] = '\0';
-        return s;
+        printf("%*s", padding, s);
+        free(s);
     }else{
         char * s = (char *)malloc(4 * sizeof(char));
         int q = n/26-1;
@@ -26,16 +28,14 @@ char * return_string(int n){
         s[1] = 'A' + q%26;
         s[2] = 'A' + n%26;
         s[3] = '\0';
-        return s;
+        printf("%*s", padding, s);
+        free(s);
     }
-
 }
 
 void display (cell ** mysheet, int R, int C, int x, int y){
-    printf("%15s", return_string(y));
-    for (int j = y+1; j < min(C, y+10); j++){
-        printf("%12s", return_string(j));
-    }
+    print_string(y, 15);
+    for (int j = y+1; j < min(C, y+10); j++) print_string (j, 12);
     printf("\n");
     for (int i = x; i < min(R, x+10); i++){
         printf("%3d", i+1);
@@ -91,13 +91,15 @@ int main(int argc, char *argv[]){
         else printf("[%.1f] (ok) > ", ((double)(clock()- st)/CLOCKS_PER_SEC));
         st=clock();
         gl = get_line();
-        if (gl == 5){
-            for (int i = 0; i < R; i++){
-                free(mysheet[i]);
-            }
-            free(mysheet);
-            free(bigies);
-        }
     }
+    for (int i = 0; i < R; i++) {
+        for (int j = 0; j < C; j++) {
+            freeTree(mysheet[i][j].cell_avl);
+            freeTree(mysheet[i][j].range_min_max);
+        }
+        free(mysheet[i]);
+    }
+    free(mysheet);
+    free(bigies);
     return 0;
 }
