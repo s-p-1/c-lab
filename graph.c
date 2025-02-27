@@ -31,9 +31,13 @@ bool dfs (int address, int parent, bool isbase){
     }
     free(tofree);
     for (int i =0; i<bigifront; i++){
-        if (bigies[i].l<=address && address<=bigies[i].r){
-            mysheet[(bigies[i].x)%1000][(bigies[i].x)/1000].count += 1;
-            if (!dfs(bigies[i].x, parent, false)) myb = false;
+        int rowt = address%1000;
+        int colt = address/1000;
+        if (bigies[i].lrow<=rowt && rowt<=bigies[i].rrow){
+            if (bigies[i].lcol<=colt && colt<=bigies[i].rcol){
+                mysheet[(bigies[i].x)%1000][(bigies[i].x)/1000].count += 1;
+                if (!dfs(bigies[i].x, parent, false)) myb = false;
+            }
         }
     }
     
@@ -57,9 +61,13 @@ void dfs2 (int address){
     }
     free(tofree);
     for (int i =0; i<bigifront; i++){
-        if (bigies[i].l<=address && address<=bigies[i].r){
-            mysheet[(bigies[i].x)%1000][(bigies[i].x)/1000].count = 0;
-            dfs2(bigies[i].x);
+        int rowt = address%1000;
+        int colt = address/1000;
+        if (bigies[i].lrow<=rowt && rowt<=bigies[i].rrow){
+            if (bigies[i].lcol<=colt && colt<=bigies[i].rcol){
+                mysheet[(bigies[i].x)%1000][(bigies[i].x)/1000].count = 0;
+                dfs2(bigies[i].x);
+            }
         }
     }
     return ;
@@ -109,18 +117,22 @@ void pro_graph(int address){
         }
         free(tofree);
         for (int i =0; i<bigifront; i++){
-            if (bigies[i].l<=address && address<=bigies[i].r){
-                int addr1 = bigies[i].x;
-                update_value(mysheet[addr1%1000]+(addr1/1000), address%1000, address/1000);
-                mysheet[addr1%1000][addr1/1000].count -= 1;
-                
-                if (mysheet[addr1%1000][addr1/1000].count <= 0){
-                    // printf("dfs %d\n", addr1);
-                    queue[rear] = addr1;
-                    rear++;
-                    if (rear == size){
-                        size = size*2;
-                        queue = (int *)realloc(queue, size * sizeof(int));
+            int rowt = address%1000;
+            int colt = address/1000;
+            if (bigies[i].lrow<=rowt && rowt<=bigies[i].rrow){
+                if (bigies[i].lcol<=colt && colt<=bigies[i].rcol){
+                    int addr1 = bigies[i].x;
+                    update_value(mysheet[addr1%1000]+(addr1/1000), address%1000, address/1000);
+                    mysheet[addr1%1000][addr1/1000].count -= 1;
+                    
+                    if (mysheet[addr1%1000][addr1/1000].count <= 0){
+                        // printf("dfs %d\n", addr1);
+                        queue[rear] = addr1;
+                        rear++;
+                        if (rear == size){
+                            size = size*2;
+                            queue = (int *)realloc(queue, size * sizeof(int));
+                        }
                     }
                 }
             }

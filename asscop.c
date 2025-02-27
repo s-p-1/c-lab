@@ -64,18 +64,20 @@ void deleteDependencies(cell *lhscell, int lhs){
         else{
             // printf("deleted from %d %d: %d\n", lhscell->row1, lhscell->col1, lhs);
             if ((lhscell->row2-lhscell->row1)*(lhscell->col2-lhscell->col1)>100000){
-                if (bigies[bigifront-1].x==lhs){
-                    if (bigies[bigifront-1].l ==(lhscell->col1)*1000+(lhscell->row1)){
-                        if (bigies[bigifront-1].r ==(lhscell->col2)*1000+(lhscell->row2)){
+                int i =bigifront-1;
+                if (bigies[i].x==lhs){
+                    if (bigies[i].lcol==(lhscell->col1) && bigies[i].lrow==(lhscell->row1)){
+                        if (bigies[i].rcol==(lhscell->col2) && bigies[i].rrow==(lhscell->row2)){
+                            bigies[i] = bigies[bigifront-1];
                             bigifront--;
                         }
                     }
                 }
                 else{
-                    for (int i =bigifront-1; i>=0; i--){
+                    for (; i>=0; i--){
                         if (bigies[i].x==lhs){
-                            if (bigies[i].l ==(lhscell->col1)*1000+(lhscell->row1)){
-                                if (bigies[i].r ==(lhscell->col2)*1000+(lhscell->row2)){
+                            if (bigies[i].lcol==(lhscell->col1) && bigies[i].lrow==(lhscell->row1)){
+                                if (bigies[i].rcol==(lhscell->col2) && bigies[i].rrow==(lhscell->row2)){
                                     bigies[i] = bigies[bigifront-1];
                                     bigifront--;
                                     break;
@@ -112,8 +114,10 @@ void addDependencies (cell * lhscell, char op, int lhs){
         else{
             if ((lhscell->row2-lhscell->row1)*(lhscell->col2-lhscell->col1)>100000){
                 bigdeps temp;
-                temp.l = (lhscell->col1)*1000+(lhscell->row1);
-                temp.r = (lhscell->col2)*1000+(lhscell->row2);
+                temp.lrow = (lhscell->row1);
+                temp.lcol = (lhscell->col1);
+                temp.rrow = (lhscell->row2);
+                temp.rcol = (lhscell->col2);
                 temp.x = lhs;
                 bigies[bigifront] = temp;
                 bigifront++;

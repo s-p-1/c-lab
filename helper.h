@@ -1,9 +1,9 @@
 #ifndef HELPER_H
 #define HELPER_H
 
-#include<stdio.h>
-#include<string.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include <math.h>
 #include <time.h>
 #include <limits.h>
@@ -14,30 +14,30 @@
 #define min(a, b) ((a) < (b) ? (a) : (b))
 
 typedef struct AVLNode {
-    int value;
-    struct AVLNode *left;
-    struct AVLNode *right;
+    int value;    
     int height;
     int count;
+    struct AVLNode *left;
+    struct AVLNode *right;
 } AVLNode;
 //display.c
 typedef struct {
     char isv;
-    int value; //initially 0
-    int sum;
-    int sq_sum;
-    char operation; 
+    char operation;
     short row1; 
     short col1;
     short row2;
     short col2;
+    int value; //initially 0
+    int sum;
+    int sq_sum;
     int count;
     int err_cnt;
     AVLNode *cell_avl;
     AVLNode *range_min_max;
 } cell; 
 
-char parser();
+char parser(char * input);
 
 int get_line();
 
@@ -68,8 +68,10 @@ bool dfs(int address, int lhs, bool flag);
 void dfs2(int address);
 
 typedef struct {
-    int l;
-    int r;
+    short lrow;
+    short lcol;
+    short rrow;
+    short rcol;
     int x;
 } bigdeps;
 
