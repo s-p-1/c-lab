@@ -241,10 +241,13 @@ char parser(char* input){
     }
 
     else if (strpbrk(exp, "+-*/")!=NULL){
-        if (strpbrk(exp, "+")!=NULL){
+        size_t pos = strcspn(exp+1, "+-*/");
+        char* oppos = exp + pos + 1;
+        if (*oppos == '+'){
             // printf("here in +\n");
-            cell1=strtok(exp, "+");
-            cell2=strtok(NULL, "+");
+            *oppos = '\0';
+            cell1 = exp;
+            cell2 = oppos+1;
             if(is_int(cell1) && is_int(cell2)) {
                 deleteDependencies(lhscell, lhs);
                 lhscell->sum = atoi(cell1) + atoi(cell2);
@@ -271,9 +274,10 @@ char parser(char* input){
             else op = '+';
         }
 
-        else if (strpbrk(exp, "*")!=NULL){
-            cell1=strtok(exp, "*");
-            cell2=strtok(NULL, "*");
+        else if (*oppos == '*'){
+            *oppos = '\0';
+            cell1 = exp;
+            cell2 = oppos+1;
             if(is_int(cell1) && is_int(cell2)) {
                 deleteDependencies(lhscell, lhs);
                 lhscell->sum = atoi(cell1) * atoi(cell2);
@@ -298,9 +302,10 @@ char parser(char* input){
             }
             else op = '*';
         }
-        else if (strpbrk(exp, "/")!=NULL){
-            cell1=strtok(exp, "/");
-            cell2=strtok(NULL, "/");
+        else if (*oppos == '/'){
+            *oppos = '\0';
+            cell1 = exp;
+            cell2 = oppos+1;
             if(is_int(cell1) && is_int(cell2)) {
                 deleteDependencies(lhscell, lhs);
                 lhscell->sum = atoi(cell1) / atoi(cell2);
@@ -324,9 +329,10 @@ char parser(char* input){
             }
             else op = '/';
         }
-        else if (strpbrk(exp, "-")!=NULL){
-            cell1=strtok(exp, "-");
-            cell2=strtok(NULL, "-");
+        else if (*oppos == '-'){
+            *oppos = '\0';
+            cell1 = exp;
+            cell2 = oppos+1;
             if(is_int(cell1) && is_int(cell2)) {
                 deleteDependencies(lhscell, lhs);
                 lhscell->sum = atoi(cell1) - atoi(cell2);
