@@ -186,6 +186,7 @@ char parser(char* input){
     if (lhs == -1) return -1;
     cell* lhscell=mysheet[lhs%1000]+(lhs/1000);
     cell oldcell = *lhscell;
+    lhscell->err_cnt= 100000000*(lhscell->err_cnt/100000000);
     char* exp=strtok(NULL, "=");
     char *cell1;
     char *cell2;
@@ -249,7 +250,6 @@ char parser(char* input){
                 deleteDependencies(lhscell, lhs);
                 lhscell->sum = atoi(cell1) + atoi(cell2);
                 lhscell->operation = '\0';
-                lhscell->err_cnt=100000000*(lhscell->err_cnt/100000000);
                 dfs(lhs, lhs, true);
                 pro_graph(lhs);
                 return 'c'; // cell assigned a constant value (a sum of two integers)
@@ -279,7 +279,6 @@ char parser(char* input){
                 deleteDependencies(lhscell, lhs);
                 lhscell->sum = atoi(cell1) * atoi(cell2);
                 lhscell->operation = '\0';
-                lhscell->err_cnt=0;
                 dfs(lhs, lhs, true);
                 pro_graph(lhs);
                 return 'c'; // cell assigned a constant value (a product of two integers)
@@ -288,8 +287,7 @@ char parser(char* input){
                 int cell2handle = cell_handler(cell2);
                 if (cell2handle == -1) return -1;
                 lhscell->sum = atoi(cell1)*mysheet[cell2handle%1000][cell2handle/1000].value;
-                lhscell->err_cnt=0;
-                if(mysheet[cell2handle%1000][cell2handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt = 1;
+                if(mysheet[cell2handle%1000][cell2handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt += 1;
                 op = 't';
 
             }
@@ -298,8 +296,7 @@ char parser(char* input){
                 int cell1handle = cell_handler(cell1);
                 if (cell1handle == -1) return -1;
                 lhscell->sum = mysheet[cell1handle%1000][cell1handle/1000].value*atoi(cell2);
-                lhscell->err_cnt=0;
-                if(mysheet[cell1handle%1000][cell1handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt = 1;
+                if(mysheet[cell1handle%1000][cell1handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt += 1;
             }
             else op = '*';
         }
@@ -309,8 +306,7 @@ char parser(char* input){
             cell2 = oppos+1;
             if(is_int(cell1) && is_int(cell2)) {
                 deleteDependencies(lhscell, lhs);
-                lhscell->err_cnt=0;
-                if(atoi(cell2)==0) lhscell->err_cnt=1;
+                if(atoi(cell2)==0) lhscell->err_cnt+=1;
                 else lhscell->sum = atoi(cell1) / atoi(cell2);
                 lhscell->operation = '\0';
                 dfs(lhs, lhs, true);
@@ -321,19 +317,17 @@ char parser(char* input){
                 op = 'r';
                 int cell2handle = cell_handler(cell2);
                 if (cell2handle == -1) return -1;
-                lhscell->err_cnt=0;
-                if(mysheet[cell2handle%1000][cell2handle/1000].value==0) lhscell->err_cnt=1;
+                if(mysheet[cell2handle%1000][cell2handle/1000].value==0) lhscell->err_cnt+=1;
                 else lhscell->sum= atoi(cell1)/mysheet[cell2handle%1000][cell2handle/1000].value;
-                if(mysheet[cell2handle%1000][cell2handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt = 1;
+                if(mysheet[cell2handle%1000][cell2handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt += 1;
             }
             else if (is_int(cell2)) {
                 op = 'R';
                 int cell1handle = cell_handler(cell1);
                 if (cell1handle == -1) return -1;
-                lhscell->err_cnt=0;
-                if(atoi(cell2)==0) lhscell->err_cnt = 1;
+                if(atoi(cell2)==0) lhscell->err_cnt += 1;
                 else lhscell->sum = mysheet[cell1handle%1000][cell1handle/1000].value/atoi(cell2);
-                if(mysheet[cell1handle%1000][cell1handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt = 1;
+                if(mysheet[cell1handle%1000][cell1handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt += 1;
             }
             else op = '/';
         }
@@ -345,7 +339,6 @@ char parser(char* input){
                 deleteDependencies(lhscell, lhs);
                 lhscell->sum = atoi(cell1) - atoi(cell2);
                 lhscell->operation = '\0';
-                lhscell->err_cnt=0;
                 dfs(lhs, lhs, true);
                 pro_graph(lhs);
                 return 'c'; // cell assigned a constant value (a difference of two integers)
@@ -355,16 +348,14 @@ char parser(char* input){
                 int cell2handle = cell_handler(cell2);
                 if (cell2handle == -1) return -1;
                 lhscell->sum = atoi(cell1)-mysheet[cell2handle%1000][cell2handle/1000].value;
-                lhscell->err_cnt=0;
-                if(mysheet[cell2handle%1000][cell2handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt = 1;
+                if(mysheet[cell2handle%1000][cell2handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt += 1;
             }
             else if (is_int(cell2)) {
                 op = 'D';
                 int cell1handle = cell_handler(cell1);
                 if (cell1handle == -1) return -1;
                 lhscell->sum = mysheet[cell1handle%1000][cell1handle/1000].value-atoi(cell2);
-                lhscell->err_cnt=0;
-                if(mysheet[cell1handle%1000][cell1handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt = 1;
+                if(mysheet[cell1handle%1000][cell1handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt += 1;
             }
             else op = '-';
         }
