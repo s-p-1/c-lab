@@ -318,9 +318,8 @@ char parser(char* input){
                 op = 'r';
                 int cell2handle = cell_handler(cell2);
                 if (cell2handle == -1) return -1;
-                if(mysheet[cell2handle%1000][cell2handle/1000].value==0) lhscell->err_cnt+=1;
-                else lhscell->sum= atoi(cell1)/mysheet[cell2handle%1000][cell2handle/1000].value;
-                if(mysheet[cell2handle%1000][cell2handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt += 1;
+                if(mysheet[cell2handle%1000][cell2handle/1000].value==0 || mysheet[cell2handle%1000][cell2handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt+=1;
+                if(mysheet[cell2handle%1000][cell2handle/1000].value!=0) lhscell->sum= atoi(cell1)/mysheet[cell2handle%1000][cell2handle/1000].value;
             }
             else if (is_int(cell2)) {
                 op = 'R';
