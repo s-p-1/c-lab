@@ -193,7 +193,6 @@ char parser(char* input){
     int cellhandle=cell_handler(exp);
     if (is_int(exp)) {
         deleteDependencies(lhscell, lhs);
-        lhscell->err_cnt=0;
         lhscell->sum = atoi(exp);
         lhscell->operation = '\0';
         dfs(lhs, lhs, true);
@@ -202,7 +201,6 @@ char parser(char* input){
     }
     else if (cellhandle!=-1){
         if (!edgehandler(cellhandle, lhs, lhscell, 0, oldcell)) return -2;
-        lhscell->err_cnt=0;
         return '+'; // cell assigned another cell
     }
     else if (stringcomp(exp, "SLEEP(", '(')){
@@ -212,7 +210,6 @@ char parser(char* input){
         char* time=strtok(noob, ")");
         if (strtok(NULL, ")") != NULL) return -3;
         if (is_int(time)){
-            lhscell->err_cnt=0;
             clock_t curr = clock();
             while (clock()-curr<CLOCKS_PER_SEC*atoi(time));
             deleteDependencies(lhscell, lhs);
@@ -225,7 +222,6 @@ char parser(char* input){
         else if (cell_handler(time) != -1){
             int rhs = cell_handler(time);
             if (!edgehandler(rhs, lhs, lhscell, 0, oldcell)) return -2;
-            lhscell->err_cnt=0;
             int timer = mysheet[rhs%1000][rhs/1000].value;
             int err = mysheet[rhs%1000][rhs/1000].err_cnt%100000000;
             if(err > 0)
