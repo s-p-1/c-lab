@@ -49,16 +49,16 @@ void deleteDependencies(cell *lhscell, int lhs){
     // printf("deleting dependencies op code %c\n", lhscell->operation);
     if (lhscell->operation != '\0'){
         if (lhscell->operation=='+'|| lhscell->operation =='*'|| lhscell->operation=='-'|| lhscell->operation=='/'){
-            printf("deleted from %d %d: %d\n", lhscell->row1, lhscell->col1, lhs);
+            // printf("deleted from %d %d: %d\n", lhscell->row1, lhscell->col1, lhs);
             mysheet[lhscell->row1][lhscell->col1].cell_avl = deleteNode(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
             mysheet[lhscell->row2][lhscell->col2].cell_avl = deleteNode(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
         }
         else if (lhscell->operation=='t'|| lhscell->operation=='d'|| lhscell->operation=='r'){
-            printf("deleted from %d %d: %d\n", lhscell->row2, lhscell->col2, lhs);
+            // printf("deleted from %d %d: %d\n", lhscell->row2, lhscell->col2, lhs);
             mysheet[lhscell->row2][lhscell->col2].cell_avl = deleteNode(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
         }
         else if (lhscell->operation=='T'|| lhscell->operation=='D'|| lhscell->operation=='R'){
-            printf("deleted from %d %d: %d\n", lhscell->row1, lhscell->col1, lhs);
+            // printf("deleted from %d %d: %d\n", lhscell->row1, lhscell->col1, lhs);
             mysheet[lhscell->row1][lhscell->col1].cell_avl = deleteNode(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
         }
         else{
