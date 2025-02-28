@@ -253,7 +253,7 @@ char parser(char* input){
                 deleteDependencies(lhscell, lhs);
                 lhscell->sum = atoi(cell1) + atoi(cell2);
                 lhscell->operation = '\0';
-                lhscell->err_cnt=0;
+                lhscell->err_cnt=100000000*(lhscell->err_cnt/100000000);
                 dfs(lhs, lhs, true);
                 pro_graph(lhs);
                 return 'c'; // cell assigned a constant value (a sum of two integers)
@@ -262,16 +262,14 @@ char parser(char* input){
                 int cell2handle = cell_handler(cell2);
                 if (cell2handle == -1) return -1;
                 if (!edgehandler(cell2handle, lhs, lhscell, atoi(cell1), oldcell)) return -2;
-                lhscell->err_cnt=0;
-                if(mysheet[cell2handle%1000][cell2handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt = 1;
+                if(mysheet[cell2handle%1000][cell2handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt += 1;
                 return '+';
             }
             else if (is_int(cell2)) {
                 int cell1handle = cell_handler(cell1);
                 if (cell1handle == -1) return -1;
                 if (!edgehandler(cell1handle, lhs, lhscell, atoi(cell2), oldcell)) return -2;
-                lhscell->err_cnt=0;
-                if(mysheet[cell1handle%1000][cell1handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt = 1;
+                if(mysheet[cell1handle%1000][cell1handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt += 1;
                 return '+';
             }
             else op = '+';
