@@ -180,14 +180,17 @@ bool edgehandler (int cellhandle, int lhs, cell* lhscell, int extra, cell oldcel
 
 
 char parser(char* input){
-    char *celll=strtok(input , "=");
+    size_t pos = strcspn(input, "=");
+    char *asspos = input + pos;
+    *asspos = '\0';
+    char *celll = input;
     char op = 'q';
     int lhs = cell_handler(celll);
     if (lhs == -1) return -1;
     cell* lhscell=mysheet[lhs%1000]+(lhs/1000);
     cell oldcell = *lhscell;
     lhscell->err_cnt= 100000000*(lhscell->err_cnt/100000000);
-    char* exp=strtok(NULL, "=");
+    char* exp= asspos+1;
     char *cell1;
     char *cell2;
     char *range;
