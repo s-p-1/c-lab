@@ -145,25 +145,26 @@ bool edgehandler (int cellhandle, int lhs, cell* lhscell, int extra, cell oldcel
     lhscell->col2 = cellhandle/1000;
     lhscell->operation = 's';
     if (!dfs(lhs, lhs, true)) {
-        // printf("cycle detected\n");
         deleteDependencies(lhscell, lhs);
         dfs2(lhs);
         *lhscell = oldcell;
         char op = oldcell.operation;
-        if (op=='+'|| op =='*'|| op=='-'|| op=='/'){
-            mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
-            mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
-        }
-        else if (op=='t'|| op=='d'|| op=='r'){
-            mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
-        }
-        else if (op=='T'|| op=='D'|| op=='R'){
-            mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
-        }
-        else{
-            for (int i =lhscell->row1; i<=lhscell->row2; i++){
-                for (int j = lhscell->col1; j<=lhscell->col2; j++){
-                    mysheet[i][j].cell_avl = insert(mysheet[i][j].cell_avl, lhs);
+        if (op!='\0'){
+            if (op=='+'|| op =='*'|| op=='-'|| op=='/'){
+                mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
+                mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
+            }
+            else if (op=='t'|| op=='d'|| op=='r'){
+                mysheet[lhscell->row2][lhscell->col2].cell_avl = insert(mysheet[lhscell->row2][lhscell->col2].cell_avl, lhs);
+            }
+            else if (op=='T'|| op=='D'|| op=='R'){
+                mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
+            }
+            else{
+                for (int i =lhscell->row1; i<=lhscell->row2; i++){
+                    for (int j = lhscell->col1; j<=lhscell->col2; j++){
+                        mysheet[i][j].cell_avl = insert(mysheet[i][j].cell_avl, lhs);
+                    }
                 }
             }
         }
