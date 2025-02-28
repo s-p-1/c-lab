@@ -443,7 +443,8 @@ char parser(char* input){
         return -2;
     }
     // printf("done_calc1\n");
-    calc_value(lhscell);
+    if(tolower(op)!='d' && tolower(op)!='t' && tolower(op)!='r')
+        calc_value(lhscell);
     // printf("done_calc\n");
     pro_graph(lhs);
     // printf("done_parser\n");
