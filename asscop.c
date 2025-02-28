@@ -338,7 +338,7 @@ char parser(char* input){
                 lhscell->err_cnt=0;
                 if(atoi(cell2)==0) lhscell->err_cnt = 1;
                 else lhscell->sum = mysheet[cell1handle%1000][cell1handle/1000].value/atoi(cell2);
-                if(mysheet[cell2handle%1000][cell2handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt = 1;
+                if(mysheet[cell1handle%1000][cell1handle/1000].err_cnt%100000000 > 0) lhscell->err_cnt = 1;
             }
             else op = '/';
         }
