@@ -202,6 +202,7 @@ char parser(char* input){
     }
     else if (cellhandle!=-1){
         if (!edgehandler(cellhandle, lhs, lhscell, 0, oldcell)) return -2;
+        if(mysheet[cellhandle%1000][cellhandle/1000].err_cnt%100000000 > 0) lhscell->err_cnt += 1;
         return '+'; // cell assigned another cell
     }
     else if (stringcomp(exp, "SLEEP(", '(')){
