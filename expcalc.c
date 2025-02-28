@@ -7,7 +7,6 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     
     // Calculate count of elements
     count = (cell1->row2 - cell1->row1 + 1) * (cell1->col2 - cell1->col1 + 1);
-    cell1->err_cnt=100000000*(cell1->err_cnt/100000000);
     if(cell1->operation == '+'){
         freeTree(cell1->range_min_max);
         val = mysheet[cell1->row1][cell1->col1].value+mysheet[cell1->row2][cell1->col2].value;
@@ -162,7 +161,7 @@ int new_value(int row, int col, int sq_sum) {
 }
 
 void update_value(cell *cell1, int row, int col){
-    printf("started update %d", cell1->err_cnt);
+    // printf("started update %d", cell1->err_cnt);
     int new_val = new_value(row, col, 0);
     int old_val = mysheet[row][col].value;
     int err1 = mysheet[row][col].err_cnt/100000000;
