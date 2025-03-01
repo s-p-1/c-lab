@@ -180,6 +180,23 @@ bool edgehandler (int cellhandle, int lhs, cell* lhscell, int extra, cell oldcel
 
 
 char parser(char* input){
+    //to see if the occurance of any of the special characters "(, :, =, )" is more than once.
+    int count_paren_open = 0;
+    int count_equal = 0;
+    int count_colon = 0;
+    int count_paren_close = 0;
+    
+    for (char *p = input; *p != '\0'; p++) {
+        if (*p == '(') count_paren_open++;
+        else if (*p == '=') count_equal++;
+        else if (*p == ':') count_colon++;
+        else if (*p == ')') count_paren_close++;
+    }
+
+    if (count_paren_open > 1 || count_equal > 1 || count_colon > 1 || count_paren_close > 1) {
+        return -1;
+    }
+
     size_t pos = strcspn(input, "=");
     char *asspos = input + pos;
     *asspos = '\0';
