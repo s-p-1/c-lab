@@ -397,10 +397,10 @@ char parser(char* input){
 
         if (strtok(NULL, ")") != NULL) return -3;
         if (stringcomp("MIN", exp, '\0')==1) op='m';
-        else if (stringcomp("MAX", exp, '\0')==1) op='M';
-        else if (stringcomp("AVG", exp, '\0')==1) op='a';
-        else if (stringcomp("SUM", exp, '\0')==1) op='s';
-        else if (stringcomp("STDEV", exp, '\0')==1) op='S';
+        else if (stringcomp("MAX", exp, '\0')==1 && count_paren_close==1 && count_paren_close==1 && count_colon==0) op='M';
+        else if (stringcomp("AVG", exp, '\0')==1 && count_paren_close==1 && count_paren_close==1 && count_colon==0) op='a';
+        else if (stringcomp("SUM", exp, '\0')==1 && count_paren_close==1 && count_paren_close==1 && count_colon==0) op='s';
+        else if (stringcomp("STDEV", exp, '\0')==1 && count_paren_close==1 && count_paren_close==1 && count_colon==0) op='S';
         else return -3;
         int cellh1 = cell_handler(cell1);
         int cellh2 = cell_handler(cell2);
