@@ -53,10 +53,17 @@ void display (cell ** mysheet, int R, int C, int x, int y){
 int main(int argc, char *argv[]){
     //timing
     clock_t st = clock();
-    //initializatoin
+    //initialization
+    if(!is_int(argv[1]) || !is_int(argv[2])) {
+        printf("error: write valid number of rows and columns.\n");
+        return 0;
+    }
     R = atoi (argv[1]);
     C = atoi (argv[2]);
-
+    if(R<1 || R>999 || C<1 || C>18278){
+        printf("error: write rows and columns in the specified range.\n");
+        return 0;
+    }
     int maxbigies = 30000;
     bigies = (bigdeps *)malloc(maxbigies*sizeof(bigdeps));
 

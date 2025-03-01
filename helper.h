@@ -41,7 +41,7 @@ char parser(char * input);
 
 int get_line();
 
-
+bool is_int(char *s);
 
 //avltree.c
 
