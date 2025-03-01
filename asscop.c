@@ -198,6 +198,7 @@ char parser(char* input){
     }
 
     size_t pos = strcspn(input, "=");
+    if(pos == strlen(input)) return -3;
     char *asspos = input + pos;
     *asspos = '\0';
     char *celll = input;
@@ -391,6 +392,7 @@ char parser(char* input){
         char* intmed1 =strtok(NULL, "(");
         cell1=strtok(intmed1, ":");
         char* intmed2 =strtok(NULL, ":");
+        if(intmed2 == NULL) return -3;
         cell2=strtok(intmed2, ")");
 
         if (strtok(NULL, ")") != NULL) return -3;
