@@ -232,7 +232,7 @@ char parser(char* input){
         char* noob=strtok(NULL, "(");
         char* time=strtok(noob, ")");
         if (strtok(NULL, ")") != NULL) return -3;
-        if (is_int(time)){
+        if (is_int(time) && count_paren_close==1 && count_paren_open==1){
             clock_t curr = clock();
             while (clock()-curr<CLOCKS_PER_SEC*atoi(time));
             deleteDependencies(lhscell, lhs);
@@ -242,7 +242,7 @@ char parser(char* input){
             pro_graph(lhs);
             return 'c'; // cell sleeped for a constant value
         }
-        else if (cell_handler(time) != -1){
+        else if (cell_handler(time) != -1 && count_paren_close==1 && count_paren_open==1){
             int rhs = cell_handler(time);
             if (!edgehandler(rhs, lhs, lhscell, 0, oldcell)) return -2;
             int timer = mysheet[rhs%1000][rhs/1000].value;
