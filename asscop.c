@@ -232,6 +232,7 @@ char parser(char* input){
         if(strcmp(nub, "SLEEP")!=0) return -3;
         char* noob=strtok(NULL, "(");
         char* time=strtok(noob, ")");
+        if(time==NULL) return -3;
         if (strtok(NULL, ")") != NULL) return -3;
         if (is_int(time) && count_paren_close==1 && count_paren_open==1){
             clock_t curr = clock();
