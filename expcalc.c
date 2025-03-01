@@ -127,6 +127,8 @@ void calc_value(cell *cell1) {  // Changed to pointer to modify the actual cell
     // Standard deviation operation
     else if(cell1->operation == 'S') {
         // First pass: calculate sum and square sum
+        cell1->sum = 0;
+        cell1->sq_sum = 0;
         freeTree(cell1->range_min_max);
         for(int i = cell1->row1; i <= cell1->row2; i++) {
             for(int j = cell1->col1; j <= cell1->col2; j++) {
