@@ -194,7 +194,6 @@ char parser(char* input){
     }
 
     if (count_paren_open > 1 || count_equal > 1 || count_colon > 1 || count_paren_close > 1) {
-        printf("Invalid input\n");
         return -1;
     }
 
@@ -398,7 +397,7 @@ char parser(char* input){
         cell2=strtok(intmed2, ")");
 
         if (strtok(NULL, ")") != NULL) return -3;
-        if (stringcomp("MIN", exp, '\0')==1) op='m';
+        if (stringcomp("MIN", exp, '\0')==1 && count_paren_close==1 && count_paren_open==1 && count_colon==1) op='m';
         else if (stringcomp("MAX", exp, '\0')==1 && count_paren_close==1 && count_paren_open==1 && count_colon==1) op='M';
         else if (stringcomp("AVG", exp, '\0')==1 && count_paren_close==1 && count_paren_open==1 && count_colon==1) op='a';
         else if (stringcomp("SUM", exp, '\0')==1 && count_paren_close==1 && count_paren_open==1 && count_colon==1) op='s';
