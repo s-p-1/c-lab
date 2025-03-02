@@ -40,7 +40,9 @@ Each cell in our spreadsheet is a structure containing:
     \item Pointers to AVL tree roots for dependency tracking and min/max calculations.
 \end{itemize}
 
-We use AVL trees (\texttt{avltree.c}) to efficiently manage dependencies and support operations like MIN and MAX. The spreadsheet maintains a directed graph where each cell is a node. An edge from cell $A$ to cell $B$ signifies that $B$ depends on $A$. When a cell is modified, a graph traversal ensures that only affected dependent cells are recalculated.
+We utilize AVL trees (\texttt{avltree.c}) to efficiently manage dependencies and perform operations such as \texttt{MIN} and \texttt{MAX} in logarithmic time. Additionally, the spreadsheet maintains a directed graph, where each cell is represented as a node. A directed edge from cell $A$ to cell $B$ indicates that $B$ depends on $A$. This structure enables efficient propagation of updates, ensuring that only affected dependent cells are recalculated when a modification occurs.
+
+To further optimize updates, we implement a deferred update mechanism. When a cell is modified, both its old and new values are stored. Instead of immediately propagating the new value to dependent cells, we first process all necessary recalculations while maintaining the old values. Once all affected cells have been updated, a final commit operation is executed to store the new values. This approach minimizes redundant computations and enhances overall efficiency.
 
 \section{EDGE CASES AND ERROR SCENARIOS}
 
