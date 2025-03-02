@@ -29,7 +29,8 @@ int mycomp(char s[20]){
         if (stringcomp("disable_output", s, '\0')) return 6;
         if (stringcomp("enable_output", s, '\0')) return 7;
         if (stringcomp("scroll_to ", s, ' ')){
-                return (1000+cell_handler(s+10));
+                int x = cell_handler(s+10);
+                if (x>=0) return (1000+x);
         }
         return -1;
 }

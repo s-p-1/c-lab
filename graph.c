@@ -57,7 +57,7 @@ bool dfs (int address, int parent, bool isbase){
         }
         front++;
     }
-    
+    free(queue);
     return true;
 
 }
@@ -108,6 +108,7 @@ void dfs2 (int address){
         }
         front++;
     }
+    free(queue);
     return ;
 }
 
