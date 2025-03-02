@@ -19,10 +19,6 @@
 \begin{document}
 \maketitle
 
-\begin{abstract}
-Your abstract.
-\end{abstract}
-
 \section{DESIGN DECISIONS}
 
 Our spreadsheet program consists of a Makefile that compiles our source files: \texttt{asscop.c}, \texttt{display.c}, \texttt{expcalc.c}, \texttt{graph.c}, \texttt{avltree.c}, and \texttt{helper.c} to create an executable spreadsheet-like application. This spreadsheet accepts formulas and control inputs.
@@ -44,6 +40,7 @@ We utilize AVL trees (\texttt{avltree.c}) to efficiently manage dependencies and
 
 To further optimize updates, we implement a deferred update mechanism. When a cell is modified, both its old and new values are stored. Instead of immediately propagating the new value to dependent cells, we first process all necessary recalculations while maintaining the old values. Once all affected cells have been updated, a final commit operation is executed to store the new values. This approach minimizes redundant computations and enhances overall efficiency.
 
+
 \section{EDGE CASES AND ERROR SCENARIOS}
 
 \subsection{Padding for 32-bit Integers}
@@ -62,7 +59,7 @@ Various invalid input commands are handled:
     \item Empty range functions such as \texttt{SLEEP()}, \texttt{MAX()}, \texttt{MIN()}, \texttt{AVG()}, \texttt{SUM()} all return \textbf{[0.0] (unrecognized cmd) >}
     \item Missing parentheses or incorrect syntax in functions, e.g., \texttt{A1=MAX(B1:B2}, \texttt{A1=MAX(B1 B2)}, \texttt{A1=MAX B1:B2)}, return \textbf{[0.0] (unrecognized cmd) >}
     \item Other invalid inputs can also be like
-    \textttA{A4=AVG(A1:A3)xyz}, \texttt{A1=MAX(B1 B2)}, \texttt{A4=A5MIN(A3:A3)}, return \textbf{[0.0] (unrecognized cmd) >}
+    \texttt{A4=AVG(A1:A3)xyz}, \texttt{A1=0.3+0.4}, \texttt{A4=A5MIN(A3:A3)}, return \textbf{[0.0] (unrecognized cmd) >} or \textbf{ [0.0] (invalid cell) >}
 \end{enumerate}
 
 \subsection{Cyclic Dependency}
@@ -83,7 +80,7 @@ Accessing non-existent cells results in an error. For example:
 \begin{enumerate}
     \item \texttt{A1=B10000+5} (when the sheet has only 100 rows)
     \item \texttt{X1=SUM(A1:A2)} (when column X does not exist)
-    \item \texttt{scrollto ZZZ1000} 
+    \item \texttt{scroll\_to ZZZ1000} 
 \end{enumerate}
 Such cases return:
 \begin{center}
@@ -96,22 +93,18 @@ Running the program with noninteger or out of range integer inputs in the row an
     \textbf{error: write valid number of rows and columns.}
 \end{center}
 
-\begin{figure}
-\centering
-\includegraphics[width=0.3\textwidth]{copass.jpg}
-\caption{Example output of the spreadsheet program.}
-\end{figure}
+
 
 \section{STRUCTURE OF PROGRAM}
 
 \begin{enumerate}
-    \item Display.c
+    \item display.c
     \begin{itemize}
         \item int main(int argc, char *argv[])
         \item void display (cell ** mysheet, int R, int C, int x, int y)
         \item char * print\_string(int n, int padding)
     \end{itemize}
-    \item Asscop.c:
+    \item asscop.c:
     \begin{itemize}
         \item char parser(char* input)
         \item bool edgehandler (int cellhandle, int lhs, cell* lhscell, int extra, cell oldcell)
@@ -120,22 +113,54 @@ Running the program with noninteger or out of range integer inputs in the row an
         \item int cell\_handler(char *cell)
         \item bool is\_int (char *s)
     \end{itemize}
-\end{enumerate}
-
-
-\section{How to Add Lists}
-Lists can be created using:
-\begin{enumerate}
-    \item Automatic numbering:
-    \begin{enumerate}
-        \item Like this,
-        \item And like this.
-    \end{enumerate}
-    \item Bullet points:
+    \item expcalc.c:
     \begin{itemize}
-        \item Like this,
-        \item And like this.
+        \item void calc\_value(cell *cell1)
+        \item int new\_value(int row, int col, int sq\_sum)
+        \item void update\_value(cell *cell1, int row, int col)
+        \item void final\_update(cell *cell1)
     \end{itemize}
+    \item graph.c:
+    \begin{itemize}
+        \item bool dfs (int address, int parent, bool isbase)
+        \item void dfs2 (int address)
+        \item void pro\_graph(int address)
+    \end{itemize}
+    \item avltree.c:
+    \begin{itemize}
+        \item normal avtree functions returning the root node.
+    \end{itemize}
+    \item helper.c:
+    \begin{itemize}
+        \item bool stringcomp(const char* s1, const char* s2, char myc)
+        \item int mycomp(char s[20])
+        \item int get\_line()
+    \end{itemize}
+    \item helper.h (header file): defines the structures of AVLnode and the spreadsheet cell. It also has the functions defined in a file but being called in some other files. It also includes the various standard packages.
+        
+    
+    
 \end{enumerate}
+
+\section{DIAGRAM}
+    Figure 1 shows the diagram of our software explaining key files, data structures, and functions.
+\begin{figure}
+\centering
+\includegraphics[width=0.3\textwidth]{copass.jpg}
+\caption{Example output of the spreadsheet program.}
+\end{figure}
+
+
+\section{CHALLENGES FACED}
+\begin{enumerate}
+    \item Parsing invalid command line arguments and invalid formula inputs
+    \item Storing the dependencies of each cell and using them to recalculate the cell value
+    \item Keeping an error count for the cells having error such that even if the error due to one dependency is lost still the error count due to other dependencies still remains.
+    \item Running the autograder and then generating test\_cases of our own especially the large testcases to test our graph.c.
+    \item Choosing a comparision function for inserting the cells into the avltree while storing dependencies.
+\end{enumerate}
+
+\section{LINKS}
+You can find the demo link here and the github link to our project here.
 
 \end{document}
