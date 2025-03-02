@@ -82,5 +82,6 @@ extern int C;
 extern cell ** mysheet;
 extern bigdeps * bigies;
 extern int bigifront;
+extern int maxibigi;
 
 #endif

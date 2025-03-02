@@ -1,6 +1,5 @@
 all :
 	@gcc display.c helper.c asscop.c graph.c expcalc.c avltree.c -lm -O3 -o spreadsheet
-	@mkdir -p target/release
 	@mv spreadsheet target/release
 
 t1:
@@ -19,9 +18,14 @@ test: t1
 		rm $$i.out; \
 	done
 
-testclean:
-	@cd tests; \
-	rm -r *.out; rm -r *.expected
+clean:
+	-@cd tests; \
+	rm -r *.out || true
+	-@rm spreadsheet || true
+	-@cd target/release; \
+	rm spreadsheet || true
+	-@rm copasscode.aux copasscode.log copasscode.pdf copasscode.out || true
+
 
 extreme: all
 	@for i in tests/extremetest*.txt; do \

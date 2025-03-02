@@ -1,5 +1,5 @@
 #include "helper.h"
-
+int maxibigi = 2000000;
 int R, C;
 bigdeps * bigies;
 int bigifront=0;

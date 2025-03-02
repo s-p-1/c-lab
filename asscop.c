@@ -63,7 +63,7 @@ void deleteDependencies(cell *lhscell, int lhs){
         }
         else{
             // printf("deleted from %d %d: %d\n", lhscell->row1, lhscell->col1, lhs);
-            if ((lhscell->row2-lhscell->row1)*(lhscell->col2-lhscell->col1)>100000){
+            if ((lhscell->row2-lhscell->row1)*(lhscell->col2-lhscell->col1)>maxibigi){
                 int i =bigifront-1;
                 if (bigies[i].x==lhs){
                     if (bigies[i].lcol==(lhscell->col1) && bigies[i].lrow==(lhscell->row1)){
@@ -112,7 +112,7 @@ void addDependencies (cell * lhscell, char op, int lhs){
             mysheet[lhscell->row1][lhscell->col1].cell_avl = insert(mysheet[lhscell->row1][lhscell->col1].cell_avl, lhs);
         }
         else{
-            if ((lhscell->row2-lhscell->row1)*(lhscell->col2-lhscell->col1)>100000){
+            if ((lhscell->row2-lhscell->row1)*(lhscell->col2-lhscell->col1)>maxibigi){
                 bigdeps temp;
                 temp.lrow = (lhscell->row1);
                 temp.lcol = (lhscell->col1);
