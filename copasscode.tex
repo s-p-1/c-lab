@@ -25,70 +25,89 @@ Your abstract.
 
 \section{DESIGN DECISIONS}
 
-Our spreadsheet program consists of a makefile running that compiles our other files :- asscop.c, display.c, expcalc.c, graph.c, avltree.c, and helper.c to create an executable spreadsheet analogous sheet. This sheet can be fed formulas and control inputs. Display.c initializes our sheet with the required number of rows and columns with each cell=0. Then with the input, it calls the getline function (defined in helper.c) to read and scroll the sheet or disable/enable display. Alternatively, it calls the parser (defined in asscop.c) to do the necessary assignments and recalculations. Each cell in our spreadsheet is a structure that contains its value and some other values required for recalculations, whether the cell is visited in graph traversal, rows and columns of the cells it depends on and the roots of the two trees it is part of. We have used avltrees (avltree.c) to calculate the mix/max thing and to store the dependencies of each cell. 
+Our spreadsheet program consists of a Makefile that compiles our source files: \texttt{asscop.c}, \texttt{display.c}, \texttt{expcalc.c}, \texttt{graph.c}, \texttt{avltree.c}, and \texttt{helper.c} to create an executable spreadsheet-like application. This spreadsheet accepts formulas and control inputs.
+
+\texttt{Display.c} initializes our sheet with the required number of rows and columns, with each cell initialized to zero. Upon receiving input, it calls the \texttt{getline} function (defined in \texttt{helper.c}) to read commands, scroll the sheet, or disable/enable the display. If necessary, it invokes the parser (defined in \texttt{asscop.c}) for assignments and recalculations. 
+
+Each cell in our spreadsheet is a structure containing:
+\begin{itemize}
+    \item Its current value,
+    \item Flags for recalculations,
+    \item A visit marker for graph traversal,
+    \item References to dependent rows and columns,
+    \item Pointers to AVL tree roots for dependency tracking and min/max calculations.
+\end{itemize}
+
+We use AVL trees (\texttt{avltree.c}) to efficiently manage dependencies and support operations like MIN and MAX.
 
 \section{EDGE CASES AND ERROR SCENARIOS}
 
-\subsection{Padding for 32bit integers}
-
-We added a padding of 15 in display.c to be able to display signed 32bit integers.
+\subsection{Padding for 32-bit Integers}
+We added a padding of 15 in \texttt{display.c} to ensure that signed 32-bit integers are displayed correctly.
 
 \subsection{Invalid Range}
-
-Giving invalid ranges in MAX, MIN, SUM, AVG and STDEV will give an error. For example: 
+Providing invalid ranges in functions such as MAX, MIN, SUM, AVG, and STDEV results in an error. Examples:
 \begin{enumerate}
-\item A1=AVG(B2:B1) will show \textbf{ [0.0] (invalid range) > }
-\item A1=SUM(A100:F1) will show \textbf{ [0.0] (invalid range) > }
+    \item \texttt{A1=AVG(B2:B1)} will output: \textbf{[0.0] (invalid range) >}
+    \item \texttt{A1=SUM(A100:F1)} will output: \textbf{[0.0] (invalid range) >}
 \end{enumerate}
 
 \subsection{Invalid Commands}
-
-We have handled various cases of invalid input commands:
+Various invalid input commands are handled:
 \begin{enumerate}
-\item Empty range functions like SLEEP(), MAX(), MIN(), AVG(), SUM() all of which will give \textbf{[0.0] (unrecognized cmd) >}
-\item Missing parentheses or colon in functions like A1=MAX(B1:B2, A1=MAX(B1 B2), A1=MAX B1:B2), will give \textbf{[0.0] (unrecognized cmd) >} 
+    \item Empty range functions such as \texttt{SLEEP()}, \texttt{MAX()}, \texttt{MIN()}, \texttt{AVG()}, \texttt{SUM()} all return \textbf{[0.0] (unrecognized cmd) >}
+    \item Missing parentheses or incorrect syntax in functions, e.g., \texttt{A1=MAX(B1:B2}, \texttt{A1=MAX(B1 B2)}, \texttt{A1=MAX B1:B2)}, return \textbf{[0.0] (unrecognized cmd) >}
 \end{enumerate}
 
 \subsection{Cyclic Dependency}
-
-
-
-
+If a formula creates a cyclic dependency (e.g., \texttt{A1=B1+1} and \texttt{B1=A1+1}), our program detects this and prevents infinite loops. The output will be:
+\begin{center}
+    \textbf{Error: Cyclic dependency detected}
+\end{center}
 
 \subsection{Division by Zero}
-
-
+Any division by zero, such as \texttt{A1=B1/0}, results in an error. The cell value will be:
+\begin{center}
+    \textbf{ERR}
+\end{center}
+The program ensures that cell is assigned ERR till it is reassigned correctly instead of halting the program.
 
 \subsection{Invalid Cells}
-
+Accessing non-existent cells results in an error. For example:
+\begin{enumerate}
+    \item \texttt{A1=B10000+5} (when the sheet has only 100 rows)
+    \item \texttt{X1=SUM(A1:A10)} (when column X does not exist)
+\end{enumerate}
+Both cases return:
+\begin{center}
+    \textbf{Error: Invalid cell reference}
+\end{center}
 
 \subsection{Incorrectly Running the Program}
-
-Giving noninteger or out of range integers as row and column input after ./sheet for eg: ./sheet six forty will give \textbf{error: write valid number of rows and columns.}
-
-
+Running the program with non-integer or out-of-range row and column inputs (e.g., \texttt{./sheet six forty}) will result in:
+\begin{center}
+    \textbf{Error: Enter a valid number of rows and columns}
+\end{center}
 
 \begin{figure}
 \centering
 \includegraphics[width=0.3\textwidth]{copass.jpg}
-\caption{\label{fig:frog}This frog was uploaded via the project menu.}
+\caption{Example output of the spreadsheet program.}
 \end{figure}
 
-
-
-\subsection{How to add Lists}
-
-You can make lists with automatic numbering \dots
-
+\subsection{How to Add Lists}
+Lists can be created using:
 \begin{enumerate}
-\item Like this,
-\item and like this.
+    \item Automatic numbering:
+    \begin{enumerate}
+        \item Like this,
+        \item And like this.
+    \end{enumerate}
+    \item Bullet points:
+    \begin{itemize}
+        \item Like this,
+        \item And like this.
+    \end{itemize}
 \end{enumerate}
-\dots or bullet points \dots
-\begin{itemize}
-\item Like this,
-\item and like this.
-\end{itemize}
-
 
 \end{document}
