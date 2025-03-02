@@ -106,6 +106,7 @@ void dfs2 (int address){
                 }
             }
         }
+        front++;
     }
     return ;
 }
