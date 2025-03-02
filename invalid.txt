@@ -14,4 +14,5 @@ A10=MAX(A5:A10)
 A4=AVG(A1:A3)xyz
 A4=A5MIN(A3:A3)
 A6=A5++
+scroll_to ZZZ1000
 q

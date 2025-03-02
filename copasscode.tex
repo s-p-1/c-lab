@@ -57,12 +57,14 @@ Various invalid input commands are handled:
 \begin{enumerate}
     \item Empty range functions such as \texttt{SLEEP()}, \texttt{MAX()}, \texttt{MIN()}, \texttt{AVG()}, \texttt{SUM()} all return \textbf{[0.0] (unrecognized cmd) >}
     \item Missing parentheses or incorrect syntax in functions, e.g., \texttt{A1=MAX(B1:B2}, \texttt{A1=MAX(B1 B2)}, \texttt{A1=MAX B1:B2)}, return \textbf{[0.0] (unrecognized cmd) >}
+    \item Other invalid inputs can also be like
+    \textttA{A4=AVG(A1:A3)xyz}, \texttt{A1=MAX(B1 B2)}, \texttt{A4=A5MIN(A3:A3)}, return \textbf{[0.0] (unrecognized cmd) >}
 \end{enumerate}
 
 \subsection{Cyclic Dependency}
-If a formula creates a cyclic dependency (e.g., \texttt{A1=B1+1} and \texttt{B1=A1+1}), our program detects this and prevents infinite loops. The output will be:
+If a formula creates a cyclic dependency (e.g., \texttt{A1=B1+1} and \texttt{B1=A1+1} or \texttt{A10=MAX(A5:A10)}), our program detects this and prevents infinite loops. The output will be:
 \begin{center}
-    \textbf{Error: Cyclic dependency detected}
+    \textbf{[0.0] (cycle detected) >}
 \end{center}
 
 \subsection{Division by Zero}
@@ -76,17 +78,18 @@ The program ensures that cell is assigned ERR till it is reassigned correctly in
 Accessing non-existent cells results in an error. For example:
 \begin{enumerate}
     \item \texttt{A1=B10000+5} (when the sheet has only 100 rows)
-    \item \texttt{X1=SUM(A1:A10)} (when column X does not exist)
+    \item \texttt{X1=SUM(A1:A2)} (when column X does not exist)
+    \item \texttt{scrollto ZZZ1000} 
 \end{enumerate}
-Both cases return:
+Such cases return:
 \begin{center}
-    \textbf{Error: Invalid cell reference}
+    \textbf{[0.0] (invalid cell) >}
 \end{center}
 
 \subsection{Incorrectly Running the Program}
-Running the program with non-integer or out-of-range row and column inputs (e.g., \texttt{./sheet six forty}) will result in:
+Running the program with noninteger or out of range integer inputs in the row and column (e.g.nge (e.g. \texttt{./sheet six forty}) will result in:
 \begin{center}
-    \textbf{Error: Enter a valid number of rows and columns}
+    \textbf{error: write valid number of rows and columns.}
 \end{center}
 
 \begin{figure}
@@ -95,7 +98,28 @@ Running the program with non-integer or out-of-range row and column inputs (e.g.
 \caption{Example output of the spreadsheet program.}
 \end{figure}
 
-\subsection{How to Add Lists}
+\section{STRUCTURE OF PROGRAM}
+
+\begin{enumerate}
+    \item Display.c
+    \begin{itemize}
+        \item int main(int argc, char *argv[])
+        \item void display (cell ** mysheet, int R, int C, int x, int y)
+        \item char * print\_string(int n, int padding)
+    \end{itemize}
+    \item Asscop.c:
+    \begin{itemize}
+        \item char parser(char* input)
+        \item bool edgehandler (int cellhandle, int lhs, cell* lhscell, int extra, cell oldcell)
+        \item void addDependencies (cell * lhscell, char op, int lhs)
+        \item void deleteDependencies(cell *lhscell, int lhs)
+        \item int cell\_handler(char *cell)
+        \item bool is\_int (char *s)
+    \end{itemize}
+\end{enumerate}
+
+
+\section{How to Add Lists}
 Lists can be created using:
 \begin{enumerate}
     \item Automatic numbering:
