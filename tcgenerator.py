@@ -24,7 +24,7 @@ def generate_lines_Sum():
     for j in range(1, 2):
         print(j)
         for i in range(1, 100):
-            lines.append(f'{int_to_str(j)}{i}=SUM({int_to_str(j)}{i+1}:ZZZ999)')
+            lines.append(f'{int_to_str(j)}{i}=AVG({int_to_str(j)}{i+1}:ZZZ999)')
         lines.append(f'{int_to_str(j)}999={int_to_str(j+1)}1')
     lines.append("enable_output\nq\n")
     
@@ -46,12 +46,12 @@ def generate_small_sums():
     for j in range(1, 2):
         print(j)
         for i in range(1, 100):
-            lines.append(f'{int_to_str(j)}{i}=SUM({int_to_str(j)}{i+1}:ZZ{i+100})')
+            lines.append(f'{int_to_str(j)}{i}=STDEV({int_to_str(j)}{i+1}:ZZ{i+100})')
         lines.append(f'{int_to_str(j)}999={int_to_str(j+1)}1')
     lines.append("enable_output\nq\n")
     return lines
 
-lines = generate_lines_equal()
+lines = generate_small_sums()
 with open('test.txt', 'w') as f:
     for line in lines:
         f.write(line + '\n')

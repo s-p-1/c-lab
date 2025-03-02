@@ -20,8 +20,8 @@ test: t1
 
 clean:
 	-@cd tests; \
-	rm -r *.out || true
-	-@rm spreadsheet || true
+	rm -r *.out \
+	rm spreadsheet || true
 	-@cd target/release; \
 	rm spreadsheet || true
 	-@rm copasscode.aux copasscode.log copasscode.pdf copasscode.out || true
