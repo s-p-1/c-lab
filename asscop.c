@@ -408,7 +408,7 @@ char parser(char* input){
         if (cellh1 == -1) return -1;
         if (cellh2 == -1) return -1;
         // printf("cellh1, %d, cellh2, %d\n", cellh1, cellh2);
-        if (cellh1/1000>=cellh2/1000 && cellh1%1000>=cellh1%1000) return -4;
+        if (!(cellh1/1000<=cellh2/1000 && cellh1%1000<=cellh1%1000)) return -4;
     }
     else return -3;
     
