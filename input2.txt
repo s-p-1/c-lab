@@ -1,0 +1,8 @@
+disable_output
+A1=0
+A2=2147483647
+A3=-2147483648
+enable_output
+A4=5/0
+B1=A4+1
+A4=B1+1
