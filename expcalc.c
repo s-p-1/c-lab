@@ -250,7 +250,7 @@ void update_value(cell *cell1, int row, int col){
     } else if (cell1->operation == 'a') {
         int count = (cell1->row2 - cell1->row1 + 1) * (cell1->col2 - cell1->col1 + 1);
         cell1->sum += (new_val - old_val);
-        cell1->value = cell1->sum / count;
+        // cell1->value = cell1->sum / count;
         if(mysheet[row][col].err_cnt/100000000 > 0  && mysheet[row][col].err_cnt%100000000 == 0)
             cell1->err_cnt-=1;
         else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
@@ -259,9 +259,9 @@ void update_value(cell *cell1, int row, int col){
         int count = (cell1->row2 - cell1->row1 + 1) * (cell1->col2 - cell1->col1 + 1);
         cell1->sum += (new_val - old_val);
         cell1->sq_sum += (new_val * new_val - old_val * old_val);
-        double mean = (double)cell1->sum / count;
-        double variance = ((double)cell1->sq_sum / count) - (mean * mean);
-        cell1->value = (int)sqrt(variance);
+        // double mean = (double)cell1->sum / count;
+        // double variance = ((double)cell1->sq_sum / count) - (mean * mean);
+        // cell1->value = (int)sqrt(variance);
         if(mysheet[row][col].err_cnt/100000000 > 0  && mysheet[row][col].err_cnt%100000000 == 0)
             cell1->err_cnt-=1;
         else if(mysheet[row][col].err_cnt/100000000 == 0  && mysheet[row][col].err_cnt%100000000 > 0)
