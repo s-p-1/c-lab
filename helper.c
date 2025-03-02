@@ -31,7 +31,6 @@ int mycomp(char s[20]){
         if (stringcomp("scroll_to ", s, ' ')){
                 return (1000+cell_handler(s+10));
         }
-        printf("give correct input\n");
         return -1;
 }
 
