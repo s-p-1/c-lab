@@ -27,18 +27,20 @@ Your abstract.
 
 Our spreadsheet program consists of a Makefile that compiles our source files: \texttt{asscop.c}, \texttt{display.c}, \texttt{expcalc.c}, \texttt{graph.c}, \texttt{avltree.c}, and \texttt{helper.c} to create an executable spreadsheet-like application. This spreadsheet accepts formulas and control inputs.
 
-\texttt{Display.c} initializes our sheet with the required number of rows and columns, with each cell initialized to zero. Upon receiving input, it calls the \texttt{getline} function (defined in \texttt{helper.c}) to read commands, scroll the sheet, or disable/enable the display. If necessary, it invokes the parser (defined in \texttt{asscop.c}) for assignments and recalculations. 
+\texttt{Display.c} initializes our sheet with the required number of rows and columns, with each cell initialized to zero. Upon receiving input, it calls the \texttt{getline} function (defined in \texttt{helper.c}) to read commands, scroll the sheet, or disable/enable the display. If necessary, it invokes the parser (defined in \texttt{asscop.c}) for assignments, recalculations or to raise errors when the command is invalid. 
 
 Each cell in our spreadsheet is a structure containing:
 \begin{itemize}
     \item Its current value,
-    \item Flags for recalculations,
+    \item Values of sums and square sums for easy recalculations (\texttt{sum} variable is also used for keeping the new value after updating),
     \item A visit marker for graph traversal,
-    \item References to dependent rows and columns,
+    \item Value of rows and columns on which it is dependent (for range we just store the two end points),
+    \item Its error count (count of error-prone cells on which it is dependent),
+    \item A \texttt{count} variable that denotes the number of cells on which it is dependent among all the nodes in the graph (of affected cells),
     \item Pointers to AVL tree roots for dependency tracking and min/max calculations.
 \end{itemize}
 
-We use AVL trees (\texttt{avltree.c}) to efficiently manage dependencies and support operations like MIN and MAX.
+We use AVL trees (\texttt{avltree.c}) to efficiently manage dependencies and support operations like MIN and MAX. The spreadsheet maintains a directed graph where each cell is a node. An edge from cell $A$ to cell $B$ signifies that $B$ depends on $A$. When a cell is modified, a graph traversal ensures that only affected dependent cells are recalculated.
 
 \section{EDGE CASES AND ERROR SCENARIOS}
 
