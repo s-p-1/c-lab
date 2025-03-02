@@ -10,7 +10,7 @@ def int_to_str(n):
 
 def generate_lines_equal():
     lines = ["disable_output\n"]
-    for j in range(1, 10):
+    for j in range(1, 100):
         print(j)
         for i in range(1, 999):
             lines.append(f'{int_to_str(j)}{i}={int_to_str(j)}{i+1}')
@@ -51,7 +51,7 @@ def generate_small_sums():
     lines.append("enable_output\nq\n")
     return lines
 
-lines = generate_lines_Max()
+lines = generate_lines_equal()
 with open('test.txt', 'w') as f:
     for line in lines:
         f.write(line + '\n')
