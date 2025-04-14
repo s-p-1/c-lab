@@ -1,5 +1,6 @@
 all :
 	@gcc display.c helper.c asscop.c graph.c expcalc.c avltree.c -lm -O3 -o spreadsheet
+	@mkdir target; cd target; mkdir release; cd ..;
 	@mv spreadsheet target/release
 
 t1:
